@@ -8,8 +8,10 @@ package io.github.ntysdd.coremath;
 
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.SinF;
+import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Sin;
+import io.github.ntysdd.coremath.binary64.Tan;
 
 /**
  * Correctly rounded elementary functions.
@@ -101,5 +103,45 @@ public final class CrMath {
    */
   public static double cos(double x) {
     return Cos.compute(x);
+  }
+
+  /**
+   * Tangent of a binary32 value; the translation of CORE-MATH {@code cr_tanf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) tangent of {@code x}, in
+   * round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code tan(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code tan(±Infinity)} is NaN
+   *   <li>{@code tan(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument, in radians
+   * @return the correctly rounded tangent of {@code x}
+   */
+  public static float tan(float x) {
+    return TanF.compute(x);
+  }
+
+  /**
+   * Tangent of a binary64 value; the translation of CORE-MATH {@code cr_tan}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) tangent of {@code x}, in
+   * round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code tan(±0.0)} is {@code ±0.0}
+   *   <li>{@code tan(±Infinity)} is NaN
+   *   <li>{@code tan(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument, in radians
+   * @return the correctly rounded tangent of {@code x}
+   */
+  public static double tan(double x) {
+    return Tan.compute(x);
   }
 }
