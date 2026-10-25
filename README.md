@@ -32,10 +32,10 @@ rules that keep it that way.
 
 | Function | binary32 (`float`) | binary64 (`double`) | Upstream source |
 | --- | --- | --- | --- |
-| `sin` | translated, tests pending | planned | `src/binary{32,64}/sin` |
+| `sin` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sin` |
 
-The binary32 translation compiles and passes an offline smoke comparison, but it
-is not accompanied by the vectors the verification procedure asks for yet.
+Both translations compile and pass an offline smoke comparison, but neither is
+accompanied by the vectors the verification procedure asks for yet.
 
 Nothing beyond the table above is scheduled. The longer-term direction, if the
 port continues, is the function set of IEEE 754-2019: `exp`, `log`, `pow`, the
@@ -49,14 +49,13 @@ trigonometric family, their inverses and the hyperbolic variants.
 
 ## Usage
 
-The API, with `sin` translated for binary32 so far:
+The API, with `sin` translated for both binary types:
 
 ```java
 import io.github.ntysdd.coremath.CrMath;
 
 float  z = CrMath.sin(1.0f);  // cr_sinf, binary32
-
-double y = CrMath.sin(1.0);   // cr_sin,  binary64, not translated yet
+double y = CrMath.sin(1.0);   // cr_sin,  binary64
 ```
 
 The two overloads are separate implementations.

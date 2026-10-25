@@ -67,9 +67,9 @@ public final strictfp class SinF {
     int e = (u>>>23)&0xff, i;
     long m = (u&(~0>>>9))|1<<23;
     U128 p0 = U128.mul(m, IPI[0]);
-    U128 p1 = U128.mul(m, IPI[1]); p1.addHi(p0.hi);
-    U128 p2 = U128.mul(m, IPI[2]); p2.addHi(p1.hi);
-    U128 p3 = U128.mul(m, IPI[3]); p3.addHi(p2.hi);
+    U128 p1 = U128.mul(m, IPI[1]); p1 = p1.addLow(p0.hi);
+    U128 p2 = U128.mul(m, IPI[2]); p2 = p2.addLow(p1.hi);
+    U128 p3 = U128.mul(m, IPI[3]); p3 = p3.addLow(p2.hi);
     long p3h = p3.hi, p3l = p3.lo, p2l = p2.lo, p1l = p1.lo;
     long a;
     int k = e-124, s = k-23;

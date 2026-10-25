@@ -7,6 +7,7 @@
 package io.github.ntysdd.coremath;
 
 import io.github.ntysdd.coremath.binary32.SinF;
+import io.github.ntysdd.coremath.binary64.Sin;
 
 /**
  * Correctly rounded elementary functions.
@@ -38,5 +39,25 @@ public final class CrMath {
    */
   public static float sin(float x) {
     return SinF.compute(x);
+  }
+
+  /**
+   * Sine of a binary64 value; the translation of CORE-MATH {@code cr_sin}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) sine of {@code x}, in
+   * round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code sin(±0.0)} is {@code ±0.0}
+   *   <li>{@code sin(±Infinity)} is NaN
+   *   <li>{@code sin(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument, in radians
+   * @return the correctly rounded sine of {@code x}
+   */
+  public static double sin(double x) {
+    return Sin.compute(x);
   }
 }
