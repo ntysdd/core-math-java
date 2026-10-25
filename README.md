@@ -33,9 +33,10 @@ rules that keep it that way.
 | Function | binary32 (`float`) | binary64 (`double`) | Upstream source |
 | --- | --- | --- | --- |
 | `sin` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sin` |
+| `cos` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cos` |
 
-Both translations compile and pass an offline smoke comparison, but neither is
-accompanied by the vectors the verification procedure asks for yet.
+The translations compile and pass an offline smoke comparison, but none of them
+is accompanied by the vectors the verification procedure asks for yet.
 
 Nothing beyond the table above is scheduled. The longer-term direction, if the
 port continues, is the function set of IEEE 754-2019: `exp`, `log`, `pow`, the
@@ -49,13 +50,15 @@ trigonometric family, their inverses and the hyperbolic variants.
 
 ## Usage
 
-The API, with `sin` translated for both binary types:
+The API, with `sin` and `cos` translated for both binary types:
 
 ```java
 import io.github.ntysdd.coremath.CrMath;
 
 float  z = CrMath.sin(1.0f);  // cr_sinf, binary32
+float  w = CrMath.cos(1.0f);  // cr_cosf, binary32
 double y = CrMath.sin(1.0);   // cr_sin,  binary64
+double v = CrMath.cos(1.0);   // cr_cos,  binary64
 ```
 
 The two overloads are separate implementations.
@@ -101,6 +104,8 @@ Correspondence between the two trees:
 | --- | --- |
 | `src/binary32/sin/sinf.c` (`cr_sinf`) | `io.github.ntysdd.coremath.binary32.SinF` |
 | `src/binary64/sin/sin.c` (`cr_sin`) | `io.github.ntysdd.coremath.binary64.Sin` |
+| `src/binary32/cos/cosf.c` (`cr_cosf`) | `io.github.ntysdd.coremath.binary32.CosF` |
+| `src/binary64/cos/cos.c` (`cr_cos`) | `io.github.ntysdd.coremath.binary64.Cos` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation

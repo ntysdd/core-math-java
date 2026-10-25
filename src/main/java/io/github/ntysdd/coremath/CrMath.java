@@ -6,7 +6,9 @@
 
 package io.github.ntysdd.coremath;
 
+import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.SinF;
+import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Sin;
 
 /**
@@ -59,5 +61,45 @@ public final class CrMath {
    */
   public static double sin(double x) {
     return Sin.compute(x);
+  }
+
+  /**
+   * Cosine of a binary32 value; the translation of CORE-MATH {@code cr_cosf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) cosine of {@code x}, in
+   * round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code cos(±0.0f)} is {@code 1.0f}
+   *   <li>{@code cos(±Infinity)} is NaN
+   *   <li>{@code cos(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument, in radians
+   * @return the correctly rounded cosine of {@code x}
+   */
+  public static float cos(float x) {
+    return CosF.compute(x);
+  }
+
+  /**
+   * Cosine of a binary64 value; the translation of CORE-MATH {@code cr_cos}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) cosine of {@code x}, in
+   * round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code cos(±0.0)} is {@code 1.0}
+   *   <li>{@code cos(±Infinity)} is NaN
+   *   <li>{@code cos(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument, in radians
+   * @return the correctly rounded cosine of {@code x}
+   */
+  public static double cos(double x) {
+    return Cos.compute(x);
   }
 }
