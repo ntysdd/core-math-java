@@ -93,6 +93,7 @@ Add missing cases to this table instead of inventing a local convention.
 | `__builtin_fabs`, `fabsf` | `Math.abs`, which clears the sign bit and leaves every other bit alone, NaN payload included |
 | `__builtin_ctz`, `clz`, `popcount` and their `l` / `ll` variants | `Long.numberOfTrailingZeros`, `numberOfLeadingZeros`, `bitCount`, or the `Integer` version when the C type is 32 bits. `clzl` counts on a 64-bit `long` under LP64, so it maps to the `Long` version. Zero is undefined upstream and returns the width in Java |
 | `__builtin_floor`, `floorf` | `Math.floor`, which returns a `double`; cast where the C code stores into a `float` |
+| `__builtin_fmax`, `fmaxf` | `Math.max`, except that `fmax` returns the other operand when one is NaN while `Math.max` propagates the NaN; check that the call site cannot see a NaN |
 | `*(uint64_t*)&d` and other type punning | `Double.doubleToRawLongBits(d)` |
 | `errno` assignments (`EDOM`, `EINVAL`, `ERANGE`) | omit. Java has no `errno`, and upstream assigns it only under `CORE_MATH_SUPPORT_ERRNO`, which no caller here can observe |
 | `fetestexcept`, `feraiseexcept`, `fesetround` | omit, same reason. The JVM exposes no floating-point environment and round-to-nearest-even is the only mode |

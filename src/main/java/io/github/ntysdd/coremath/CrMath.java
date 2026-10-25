@@ -7,9 +7,11 @@
 package io.github.ntysdd.coremath;
 
 import io.github.ntysdd.coremath.binary32.CosF;
+import io.github.ntysdd.coremath.binary32.ExpF;
 import io.github.ntysdd.coremath.binary32.SinF;
 import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary64.Cos;
+import io.github.ntysdd.coremath.binary64.Exp;
 import io.github.ntysdd.coremath.binary64.Sin;
 import io.github.ntysdd.coremath.binary64.Tan;
 
@@ -143,5 +145,53 @@ public final class CrMath {
    */
   public static double tan(double x) {
     return Tan.compute(x);
+  }
+
+  /**
+   * Exponential of a binary32 value; the translation of CORE-MATH
+   * {@code cr_expf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) {@code e} to the power
+   * {@code x}, in round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code exp(+0.0f)} and {@code exp(-0.0f)} are {@code 1.0f}
+   *   <li>{@code exp(-Infinity)} is {@code +0.0f}
+   *   <li>{@code exp(+Infinity)} is {@code +Infinity}
+   *   <li>{@code exp(NaN)} is NaN
+   *   <li>results too large to represent are {@code +Infinity}, results too
+   *       small are {@code +0.0f}
+   * </ul>
+   *
+   * @param x the exponent
+   * @return the correctly rounded exponential of {@code x}
+   */
+  public static float exp(float x) {
+    return ExpF.compute(x);
+  }
+
+  /**
+   * Exponential of a binary64 value; the translation of CORE-MATH
+   * {@code cr_exp}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) {@code e} to the power
+   * {@code x}, in round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code exp(+0.0)} and {@code exp(-0.0)} are {@code 1.0}
+   *   <li>{@code exp(-Infinity)} is {@code +0.0}
+   *   <li>{@code exp(+Infinity)} is {@code +Infinity}
+   *   <li>{@code exp(NaN)} is NaN
+   *   <li>results too large to represent are {@code +Infinity}, results too
+   *       small are {@code +0.0}
+   * </ul>
+   *
+   * @param x the exponent
+   * @return the correctly rounded exponential of {@code x}
+   */
+  public static double exp(double x) {
+    return Exp.compute(x);
   }
 }

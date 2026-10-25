@@ -35,6 +35,7 @@ rules that keep it that way.
 | `sin` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sin` |
 | `cos` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cos` |
 | `tan` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tan` |
+| `exp` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -51,7 +52,7 @@ trigonometric family, their inverses and the hyperbolic variants.
 
 ## Usage
 
-The API, with `sin`, `cos` and `tan` translated for both binary types:
+The API, with `sin`, `cos`, `tan` and `exp` translated for both binary types:
 
 ```java
 import io.github.ntysdd.coremath.CrMath;
@@ -59,9 +60,11 @@ import io.github.ntysdd.coremath.CrMath;
 float  z = CrMath.sin(1.0f);  // cr_sinf, binary32
 float  w = CrMath.cos(1.0f);  // cr_cosf, binary32
 float  q = CrMath.tan(1.0f);  // cr_tanf, binary32
+float  e = CrMath.exp(1.0f);  // cr_expf, binary32
 double y = CrMath.sin(1.0);   // cr_sin,  binary64
 double v = CrMath.cos(1.0);   // cr_cos,  binary64
 double p = CrMath.tan(1.0);   // cr_tan,  binary64
+double f = CrMath.exp(1.0);   // cr_exp,  binary64
 ```
 
 The two overloads are separate implementations.
@@ -111,6 +114,8 @@ Correspondence between the two trees:
 | `src/binary64/cos/cos.c` (`cr_cos`) | `io.github.ntysdd.coremath.binary64.Cos` |
 | `src/binary32/tan/tanf.c` (`cr_tanf`) | `io.github.ntysdd.coremath.binary32.TanF` |
 | `src/binary64/tan/tan.c` (`cr_tan`) | `io.github.ntysdd.coremath.binary64.Tan` |
+| `src/binary32/exp/expf.c` (`cr_expf`) | `io.github.ntysdd.coremath.binary32.ExpF` |
+| `src/binary64/exp/exp.c` (`cr_exp`) | `io.github.ntysdd.coremath.binary64.Exp` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation
