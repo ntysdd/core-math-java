@@ -32,7 +32,10 @@ rules that keep it that way.
 
 | Function | binary32 (`float`) | binary64 (`double`) | Upstream source |
 | --- | --- | --- | --- |
-| `sin` | planned | planned | `src/binary{32,64}/sin` |
+| `sin` | translated, tests pending | planned | `src/binary{32,64}/sin` |
+
+The binary32 translation compiles and passes an offline smoke comparison, but it
+is not accompanied by the vectors the verification procedure asks for yet.
 
 Nothing beyond the table above is scheduled. The longer-term direction, if the
 port continues, is the function set of IEEE 754-2019: `exp`, `log`, `pow`, the
@@ -46,13 +49,14 @@ trigonometric family, their inverses and the hyperbolic variants.
 
 ## Usage
 
-The intended API, once `sin` lands:
+The API, with `sin` translated for binary32 so far:
 
 ```java
 import io.github.ntysdd.coremath.CrMath;
 
-double y = CrMath.sin(1.0);   // cr_sin,  binary64
 float  z = CrMath.sin(1.0f);  // cr_sinf, binary32
+
+double y = CrMath.sin(1.0);   // cr_sin,  binary64, not translated yet
 ```
 
 The two overloads are separate implementations.
@@ -83,11 +87,11 @@ The vectors are checked in as plain text.
 
 ## Building and testing
 
-The build files are not committed yet. Once they are, the commands will be:
+The commands are:
 
 ```bash
 mvn -q verify          # compile, run tests, build the jar
-mvn -q -Dtest=SinTest test
+mvn -q -Dtest=SinFTest test
 ```
 
 ## Developing
@@ -102,7 +106,6 @@ Correspondence between the two trees:
 
 `AGENTS.md` holds the rules for changing code here: translation
 conventions, the C to Java mapping table, test requirements and commit format.
-It becomes `AGENTS.md` once `sin` is translated.
 
 ## License
 
