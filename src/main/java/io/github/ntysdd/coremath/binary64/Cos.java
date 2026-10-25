@@ -299,8 +299,13 @@ public final strictfp class Cos {
     long md = (a.hi >>> (ex - 1))&0x1;
     long lo = ((a.hi&(~0L >>> ex)) != 0 || a.lo != 0) ? 1 : 0;
 
-    // The C code switches on fegetround(); the JVM has no floating-point
-    // environment, so only the FE_TONEAREST case is left (AGENTS.md §3).
+    /* The C code switches on fegetround() and handles FE_TONEAREST,
+       FE_DOWNWARD and FE_UPWARD. The JVM has no floating-point environment and
+       round-to-nearest-even is the only mode, so only the FE_TONEAREST case is
+       translated. The FE_DOWNWARD and FE_UPWARD cases are dropped because they
+       belong to the directed rounding modes, which AGENTS.md puts out of scope;
+       keeping them would mean carrying a rounding mode that no caller can
+       select. */
     hi += lo != 0 ? md : hi&md;
 
     a.hi = hi << ex;
