@@ -8,10 +8,12 @@ package io.github.ntysdd.coremath;
 
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.ExpF;
+import io.github.ntysdd.coremath.binary32.LogF;
 import io.github.ntysdd.coremath.binary32.SinF;
 import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Exp;
+import io.github.ntysdd.coremath.binary64.Log;
 import io.github.ntysdd.coremath.binary64.Sin;
 import io.github.ntysdd.coremath.binary64.Tan;
 
@@ -193,5 +195,52 @@ public final class CrMath {
    */
   public static double exp(double x) {
     return Exp.compute(x);
+  }
+
+  /**
+   * Natural logarithm of a binary32 value; the translation of CORE-MATH
+   * {@code cr_logf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) natural logarithm of
+   * {@code x}, in round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code log(1.0f)} is {@code +0.0f}
+   *   <li>{@code log(+0.0f)} and {@code log(-0.0f)} are
+   *       {@code -Infinity}
+   *   <li>{@code log(x)} is NaN for {@code x < 0}
+   *   <li>{@code log(+Infinity)} is {@code +Infinity}
+   *   <li>{@code log(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded natural logarithm of {@code x}
+   */
+  public static float log(float x) {
+    return LogF.compute(x);
+  }
+
+  /**
+   * Natural logarithm of a binary64 value; the translation of CORE-MATH
+   * {@code cr_log}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) natural logarithm of
+   * {@code x}, in round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code log(1.0)} is {@code +0.0}
+   *   <li>{@code log(+0.0)} and {@code log(-0.0)} are {@code -Infinity}
+   *   <li>{@code log(x)} is NaN for {@code x < 0}
+   *   <li>{@code log(+Infinity)} is {@code +Infinity}
+   *   <li>{@code log(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded natural logarithm of {@code x}
+   */
+  public static double log(double x) {
+    return Log.compute(x);
   }
 }

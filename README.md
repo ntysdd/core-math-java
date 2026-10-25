@@ -36,6 +36,7 @@ rules that keep it that way.
 | `cos` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cos` |
 | `tan` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tan` |
 | `exp` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp` |
+| `log` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -116,6 +117,8 @@ Correspondence between the two trees:
 | `src/binary64/tan/tan.c` (`cr_tan`) | `io.github.ntysdd.coremath.binary64.Tan` |
 | `src/binary32/exp/expf.c` (`cr_expf`) | `io.github.ntysdd.coremath.binary32.ExpF` |
 | `src/binary64/exp/exp.c` (`cr_exp`) | `io.github.ntysdd.coremath.binary64.Exp` |
+| `src/binary32/log/logf.c` (`cr_logf`) | `io.github.ntysdd.coremath.binary32.LogF` |
+| `src/binary64/log/log.c` (`cr_log`) and `dint.h` | `io.github.ntysdd.coremath.binary64.Log` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation
