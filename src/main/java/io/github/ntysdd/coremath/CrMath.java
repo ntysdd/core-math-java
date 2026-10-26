@@ -48,6 +48,7 @@ import io.github.ntysdd.coremath.binary64.Exp;
 import io.github.ntysdd.coremath.binary64.Exp2;
 import io.github.ntysdd.coremath.binary64.Expm1;
 import io.github.ntysdd.coremath.binary64.Erf;
+import io.github.ntysdd.coremath.binary64.Erfc;
 import io.github.ntysdd.coremath.binary64.Hypot;
 import io.github.ntysdd.coremath.binary64.Log10;
 import io.github.ntysdd.coremath.binary64.Log2;
@@ -1211,5 +1212,23 @@ public final class CrMath {
    */
   public static float erfc(float x) {
     return ErfcF.compute(x);
+  }
+
+  /**
+   * Complementary error function of a binary64 value; the translation of
+   * CORE-MATH {@code cr_erfc}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of {@code 1 - erf(x)},
+   * in round-to-nearest-even, evaluated so that it keeps its relative accuracy
+   * in the far tail instead of cancelling. The special cases are the ones of the
+   * {@code float} overload, with the binary64 constants: in particular
+   * {@code erfc(+Infinity)} is {@code +0.0} and {@code erfc(-Infinity)} is
+   * {@code 2.0}.
+   *
+   * @param x the argument
+   * @return the correctly rounded complementary error function
+   */
+  public static double erfc(double x) {
+    return Erfc.compute(x);
   }
 }

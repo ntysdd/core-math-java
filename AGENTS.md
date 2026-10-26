@@ -100,6 +100,8 @@ Add missing cases to this table instead of inventing a local convention.
 | `__builtin_fabs`, `fabsf` | `Math.abs`, which clears the sign bit and leaves every other bit alone, NaN payload included |
 | `__builtin_ctz`, `clz`, `popcount` and their `l` / `ll` variants | `Long.numberOfTrailingZeros`, `numberOfLeadingZeros`, `bitCount`, or the `Integer` version when the C type is 32 bits. `clzl` counts on a 64-bit `long` under LP64, so it maps to the `Long` version. Zero is undefined upstream and returns the width in Java |
 | `__builtin_floor`, `floorf` | `Math.floor`, which returns a `double`; cast where the C code stores into a `float` |
+| `__builtin_ldexp` | `Math.scalb`, which scales by any power of two the format can hold, negative exponents included |
+| a test of a `uint64_t` against `0x8000000000000000`, used as a sign test (`if (t.u >= 0x8000000000000000)` in `erfc.c`) | `t < 0` on the signed `long`. The Java literal `0x8000000000000000L` is `Long.MIN_VALUE`, so writing the C comparison as it stands makes it always true; `t < 0` is the same test, since a `long` is negative exactly when its top bit is set |
 | `__builtin_fmax`, `fmaxf` | `Math.max`, except that `fmax` returns the other operand when one is NaN while `Math.max` propagates the NaN; check that the call site cannot see a NaN |
 | `*(uint64_t*)&d` and other type punning | `Double.doubleToRawLongBits(d)` |
 | `errno` assignments (`EDOM`, `EINVAL`, `ERANGE`) | omit. Java has no `errno`, and upstream assigns it only under `CORE_MATH_SUPPORT_ERRNO`, which no caller here can observe |
@@ -111,7 +113,7 @@ Add missing cases to this table instead of inventing a local convention.
 | a block behind a macro the reference build does not define (`#ifdef CORE_MATH_CHECK_INEXACT` in `cbrtf.c`) | drop it as an unbuilt `#if` variant, like the last row of this table |
 | `exit(1)` in a verification path | `throw new IllegalStateException(...)` |
 | `printf` in translated code | remove. The library does no logging |
-| `__attribute__((noinline))`, `__builtin_expect` | nothing, the JIT decides and profiles branches itself |
+| `__attribute__((noinline))`, `__attribute__((cold))`, `__builtin_expect` | nothing, the JIT decides and profiles branches itself |
 | `#pragma STDC FENV_ACCESS` | nothing |
 | `static const` tables | `private static final` fields, same order, same values |
 | an array of a small anonymous struct of integers (`struct {ushort c0; short c1;} B[]` in `log2.c`) | `int[][]`, one row per entry, the columns in declaration order |
@@ -119,6 +121,7 @@ Add missing cases to this table instead of inventing a local convention.
 | an array of a struct whose first member is an anonymous union (`struct {union{float arg; uint32_t uarg;}; float rh, rl;} st[]` in `sinhf.c`) | one array per column (`int[] stUarg`, `float[] stRh`, `float[] stRl`), leaving out the union member no one reads, and with an `f` suffix on the `float` columns so that they round like the C initializers |
 | an array of a struct mixing integer and floating members (`struct {int iq; double x, r, d;} db[]` in `sinpi.c` and `cospi.c`) | one array per column, in declaration order (`int[] dbIq`, `double[] dbX`, `double[] dbR`, `double[] dbD`), `sizeof(db)/sizeof(db[0])` becoming the length of the first column and the `unsigned i` of that loop an `int` |
 | a three-dimensional table (`static const double LL[4][17][3]` in `asinh.c`, `acosh.c` and `atanh.c`) | `double[][][]` with the same three indices and one row per line, since Java expresses the nested braces of the C initializer directly |
+| a table whose rows are initialised with different lengths (`static const double Tacc[10][30]` in `erfc.c`, rows of 21 to 30 coefficients) | `double[][]` with rows of exactly those lengths, since the C code only reads the initialised prefix of each row and the zero fill of the rest is never observed |
 | an `#if defined(__x86_64__)` branch built on `x86intrin.h` (`as_ldexp`, `as_todenormal`, the `_mm_and_pd` masking of a rounded value in `sinh.c`, `cosh.c`, `tanh.c`) | the portable `#else` branch of the same `#if`, which computes the same bits with plain integer arithmetic |
 | `(const uint64_t *)pow10`, the bit view of a table of `double` (`log10.c`) | `Double.doubleToRawLongBits` applied to the entry at the use site; the table keeps the C spelling |
 | `unsigned int` arithmetic that wraps and is shifted logically (`0x267cfa2u*((unsigned int)e+1u)>>27` in `log10.c`) | the same wrapping arithmetic on `int`, which is defined to wrap, with `>>>` for the unsigned shift |
