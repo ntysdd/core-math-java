@@ -20,6 +20,7 @@ import io.github.ntysdd.coremath.binary32.PowF;
 import io.github.ntysdd.coremath.binary32.SinF;
 import io.github.ntysdd.coremath.binary32.SinhF;
 import io.github.ntysdd.coremath.binary32.TanF;
+import io.github.ntysdd.coremath.binary32.TanhF;
 import io.github.ntysdd.coremath.binary64.Acos;
 import io.github.ntysdd.coremath.binary64.Asin;
 import io.github.ntysdd.coremath.binary64.Atan2;
@@ -34,6 +35,7 @@ import io.github.ntysdd.coremath.binary64.Pow;
 import io.github.ntysdd.coremath.binary64.Sin;
 import io.github.ntysdd.coremath.binary64.Sinh;
 import io.github.ntysdd.coremath.binary64.Tan;
+import io.github.ntysdd.coremath.binary64.Tanh;
 
 /**
  * Correctly rounded elementary functions.
@@ -666,5 +668,43 @@ public final class CrMath {
    */
   public static double cosh(double x) {
     return Cosh.compute(x);
+  }
+
+  /**
+   * Hyperbolic tangent of a binary32 value; the translation of CORE-MATH
+   * {@code cr_tanhf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) hyperbolic tangent of
+   * {@code x}, in round-to-nearest-even, in the range {@code [-1, 1]}.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code tanh(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code tanh(±Infinity)} is {@code ±1.0f}
+   *   <li>{@code tanh(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded hyperbolic tangent of {@code x}
+   */
+  public static float tanh(float x) {
+    return TanhF.compute(x);
+  }
+
+  /**
+   * Hyperbolic tangent of a binary64 value; the translation of CORE-MATH
+   * {@code cr_tanh}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) hyperbolic tangent of
+   * {@code x}, in round-to-nearest-even, in the range {@code [-1, 1]}.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded hyperbolic tangent of {@code x}
+   */
+  public static double tanh(double x) {
+    return Tanh.compute(x);
   }
 }
