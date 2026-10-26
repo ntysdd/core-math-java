@@ -42,6 +42,8 @@ rules that keep it that way.
 | `atan2` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atan2` |
 | `log2` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log2` |
 | `log10` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log10` |
+| `asin` | translated, tests pending | translated, tests pending | `src/binary{32,64}/asin` |
+| `acos` | translated, tests pending | translated, tests pending | `src/binary{32,64}/acos` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -78,6 +80,8 @@ double a = CrMath.atan(1.0);    // cr_atan, binary64
 double b = CrMath.atan2(1.0, 2.0); // cr_atan2, binary64
 double c = CrMath.log2(3.0);   // cr_log2, binary64
 double d = CrMath.log10(3.0);  // cr_log10, binary64
+double e = CrMath.asin(0.5);   // cr_asin, binary64
+double f = CrMath.acos(0.5);   // cr_acos, binary64
 ```
 
 The two overloads are separate implementations.
@@ -141,6 +145,10 @@ Correspondence between the two trees:
 | `src/binary64/log2/log2.c` (`cr_log2`) | `io.github.ntysdd.coremath.binary64.Log2` |
 | `src/binary32/log10/log10f.c` (`cr_log10f`) | `io.github.ntysdd.coremath.binary32.Log10F` |
 | `src/binary64/log10/log10.c` (`cr_log10`) and `dint.h` | `io.github.ntysdd.coremath.binary64.Log10` |
+| `src/binary32/asin/asinf.c` (`cr_asinf`) | `io.github.ntysdd.coremath.binary32.AsinF` |
+| `src/binary64/asin/asin.c` (`cr_asin`) | `io.github.ntysdd.coremath.binary64.Asin` |
+| `src/binary32/acos/acosf.c` (`cr_acosf`) | `io.github.ntysdd.coremath.binary32.AcosF` |
+| `src/binary64/acos/acos.c` (`cr_acos`) | `io.github.ntysdd.coremath.binary64.Acos` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation

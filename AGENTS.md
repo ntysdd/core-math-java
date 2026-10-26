@@ -112,6 +112,11 @@ Add missing cases to this table instead of inventing a local convention.
 | `unsigned int` arithmetic that wraps and is shifted logically (`0x267cfa2u*((unsigned int)e+1u)>>27` in `log10.c`) | the same wrapping arithmetic on `int`, which is defined to wrap, with `>>>` for the unsigned shift |
 | an `int64_t` local that holds at most 32 bits (`m` and `j` of `log10f.c`) | `int`, widening to `long` only where the C code shifts it into the significand (`log2f.c` does the same) |
 | `#define` constants inside a function (`OFFSET`, `ONE_OVER_LOG10_H`, `ONE_OVER_LOG10_L`) | `private static final` fields, with a comment naming the C macro |
+| an output parameter (`double *e`, `uint64_t *r`, `int *n`) | a one-element array, allocated per call. A local whose address the C code passes (`cl` in `polydd`, `pl` in `as_acos_refine`) becomes a one-element array as well |
+| a pointer to a table (`const double c[][2]`) | `double[][]`, passed as it is |
+| `sizeof(a)/sizeof(a[0])` | `a.length` |
+| a C flag, `int hard = (a <= b && b <= 0) || c > 47;` | `boolean`, because Java's relational and logical operators yield `boolean` |
+| a `static const` scalar inside a function whose name is taken by a table of the same class (`static const double c` in `acos.c`) | a field with a suffix, `cTiny`, and a comment naming the C declaration |
 | `#if`-selected variants | translate the one the reference build uses (GCC 10+ or Clang 17+, `-O2`, `-ffp-contract=off`, no FMA contraction unless the source calls `__builtin_fma`), drop the rest. This is the one place where code is removed rather than translated |
 
 Floating-point behavior that has to survive the translation:

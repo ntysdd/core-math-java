@@ -6,6 +6,8 @@
 
 package io.github.ntysdd.coremath;
 
+import io.github.ntysdd.coremath.binary32.AcosF;
+import io.github.ntysdd.coremath.binary32.AsinF;
 import io.github.ntysdd.coremath.binary32.Atan2F;
 import io.github.ntysdd.coremath.binary32.AtanF;
 import io.github.ntysdd.coremath.binary32.CosF;
@@ -16,6 +18,8 @@ import io.github.ntysdd.coremath.binary32.LogF;
 import io.github.ntysdd.coremath.binary32.PowF;
 import io.github.ntysdd.coremath.binary32.SinF;
 import io.github.ntysdd.coremath.binary32.TanF;
+import io.github.ntysdd.coremath.binary64.Acos;
+import io.github.ntysdd.coremath.binary64.Asin;
 import io.github.ntysdd.coremath.binary64.Atan2;
 import io.github.ntysdd.coremath.binary64.Atan;
 import io.github.ntysdd.coremath.binary64.Cos;
@@ -500,5 +504,83 @@ public final class CrMath {
    */
   public static double log10(double x) {
     return Log10.compute(x);
+  }
+
+  /**
+   * Arcsine of a binary32 value; the translation of CORE-MATH
+   * {@code cr_asinf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) arcsine of {@code x}, in
+   * round-to-nearest-even, in the range {@code [-pi/2, pi/2]}.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code asin(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code asin(±1.0f)} is {@code ±pi/2}
+   *   <li>{@code asin(x)} is NaN for {@code |x| > 1}
+   *   <li>{@code asin(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded arcsine of {@code x}
+   */
+  public static float asin(float x) {
+    return AsinF.compute(x);
+  }
+
+  /**
+   * Arcsine of a binary64 value; the translation of CORE-MATH {@code cr_asin}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) arcsine of {@code x}, in
+   * round-to-nearest-even, in the range {@code [-pi/2, pi/2]}.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded arcsine of {@code x}
+   */
+  public static double asin(double x) {
+    return Asin.compute(x);
+  }
+
+  /**
+   * Arccosine of a binary32 value; the translation of CORE-MATH
+   * {@code cr_acosf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) arccosine of {@code x}, in
+   * round-to-nearest-even, in the range {@code [0, pi]}.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code acos(1.0f)} is {@code +0.0f}
+   *   <li>{@code acos(-1.0f)} is {@code pi}
+   *   <li>{@code acos(±0.0f)} is {@code pi/2}
+   *   <li>{@code acos(x)} is NaN for {@code |x| > 1}
+   *   <li>{@code acos(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded arccosine of {@code x}
+   */
+  public static float acos(float x) {
+    return AcosF.compute(x);
+  }
+
+  /**
+   * Arccosine of a binary64 value; the translation of CORE-MATH
+   * {@code cr_acos}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) arccosine of {@code x}, in
+   * round-to-nearest-even, in the range {@code [0, pi]}.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded arccosine of {@code x}
+   */
+  public static double acos(double x) {
+    return Acos.compute(x);
   }
 }
