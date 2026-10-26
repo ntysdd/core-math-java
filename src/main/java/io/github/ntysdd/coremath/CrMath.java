@@ -11,6 +11,7 @@ import io.github.ntysdd.coremath.binary32.AsinF;
 import io.github.ntysdd.coremath.binary32.Atan2F;
 import io.github.ntysdd.coremath.binary32.AtanF;
 import io.github.ntysdd.coremath.binary32.CosF;
+import io.github.ntysdd.coremath.binary32.CoshF;
 import io.github.ntysdd.coremath.binary32.ExpF;
 import io.github.ntysdd.coremath.binary32.Log10F;
 import io.github.ntysdd.coremath.binary32.Log2F;
@@ -24,6 +25,7 @@ import io.github.ntysdd.coremath.binary64.Asin;
 import io.github.ntysdd.coremath.binary64.Atan2;
 import io.github.ntysdd.coremath.binary64.Atan;
 import io.github.ntysdd.coremath.binary64.Cos;
+import io.github.ntysdd.coremath.binary64.Cosh;
 import io.github.ntysdd.coremath.binary64.Exp;
 import io.github.ntysdd.coremath.binary64.Log10;
 import io.github.ntysdd.coremath.binary64.Log2;
@@ -624,5 +626,45 @@ public final class CrMath {
    */
   public static double sinh(double x) {
     return Sinh.compute(x);
+  }
+
+  /**
+   * Hyperbolic cosine of a binary32 value; the translation of CORE-MATH
+   * {@code cr_coshf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) hyperbolic cosine of
+   * {@code x}, in round-to-nearest-even. Finite arguments whose result is too
+   * large round to {@code +Infinity}, as the standard requires.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code cosh(±0.0f)} is {@code 1.0f}
+   *   <li>{@code cosh(±Infinity)} is {@code +Infinity}
+   *   <li>{@code cosh(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded hyperbolic cosine of {@code x}
+   */
+  public static float cosh(float x) {
+    return CoshF.compute(x);
+  }
+
+  /**
+   * Hyperbolic cosine of a binary64 value; the translation of CORE-MATH
+   * {@code cr_cosh}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) hyperbolic cosine of
+   * {@code x}, in round-to-nearest-even. Finite arguments whose result is too
+   * large round to {@code +Infinity}, as the standard requires.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded hyperbolic cosine of {@code x}
+   */
+  public static double cosh(double x) {
+    return Cosh.compute(x);
   }
 }

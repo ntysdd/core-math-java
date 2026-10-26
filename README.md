@@ -45,6 +45,7 @@ rules that keep it that way.
 | `asin` | translated, tests pending | translated, tests pending | `src/binary{32,64}/asin` |
 | `acos` | translated, tests pending | translated, tests pending | `src/binary{32,64}/acos` |
 | `sinh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sinh` |
+| `cosh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cosh` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -84,6 +85,7 @@ double d = CrMath.log10(3.0);  // cr_log10, binary64
 double e = CrMath.asin(0.5);   // cr_asin, binary64
 double f = CrMath.acos(0.5);   // cr_acos, binary64
 double g = CrMath.sinh(0.5);   // cr_sinh, binary64
+double h = CrMath.cosh(0.5);   // cr_cosh, binary64
 ```
 
 The two overloads are separate implementations.
@@ -153,6 +155,8 @@ Correspondence between the two trees:
 | `src/binary64/acos/acos.c` (`cr_acos`) | `io.github.ntysdd.coremath.binary64.Acos` |
 | `src/binary32/sinh/sinhf.c` (`cr_sinhf`) | `io.github.ntysdd.coremath.binary32.SinhF` |
 | `src/binary64/sinh/sinh.c` (`cr_sinh`) | `io.github.ntysdd.coremath.binary64.Sinh` |
+| `src/binary32/cosh/coshf.c` (`cr_coshf`) | `io.github.ntysdd.coremath.binary32.CoshF` |
+| `src/binary64/cosh/cosh.c` (`cr_cosh`) | `io.github.ntysdd.coremath.binary64.Cosh` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation
