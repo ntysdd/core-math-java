@@ -10,6 +10,7 @@ import io.github.ntysdd.coremath.binary32.Atan2F;
 import io.github.ntysdd.coremath.binary32.AtanF;
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.ExpF;
+import io.github.ntysdd.coremath.binary32.Log10F;
 import io.github.ntysdd.coremath.binary32.Log2F;
 import io.github.ntysdd.coremath.binary32.LogF;
 import io.github.ntysdd.coremath.binary32.PowF;
@@ -19,6 +20,7 @@ import io.github.ntysdd.coremath.binary64.Atan2;
 import io.github.ntysdd.coremath.binary64.Atan;
 import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Exp;
+import io.github.ntysdd.coremath.binary64.Log10;
 import io.github.ntysdd.coremath.binary64.Log2;
 import io.github.ntysdd.coremath.binary64.Log;
 import io.github.ntysdd.coremath.binary64.Pow;
@@ -456,5 +458,47 @@ public final class CrMath {
    */
   public static double log2(double x) {
     return Log2.compute(x);
+  }
+
+  /**
+   * Base-10 logarithm of a binary32 value; the translation of CORE-MATH
+   * {@code cr_log10f}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) base-10 logarithm of
+   * {@code x}, in round-to-nearest-even. In particular it is exact on
+   * {@code 10^n} for {@code 0 <= n <= 22}.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code log10(1.0f)} is {@code +0.0f}
+   *   <li>{@code log10(±0.0f)} is {@code -Infinity}
+   *   <li>{@code log10(x)} is NaN for {@code x < 0}
+   *   <li>{@code log10(+Infinity)} is {@code +Infinity}
+   *   <li>{@code log10(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded base-10 logarithm of {@code x}
+   */
+  public static float log10(float x) {
+    return Log10F.compute(x);
+  }
+
+  /**
+   * Base-10 logarithm of a binary64 value; the translation of CORE-MATH
+   * {@code cr_log10}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) base-10 logarithm of
+   * {@code x}, in round-to-nearest-even. In particular it is exact on
+   * {@code 10^n} for {@code 0 <= n <= 22}.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded base-10 logarithm of {@code x}
+   */
+  public static double log10(double x) {
+    return Log10.compute(x);
   }
 }

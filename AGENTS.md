@@ -107,6 +107,11 @@ Add missing cases to this table instead of inventing a local convention.
 | `#pragma STDC FENV_ACCESS` | nothing |
 | `static const` tables | `private static final` fields, same order, same values |
 | an array of a small anonymous struct of integers (`struct {ushort c0; short c1;} B[]` in `log2.c`) | `int[][]`, one row per entry, the columns in declaration order |
+| an array of the union `{float f; uint32_t u;}` whose initializers set the float member (`st[]` in `log10f.c`) | `float[]` with the C literals plus an `f` suffix, and `Float.floatToRawIntBits` where the code reads the `u` member |
+| `(const uint64_t *)pow10`, the bit view of a table of `double` (`log10.c`) | `Double.doubleToRawLongBits` applied to the entry at the use site; the table keeps the C spelling |
+| `unsigned int` arithmetic that wraps and is shifted logically (`0x267cfa2u*((unsigned int)e+1u)>>27` in `log10.c`) | the same wrapping arithmetic on `int`, which is defined to wrap, with `>>>` for the unsigned shift |
+| an `int64_t` local that holds at most 32 bits (`m` and `j` of `log10f.c`) | `int`, widening to `long` only where the C code shifts it into the significand (`log2f.c` does the same) |
+| `#define` constants inside a function (`OFFSET`, `ONE_OVER_LOG10_H`, `ONE_OVER_LOG10_L`) | `private static final` fields, with a comment naming the C macro |
 | `#if`-selected variants | translate the one the reference build uses (GCC 10+ or Clang 17+, `-O2`, `-ffp-contract=off`, no FMA contraction unless the source calls `__builtin_fma`), drop the rest. This is the one place where code is removed rather than translated |
 
 Floating-point behavior that has to survive the translation:
