@@ -39,6 +39,7 @@ rules that keep it that way.
 | `log` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log` |
 | `pow` | translated, tests pending | translated, tests pending | `src/binary{32,64}/pow` |
 | `atan` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atan` |
+| `atan2` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atan2` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -72,6 +73,7 @@ double p = CrMath.tan(1.0);     // cr_tan,  binary64
 double f = CrMath.exp(1.0);     // cr_exp,  binary64
 double h = CrMath.pow(2.0, 3.0); // cr_pow, binary64
 double a = CrMath.atan(1.0);    // cr_atan, binary64
+double b = CrMath.atan2(1.0, 2.0); // cr_atan2, binary64
 ```
 
 The two overloads are separate implementations.
@@ -129,6 +131,8 @@ Correspondence between the two trees:
 | `src/binary64/pow/pow.c` (`cr_pow`), `pow.h`, `dint.h` and `qint.h` | `io.github.ntysdd.coremath.binary64.Pow` |
 | `src/binary32/atan/atanf.c` (`cr_atanf`) | `io.github.ntysdd.coremath.binary32.AtanF` |
 | `src/binary64/atan/atan.c` (`cr_atan`) | `io.github.ntysdd.coremath.binary64.Atan` |
+| `src/binary32/atan2/atan2f.c` (`cr_atan2f`) | `io.github.ntysdd.coremath.binary32.Atan2F` |
+| `src/binary64/atan2/atan2.c` (`cr_atan2`) and `tint.h` | `io.github.ntysdd.coremath.binary64.Atan2` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation

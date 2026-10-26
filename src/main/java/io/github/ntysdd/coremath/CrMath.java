@@ -6,6 +6,7 @@
 
 package io.github.ntysdd.coremath;
 
+import io.github.ntysdd.coremath.binary32.Atan2F;
 import io.github.ntysdd.coremath.binary32.AtanF;
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.ExpF;
@@ -13,6 +14,7 @@ import io.github.ntysdd.coremath.binary32.LogF;
 import io.github.ntysdd.coremath.binary32.PowF;
 import io.github.ntysdd.coremath.binary32.SinF;
 import io.github.ntysdd.coremath.binary32.TanF;
+import io.github.ntysdd.coremath.binary64.Atan2;
 import io.github.ntysdd.coremath.binary64.Atan;
 import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Exp;
@@ -361,5 +363,55 @@ public final class CrMath {
    */
   public static double atan(double x) {
     return Atan.compute(x);
+  }
+
+  /**
+   * Arc tangent of {@code y/x} for two binary32 values, with the quadrant
+   * chosen from the signs; the translation of CORE-MATH {@code cr_atan2f}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) arc tangent of
+   * {@code y/x}, in round-to-nearest-even, in the range
+   * {@code [-pi, pi]}.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code atan2(±0.0f, +0.0f)} is {@code ±0.0f}
+   *   <li>{@code atan2(±0.0f, -0.0f)} and {@code atan2(±0.0f, x < 0)} are
+   *       {@code ±pi}
+   *   <li>{@code atan2(±0.0f, x > 0)} is {@code ±0.0f}
+   *   <li>{@code atan2(y > 0, ±0.0f)} is {@code +pi/2} and
+   *       {@code atan2(y < 0, ±0.0f)} is {@code -pi/2}
+   *   <li>{@code atan2(±y, +Infinity)} is {@code ±0.0f} and
+   *       {@code atan2(±y, -Infinity)} is {@code ±pi}
+   *   <li>{@code atan2(±Infinity, x)} is {@code ±pi/2}
+   *   <li>{@code atan2(±Infinity, +Infinity)} is {@code ±pi/4} and
+   *       {@code atan2(±Infinity, -Infinity)} is {@code ±3pi/4}
+   *   <li>a NaN argument gives a NaN
+   * </ul>
+   *
+   * @param y the ordinate
+   * @param x the abscissa
+   * @return the correctly rounded arc tangent of {@code y/x}, quadrant resolved
+   */
+  public static float atan2(float y, float x) {
+    return Atan2F.compute(y, x);
+  }
+
+  /**
+   * Arc tangent of {@code y/x} for two binary64 values, with the quadrant
+   * chosen from the signs; the translation of CORE-MATH {@code cr_atan2}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) arc tangent of
+   * {@code y/x}, in round-to-nearest-even, in the range {@code [-pi, pi]}.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param y the ordinate
+   * @param x the abscissa
+   * @return the correctly rounded arc tangent of {@code y/x}, quadrant resolved
+   */
+  public static double atan2(double y, double x) {
+    return Atan2.compute(y, x);
   }
 }
