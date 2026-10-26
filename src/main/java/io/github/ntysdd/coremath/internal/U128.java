@@ -96,4 +96,12 @@ public final class U128 {
     int c = Long.compareUnsigned(hi, b.hi);
     return c != 0 ? c : Long.compareUnsigned(lo, b.lo);
   }
+
+  /**
+   * The C code's {@code !!(u128)v} test: {@code 0} for zero, {@code 1}
+   * otherwise.
+   */
+  public int signum() {
+    return (lo|hi) != 0 ? 1 : 0;
+  }
 }

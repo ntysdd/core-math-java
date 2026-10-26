@@ -17,6 +17,7 @@ import io.github.ntysdd.coremath.binary32.CosPiF;
 import io.github.ntysdd.coremath.binary32.ExpF;
 import io.github.ntysdd.coremath.binary32.Exp2F;
 import io.github.ntysdd.coremath.binary32.Expm1F;
+import io.github.ntysdd.coremath.binary32.HypotF;
 import io.github.ntysdd.coremath.binary32.Log10F;
 import io.github.ntysdd.coremath.binary32.Log2F;
 import io.github.ntysdd.coremath.binary32.LogF;
@@ -38,6 +39,7 @@ import io.github.ntysdd.coremath.binary64.CosPi;
 import io.github.ntysdd.coremath.binary64.Exp;
 import io.github.ntysdd.coremath.binary64.Exp2;
 import io.github.ntysdd.coremath.binary64.Expm1;
+import io.github.ntysdd.coremath.binary64.Hypot;
 import io.github.ntysdd.coremath.binary64.Log10;
 import io.github.ntysdd.coremath.binary64.Log2;
 import io.github.ntysdd.coremath.binary64.Log;
@@ -972,5 +974,50 @@ public final class CrMath {
    */
   public static double cospi(double x) {
     return CosPi.compute(x);
+  }
+
+  /**
+   * {@code sqrt(x*x + y*y)} of two binary32 values without intermediate
+   * overflow or underflow; the translation of CORE-MATH {@code cr_hypotf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) Euclidean distance
+   * {@code sqrt(x*x + y*y)}, in round-to-nearest-even. Neither the squares nor
+   * their sum are formed in the binary32 format, so a result that fits is
+   * returned even when {@code x*x} or {@code y*y} would overflow to infinity.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code hypot(±0.0f, ±0.0f)} is {@code +0.0f}
+   *   <li>{@code hypot(x, ±0.0f)} is {@code |x|}
+   *   <li>{@code hypot(±Infinity, y)} is {@code +Infinity}, even when {@code y}
+   *       is NaN
+   *   <li>{@code hypot(NaN, y)} is NaN unless {@code y} is an infinity
+   *   <li>a finite result too large for the format rounds to
+   *       {@code +Infinity}
+   * </ul>
+   *
+   * @param x one leg
+   * @param y the other leg
+   * @return the correctly rounded {@code sqrt(x*x + y*y)}
+   */
+  public static float hypot(float x, float y) {
+    return HypotF.compute(x, y);
+  }
+
+  /**
+   * {@code sqrt(x*x + y*y)} of two binary64 values without intermediate
+   * overflow or underflow; the translation of CORE-MATH {@code cr_hypot}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) Euclidean distance
+   * {@code sqrt(x*x + y*y)}, in round-to-nearest-even, and keeps the subnormal
+   * range exact. The special cases are the ones of the {@code float} overload,
+   * with the binary64 constants.
+   *
+   * @param x one leg
+   * @param y the other leg
+   * @return the correctly rounded {@code sqrt(x*x + y*y)}
+   */
+  public static double hypot(double x, double y) {
+    return Hypot.compute(x, y);
   }
 }
