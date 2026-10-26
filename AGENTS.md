@@ -83,6 +83,7 @@ Add missing cases to this table instead of inventing a local convention.
 | `int`, `int32_t` | `int` |
 | `long`, `int64_t`, `uint64_t` | `long`, unsigned views through `Long.compareUnsigned`, `Long.divideUnsigned`, `Long.toUnsignedString`; never mix signed and unsigned comparisons by accident |
 | `unsigned char`, `uint8_t` | `int`, range-checked where the range matters |
+| `uint32_t` | `int`, with `>>>` for its shifts and `Integer.compareUnsigned` at every comparison. Java has no unsigned 32-bit type, so a shift that moves bit 31 out (`au = u<<1`, `ax = ux<<1`, anything built from a sign-magnitude bit pattern) leaves a *negative* `int` where the C value is a large `uint32_t`; a signed `<` or `>` then takes the wrong branch, `Integer.numberOfLeadingZeros` returns 0 instead of the `__builtin_clz` value, and a shift count computed from it goes negative and is masked modulo 32. `cbrtf.c`'s `au = u<<1; au < 1u<<24 \|\| au >= 0xffu<<24` is that case: written with a signed test it sent every negative argument into the subnormal branch and was off by a factor of six until the oracle caught it |
 | `u128` / `unsigned __int128` | `long hi` plus `long lo` with static helpers in `internal.U128`. 64x64 to 128 goes through `Math.multiplyHigh` with the unsigned correction, since `Math.unsignedMultiplyHigh` is Java 18 |
 | `b64u64_u`, `b32u32_u` unions | `Double.doubleToRawLongBits` and friends, or a small `internal` value class with a comment naming the C union |
 | `dint64_t` and similar structs | a small mutable `internal` class with the same field names (`lo`, `hi`, `ex`, `sgn`) and the same invariants, described in its Javadoc. `qint64_t` becomes `internal.Qint64` the same way, with the four limbs `hh`, `hl`, `lh`, `ll` and the `rh` / `rl` union members as accessors, and `tint_t` becomes `internal.Tint64` with `h`, `m`, `l` and `_h` / `_l` |
@@ -247,6 +248,9 @@ mvn -q -DskipTests package    # jar only
   same branches.
 * Nothing departs from the C code beyond the mechanical mapping in §3, and
   anything that would have needed approval went through §9 first.
+* Every comparison of a `uint32_t` goes through `Integer.compareUnsigned` and
+  every one of a `uint64_t` through `Long.compareUnsigned`; values built by a
+  shift that can move the sign bit (`x<<1`) are the ones to check first.
 * Every class doing floating-point work is `strictfp`.
 * NaN results are asserted with `isNaN`, and no C `0.0f/0.0f` was carried over
   as arithmetic (§3).
