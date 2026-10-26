@@ -37,6 +37,7 @@ rules that keep it that way.
 | `tan` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tan` |
 | `exp` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp` |
 | `log` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log` |
+| `pow` | translated, tests pending | not translated | `src/binary{32,64}/pow` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -53,19 +54,21 @@ trigonometric family, their inverses and the hyperbolic variants.
 
 ## Usage
 
-The API, with `sin`, `cos`, `tan` and `exp` translated for both binary types:
+The API. See the scope table for which functions exist so far in which binary
+format:
 
 ```java
 import io.github.ntysdd.coremath.CrMath;
 
-float  z = CrMath.sin(1.0f);  // cr_sinf, binary32
-float  w = CrMath.cos(1.0f);  // cr_cosf, binary32
-float  q = CrMath.tan(1.0f);  // cr_tanf, binary32
-float  e = CrMath.exp(1.0f);  // cr_expf, binary32
-double y = CrMath.sin(1.0);   // cr_sin,  binary64
-double v = CrMath.cos(1.0);   // cr_cos,  binary64
-double p = CrMath.tan(1.0);   // cr_tan,  binary64
-double f = CrMath.exp(1.0);   // cr_exp,  binary64
+float  z = CrMath.sin(1.0f);    // cr_sinf, binary32
+float  w = CrMath.cos(1.0f);    // cr_cosf, binary32
+float  q = CrMath.tan(1.0f);    // cr_tanf, binary32
+float  e = CrMath.exp(1.0f);    // cr_expf, binary32
+float  g = CrMath.pow(2.0f, 3.0f); // cr_powf, binary32
+double y = CrMath.sin(1.0);     // cr_sin,  binary64
+double v = CrMath.cos(1.0);     // cr_cos,  binary64
+double p = CrMath.tan(1.0);     // cr_tan,  binary64
+double f = CrMath.exp(1.0);     // cr_exp,  binary64
 ```
 
 The two overloads are separate implementations.
@@ -119,6 +122,7 @@ Correspondence between the two trees:
 | `src/binary64/exp/exp.c` (`cr_exp`) | `io.github.ntysdd.coremath.binary64.Exp` |
 | `src/binary32/log/logf.c` (`cr_logf`) | `io.github.ntysdd.coremath.binary32.LogF` |
 | `src/binary64/log/log.c` (`cr_log`) and `dint.h` | `io.github.ntysdd.coremath.binary64.Log` |
+| `src/binary32/pow/powf.c` (`cr_powf`) | `io.github.ntysdd.coremath.binary32.PowF` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation

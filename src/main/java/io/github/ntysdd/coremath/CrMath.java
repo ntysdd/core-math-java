@@ -9,6 +9,7 @@ package io.github.ntysdd.coremath;
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.ExpF;
 import io.github.ntysdd.coremath.binary32.LogF;
+import io.github.ntysdd.coremath.binary32.PowF;
 import io.github.ntysdd.coremath.binary32.SinF;
 import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary64.Cos;
@@ -242,5 +243,39 @@ public final class CrMath {
    */
   public static double log(double x) {
     return Log.compute(x);
+  }
+
+  /**
+   * Power of two binary32 values; the translation of CORE-MATH
+   * {@code cr_powf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of {@code x} raised
+   * to {@code y}, in round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code pow(±0.0f, y)} is {@code ±0.0f} for {@code y} a positive odd
+   *       integer, {@code +0.0f} for other positive {@code y}, and
+   *       {@code ±Infinity} for negative {@code y}
+   *   <li>{@code pow(±Infinity, y)} is {@code ±0.0f} for negative {@code y} and
+   *       {@code ±Infinity} for positive {@code y}, with the sign of the odd
+   *       integer case
+   *   <li>{@code pow(x, ±0.0f)} is {@code 1.0f} for every {@code x}, NaN
+   *       included
+   *   <li>{@code pow(1.0f, y)} is {@code 1.0f} for every {@code y}
+   *   <li>{@code pow(x, 1.0f)} is {@code x}
+   *   <li>{@code pow(x, y)} is NaN for a negative finite {@code x} and a
+   *       non-integer {@code y}
+   *   <li>{@code pow(-1.0f, ±Infinity)} is {@code 1.0f}
+   *   <li>{@code pow(NaN, 0.0f)} is {@code 1.0f}, {@code pow(1.0f, NaN)} is
+   *       {@code 1.0f}, and every other NaN argument gives a NaN
+   * </ul>
+   *
+   * @param x the base
+   * @param y the exponent
+   * @return the correctly rounded {@code x} raised to {@code y}
+   */
+  public static float pow(float x, float y) {
+    return PowF.compute(x, y);
   }
 }
