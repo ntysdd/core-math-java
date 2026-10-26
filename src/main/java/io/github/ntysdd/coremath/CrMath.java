@@ -9,6 +9,7 @@ package io.github.ntysdd.coremath;
 import io.github.ntysdd.coremath.binary32.AcosF;
 import io.github.ntysdd.coremath.binary32.AcoshF;
 import io.github.ntysdd.coremath.binary32.AsinhF;
+import io.github.ntysdd.coremath.binary32.AtanhF;
 import io.github.ntysdd.coremath.binary32.AsinF;
 import io.github.ntysdd.coremath.binary32.Atan2F;
 import io.github.ntysdd.coremath.binary32.AtanF;
@@ -33,6 +34,7 @@ import io.github.ntysdd.coremath.binary32.TanhF;
 import io.github.ntysdd.coremath.binary64.Acos;
 import io.github.ntysdd.coremath.binary64.Acosh;
 import io.github.ntysdd.coremath.binary64.Asinh;
+import io.github.ntysdd.coremath.binary64.Atanh;
 import io.github.ntysdd.coremath.binary64.Asin;
 import io.github.ntysdd.coremath.binary64.Atan2;
 import io.github.ntysdd.coremath.binary64.Atan;
@@ -1100,5 +1102,45 @@ public final class CrMath {
    */
   public static double acosh(double x) {
     return Acosh.compute(x);
+  }
+
+  /**
+   * Inverse hyperbolic tangent of a binary32 value; the translation of
+   * CORE-MATH {@code cr_atanhf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code log((1+x)/(1-x))/2}, in round-to-nearest-even, and is the exact
+   * {@code x} for every {@code x} small enough that the correction vanishes.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code atanh(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code atanh(±1.0f)} is {@code ±Infinity}, a pole rather than a
+   *       domain error
+   *   <li>{@code atanh(x)} is NaN for {@code |x| > 1}, including the
+   *       infinities
+   *   <li>{@code atanh(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument, between -1 and 1
+   * @return the correctly rounded inverse hyperbolic tangent
+   */
+  public static float atanh(float x) {
+    return AtanhF.compute(x);
+  }
+
+  /**
+   * Inverse hyperbolic tangent of a binary64 value; the translation of
+   * CORE-MATH {@code cr_atanh}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code log((1+x)/(1-x))/2}, in round-to-nearest-even. The special cases are
+   * the ones of the {@code float} overload, with the binary64 constants.
+   *
+   * @param x the argument, between -1 and 1
+   * @return the correctly rounded inverse hyperbolic tangent
+   */
+  public static double atanh(double x) {
+    return Atanh.compute(x);
   }
 }
