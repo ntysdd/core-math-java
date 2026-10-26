@@ -6,12 +6,14 @@
 
 package io.github.ntysdd.coremath;
 
+import io.github.ntysdd.coremath.binary32.AtanF;
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.ExpF;
 import io.github.ntysdd.coremath.binary32.LogF;
 import io.github.ntysdd.coremath.binary32.PowF;
 import io.github.ntysdd.coremath.binary32.SinF;
 import io.github.ntysdd.coremath.binary32.TanF;
+import io.github.ntysdd.coremath.binary64.Atan;
 import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Exp;
 import io.github.ntysdd.coremath.binary64.Log;
@@ -317,5 +319,47 @@ public final class CrMath {
    */
   public static double pow(double x, double y) {
     return Pow.compute(x, y);
+  }
+
+  /**
+   * Arc tangent of a binary32 value; the translation of CORE-MATH
+   * {@code cr_atanf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) arc tangent of
+   * {@code x}, in round-to-nearest-even, in the range {@code [-pi/2, pi/2]}.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code atan(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code atan(±Infinity)} is {@code ±pi/2}, rounded to binary32
+   *   <li>{@code atan(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded arc tangent of {@code x}
+   */
+  public static float atan(float x) {
+    return AtanF.compute(x);
+  }
+
+  /**
+   * Arc tangent of a binary64 value; the translation of CORE-MATH
+   * {@code cr_atan}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) arc tangent of
+   * {@code x}, in round-to-nearest-even, in the range {@code [-pi/2, pi/2]}.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code atan(±0.0)} is {@code ±0.0}
+   *   <li>{@code atan(±Infinity)} is {@code ±pi/2}, rounded to binary64
+   *   <li>{@code atan(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded arc tangent of {@code x}
+   */
+  public static double atan(double x) {
+    return Atan.compute(x);
   }
 }

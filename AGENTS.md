@@ -173,7 +173,12 @@ Vectors are produced outside the build, from a local checkout of upstream:
 1. Check out the commit recorded in the Java file header.
 2. Build the function with reference flags: GCC 10+ or Clang 17+ at `-O2`,
    with `-ffp-contract=off`, no `-ffast-math`. FMA happens only where the
-   source calls `__builtin_fma`.
+   source calls `__builtin_fma`. On x86-64 without `-mfma` that call goes to
+   the C library's `fma`, and a wrong one silently ruins the vectors: the
+   mingw fma of gcc 13.2.0 is not exact when the product falls in the subnormal
+   range, which moved 499 of a million `cr_atan` results by one ulp until the
+   oracle was rebuilt with `-mfma`. Add it whenever the source calls
+   `__builtin_fma`, and check that `fma` is exact before trusting a vector file.
 3. Feed the input set through the C entry point and print the raw bit patterns,
    one line per case: `<input> <output>` in hexadecimal.
 4. Commit the file as `src/test/resources/vectors/<type>/<name>.txt`, with a `#`
