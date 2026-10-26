@@ -7,6 +7,7 @@
 package io.github.ntysdd.coremath;
 
 import io.github.ntysdd.coremath.binary32.AcosF;
+import io.github.ntysdd.coremath.binary32.AcoshF;
 import io.github.ntysdd.coremath.binary32.AsinhF;
 import io.github.ntysdd.coremath.binary32.AsinF;
 import io.github.ntysdd.coremath.binary32.Atan2F;
@@ -30,6 +31,7 @@ import io.github.ntysdd.coremath.binary32.SinPiF;
 import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary32.TanhF;
 import io.github.ntysdd.coremath.binary64.Acos;
+import io.github.ntysdd.coremath.binary64.Acosh;
 import io.github.ntysdd.coremath.binary64.Asinh;
 import io.github.ntysdd.coremath.binary64.Asin;
 import io.github.ntysdd.coremath.binary64.Atan2;
@@ -1060,5 +1062,43 @@ public final class CrMath {
    */
   public static double asinh(double x) {
     return Asinh.compute(x);
+  }
+
+  /**
+   * Inverse hyperbolic cosine of a binary32 value; the translation of CORE-MATH
+   * {@code cr_acoshf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code log(x + sqrt(x*x - 1))}, in round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code acosh(1.0f)} is {@code +0.0f}
+   *   <li>{@code acosh(x)} is NaN for {@code x < 1}, including the negative
+   *       arguments and {@code -Infinity}
+   *   <li>{@code acosh(+Infinity)} is {@code +Infinity}
+   *   <li>{@code acosh(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument, at least one
+   * @return the correctly rounded inverse hyperbolic cosine
+   */
+  public static float acosh(float x) {
+    return AcoshF.compute(x);
+  }
+
+  /**
+   * Inverse hyperbolic cosine of a binary64 value; the translation of CORE-MATH
+   * {@code cr_acosh}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code log(x + sqrt(x*x - 1))}, in round-to-nearest-even. The special cases
+   * are the ones of the {@code float} overload, with the binary64 constants.
+   *
+   * @param x the argument, at least one
+   * @return the correctly rounded inverse hyperbolic cosine
+   */
+  public static double acosh(double x) {
+    return Acosh.compute(x);
   }
 }
