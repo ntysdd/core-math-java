@@ -13,6 +13,7 @@ import io.github.ntysdd.coremath.binary32.AtanF;
 import io.github.ntysdd.coremath.binary32.CbrtF;
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.CoshF;
+import io.github.ntysdd.coremath.binary32.CosPiF;
 import io.github.ntysdd.coremath.binary32.ExpF;
 import io.github.ntysdd.coremath.binary32.Exp2F;
 import io.github.ntysdd.coremath.binary32.Expm1F;
@@ -23,6 +24,7 @@ import io.github.ntysdd.coremath.binary32.Log1pF;
 import io.github.ntysdd.coremath.binary32.PowF;
 import io.github.ntysdd.coremath.binary32.SinF;
 import io.github.ntysdd.coremath.binary32.SinhF;
+import io.github.ntysdd.coremath.binary32.SinPiF;
 import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary32.TanhF;
 import io.github.ntysdd.coremath.binary64.Acos;
@@ -32,6 +34,7 @@ import io.github.ntysdd.coremath.binary64.Atan;
 import io.github.ntysdd.coremath.binary64.Cbrt;
 import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Cosh;
+import io.github.ntysdd.coremath.binary64.CosPi;
 import io.github.ntysdd.coremath.binary64.Exp;
 import io.github.ntysdd.coremath.binary64.Exp2;
 import io.github.ntysdd.coremath.binary64.Expm1;
@@ -42,6 +45,7 @@ import io.github.ntysdd.coremath.binary64.Log1p;
 import io.github.ntysdd.coremath.binary64.Pow;
 import io.github.ntysdd.coremath.binary64.Sin;
 import io.github.ntysdd.coremath.binary64.Sinh;
+import io.github.ntysdd.coremath.binary64.SinPi;
 import io.github.ntysdd.coremath.binary64.Tan;
 import io.github.ntysdd.coremath.binary64.Tanh;
 
@@ -885,5 +889,88 @@ public final class CrMath {
    */
   public static double expm1(double x) {
     return Expm1.compute(x);
+  }
+
+  /**
+   * {@code sin(pi*x)} of a binary32 value; the translation of CORE-MATH
+   * {@code cr_sinpif}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) sine of {@code pi*x}, in
+   * round-to-nearest-even. It is not {@code (float) Math.sin(Math.PI*x)}: the
+   * argument of this function is exact, so the reduction inside it never loses
+   * the bits of {@code x} that the {@code pi} constant would smear.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code sinpi(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code sinpi(±Infinity)} is NaN
+   *   <li>{@code sinpi(NaN)} is NaN
+   *   <li>{@code sinpi(x)} is {@code ±0.0f} for every nonzero integer
+   *       {@code x}, with the sign of {@code x}
+   *   <li>{@code sinpi(x)} is {@code ±1.0f} for every half-integer {@code x},
+   *       with the sign of {@code sin(pi*x)}
+   * </ul>
+   *
+   * @param x the argument, in units of pi
+   * @return the correctly rounded sine of {@code pi*x}
+   */
+  public static float sinpi(float x) {
+    return SinPiF.compute(x);
+  }
+
+  /**
+   * {@code sin(pi*x)} of a binary64 value; the translation of CORE-MATH
+   * {@code cr_sinpi}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) sine of {@code pi*x}, in
+   * round-to-nearest-even. The special cases are the ones of the {@code float}
+   * overload, with the binary64 constants.
+   *
+   * @param x the argument, in units of pi
+   * @return the correctly rounded sine of {@code pi*x}
+   */
+  public static double sinpi(double x) {
+    return SinPi.compute(x);
+  }
+
+  /**
+   * {@code cos(pi*x)} of a binary32 value; the translation of CORE-MATH
+   * {@code cr_cospif}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) cosine of {@code pi*x}, in
+   * round-to-nearest-even. It is not {@code (float) Math.cos(Math.PI*x)}: the
+   * argument of this function is exact, so the reduction inside it never loses
+   * the bits of {@code x} that the {@code pi} constant would smear.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code cospi(±0.0f)} is {@code 1.0f}
+   *   <li>{@code cospi(±Infinity)} is NaN
+   *   <li>{@code cospi(NaN)} is NaN
+   *   <li>{@code cospi(x)} is {@code -1.0f} for every odd integer {@code x} and
+   *       {@code 1.0f} for every other integer
+   *   <li>{@code cospi(x)} is {@code +0.0f} for every half-integer {@code x}
+   * </ul>
+   *
+   * @param x the argument, in units of pi
+   * @return the correctly rounded cosine of {@code pi*x}
+   */
+  public static float cospi(float x) {
+    return CosPiF.compute(x);
+  }
+
+  /**
+   * {@code cos(pi*x)} of a binary64 value; the translation of CORE-MATH
+   * {@code cr_cospi}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) cosine of {@code pi*x}, in
+   * round-to-nearest-even. The special cases are the ones of the {@code float}
+   * overload, with the binary64 constants.
+   *
+   * @param x the argument, in units of pi
+   * @return the correctly rounded cosine of {@code pi*x}
+   */
+  public static double cospi(double x) {
+    return CosPi.compute(x);
   }
 }
