@@ -14,6 +14,7 @@ import io.github.ntysdd.coremath.binary32.CbrtF;
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.CoshF;
 import io.github.ntysdd.coremath.binary32.ExpF;
+import io.github.ntysdd.coremath.binary32.Exp2F;
 import io.github.ntysdd.coremath.binary32.Log10F;
 import io.github.ntysdd.coremath.binary32.Log2F;
 import io.github.ntysdd.coremath.binary32.LogF;
@@ -30,6 +31,7 @@ import io.github.ntysdd.coremath.binary64.Cbrt;
 import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Cosh;
 import io.github.ntysdd.coremath.binary64.Exp;
+import io.github.ntysdd.coremath.binary64.Exp2;
 import io.github.ntysdd.coremath.binary64.Log10;
 import io.github.ntysdd.coremath.binary64.Log2;
 import io.github.ntysdd.coremath.binary64.Log;
@@ -745,5 +747,48 @@ public final class CrMath {
    */
   public static double cbrt(double x) {
     return Cbrt.compute(x);
+  }
+
+  /**
+   * {@code 2^x} of a binary32 value; the translation of CORE-MATH
+   * {@code cr_exp2f}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of two raised to
+   * {@code x}, in round-to-nearest-even, and is exact on every power of two the
+   * exponent field can express.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code exp2(±0.0f)} is {@code 1.0f}
+   *   <li>{@code exp2(-Infinity)} is {@code +0.0f}
+   *   <li>{@code exp2(+Infinity)} is {@code +Infinity}
+   *   <li>{@code exp2(NaN)} is NaN
+   *   <li>a finite argument whose result overflows rounds to
+   *       {@code +Infinity}, one whose result underflows to {@code +0.0f}
+   * </ul>
+   *
+   * @param x the exponent
+   * @return the correctly rounded {@code 2^x}
+   */
+  public static float exp2(float x) {
+    return Exp2F.compute(x);
+  }
+
+  /**
+   * {@code 2^x} of a binary64 value; the translation of CORE-MATH
+   * {@code cr_exp2}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of two raised to
+   * {@code x}, in round-to-nearest-even, and is exact on every power of two the
+   * exponent field can express.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param x the exponent
+   * @return the correctly rounded {@code 2^x}
+   */
+  public static double exp2(double x) {
+    return Exp2.compute(x);
   }
 }
