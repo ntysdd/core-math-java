@@ -101,6 +101,8 @@ Add missing cases to this table instead of inventing a local convention.
 | `*(uint64_t*)&d` and other type punning | `Double.doubleToRawLongBits(d)` |
 | `errno` assignments (`EDOM`, `EINVAL`, `ERANGE`) | omit. Java has no `errno`, and upstream assigns it only under `CORE_MATH_SUPPORT_ERRNO`, which no caller here can observe |
 | `fetestexcept`, `feraiseexcept`, `fesetround` | omit, same reason. The JVM exposes no floating-point environment and round-to-nearest-even is the only mode |
+| `fegetround`, `_mm_getcsr`, `_mm_setcsr` and other reads of the rounding mode | omit together with every branch that exists only for a directed rounding mode, and write a comment saying what the deleted code did and why it is dead. Java has round-to-nearest-even and nothing else, so `rm` is a constant 0: `off[rm]` becomes `off[0]`, `if (rm > 0) { ... }` goes away, and a table that only such a branch reads (`wlist` in `cbrt.c`) goes away with it |
+| a block behind a macro the reference build does not define (`#ifdef CORE_MATH_CHECK_INEXACT` in `cbrtf.c`) | drop it as an unbuilt `#if` variant, like the last row of this table |
 | `exit(1)` in a verification path | `throw new IllegalStateException(...)` |
 | `printf` in translated code | remove. The library does no logging |
 | `__attribute__((noinline))`, `__builtin_expect` | nothing, the JIT decides and profiles branches itself |

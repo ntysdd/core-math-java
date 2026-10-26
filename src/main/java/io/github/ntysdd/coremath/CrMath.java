@@ -10,6 +10,7 @@ import io.github.ntysdd.coremath.binary32.AcosF;
 import io.github.ntysdd.coremath.binary32.AsinF;
 import io.github.ntysdd.coremath.binary32.Atan2F;
 import io.github.ntysdd.coremath.binary32.AtanF;
+import io.github.ntysdd.coremath.binary32.CbrtF;
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.CoshF;
 import io.github.ntysdd.coremath.binary32.ExpF;
@@ -25,6 +26,7 @@ import io.github.ntysdd.coremath.binary64.Acos;
 import io.github.ntysdd.coremath.binary64.Asin;
 import io.github.ntysdd.coremath.binary64.Atan2;
 import io.github.ntysdd.coremath.binary64.Atan;
+import io.github.ntysdd.coremath.binary64.Cbrt;
 import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Cosh;
 import io.github.ntysdd.coremath.binary64.Exp;
@@ -706,5 +708,42 @@ public final class CrMath {
    */
   public static double tanh(double x) {
     return Tanh.compute(x);
+  }
+
+  /**
+   * Cube root of a binary32 value; the translation of CORE-MATH
+   * {@code cr_cbrtf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) cube root of {@code x}, in
+   * round-to-nearest-even, and is exact on every cube.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code cbrt(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code cbrt(±Infinity)} is {@code ±Infinity}
+   *   <li>{@code cbrt(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded cube root of {@code x}
+   */
+  public static float cbrt(float x) {
+    return CbrtF.compute(x);
+  }
+
+  /**
+   * Cube root of a binary64 value; the translation of CORE-MATH {@code cr_cbrt}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) cube root of {@code x}, in
+   * round-to-nearest-even, and is exact on every cube.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded cube root of {@code x}
+   */
+  public static double cbrt(double x) {
+    return Cbrt.compute(x);
   }
 }
