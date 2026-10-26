@@ -15,6 +15,7 @@ import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Exp;
 import io.github.ntysdd.coremath.binary64.Log;
+import io.github.ntysdd.coremath.binary64.Pow;
 import io.github.ntysdd.coremath.binary64.Sin;
 import io.github.ntysdd.coremath.binary64.Tan;
 
@@ -277,5 +278,44 @@ public final class CrMath {
    */
   public static float pow(float x, float y) {
     return PowF.compute(x, y);
+  }
+
+  /**
+   * Power of two binary64 values; the translation of CORE-MATH
+   * {@code cr_pow}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of {@code x} raised
+   * to {@code y}, in round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code pow(±0.0, y)} is {@code ±0.0} for {@code y} a positive odd
+   *       integer, {@code +0.0} for other positive {@code y}, and
+   *       {@code ±Infinity} for negative {@code y}
+   *   <li>{@code pow(±Infinity, y)} is {@code ±0.0} for negative {@code y} and
+   *       {@code ±Infinity} for positive {@code y}, with the sign of the odd
+   *       integer case
+   *   <li>{@code pow(x, ±0.0)} is {@code 1.0} for every {@code x}, NaN
+   *       included
+   *   <li>{@code pow(1.0, y)} is {@code 1.0} for every {@code y}, NaN and the
+   *       infinities included
+   *   <li>{@code pow(x, 1.0)} is {@code x}
+   *   <li>{@code pow(x, y)} is NaN for a negative finite {@code x} and a
+   *       non-integer {@code y}
+   *   <li>{@code pow(-1.0, ±Infinity)} is {@code 1.0}
+   *   <li>{@code pow(NaN, 0.0)} is {@code 1.0}, {@code pow(1.0, NaN)} is
+   *       {@code 1.0}, and every other NaN argument gives a NaN
+   * </ul>
+   *
+   * <p>Note that {@link Math#pow} answers NaN for {@code pow(±1.0, ±Infinity)}
+   * and for {@code pow(1.0, NaN)}, where IEEE 754-2019 and CORE-MATH answer
+   * {@code 1.0}.
+   *
+   * @param x the base
+   * @param y the exponent
+   * @return the correctly rounded {@code x} raised to {@code y}
+   */
+  public static double pow(double x, double y) {
+    return Pow.compute(x, y);
   }
 }
