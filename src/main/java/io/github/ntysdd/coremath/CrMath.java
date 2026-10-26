@@ -7,6 +7,7 @@
 package io.github.ntysdd.coremath;
 
 import io.github.ntysdd.coremath.binary32.AcosF;
+import io.github.ntysdd.coremath.binary32.AsinhF;
 import io.github.ntysdd.coremath.binary32.AsinF;
 import io.github.ntysdd.coremath.binary32.Atan2F;
 import io.github.ntysdd.coremath.binary32.AtanF;
@@ -29,6 +30,7 @@ import io.github.ntysdd.coremath.binary32.SinPiF;
 import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary32.TanhF;
 import io.github.ntysdd.coremath.binary64.Acos;
+import io.github.ntysdd.coremath.binary64.Asinh;
 import io.github.ntysdd.coremath.binary64.Asin;
 import io.github.ntysdd.coremath.binary64.Atan2;
 import io.github.ntysdd.coremath.binary64.Atan;
@@ -1019,5 +1021,44 @@ public final class CrMath {
    */
   public static double hypot(double x, double y) {
     return Hypot.compute(x, y);
+  }
+
+  /**
+   * Inverse hyperbolic sine of a binary32 value; the translation of CORE-MATH
+   * {@code cr_asinhf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code log(x + sqrt(x*x + 1))}, in round-to-nearest-even, and is the exact
+   * {@code x} for every {@code x} small enough that the correction vanishes.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code asinh(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code asinh(±Infinity)} is {@code ±Infinity}
+   *   <li>{@code asinh(NaN)} is NaN
+   *   <li>the function is odd and monotonic, so a subnormal argument never
+   *       underflows to anything but itself
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded inverse hyperbolic sine
+   */
+  public static float asinh(float x) {
+    return AsinhF.compute(x);
+  }
+
+  /**
+   * Inverse hyperbolic sine of a binary64 value; the translation of CORE-MATH
+   * {@code cr_asinh}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code log(x + sqrt(x*x + 1))}, in round-to-nearest-even. The special cases
+   * are the ones of the {@code float} overload, with the binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded inverse hyperbolic sine
+   */
+  public static double asinh(double x) {
+    return Asinh.compute(x);
   }
 }

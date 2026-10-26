@@ -54,6 +54,7 @@ rules that keep it that way.
 | `sinpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sinpi` |
 | `cospi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cospi` |
 | `hypot` | translated, tests pending | translated, tests pending | `src/binary{32,64}/hypot` |
+| `asinh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/asinh` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -102,6 +103,7 @@ double m = CrMath.expm1(0.5);  // cr_expm1, binary64
 double n = CrMath.sinpi(0.5);  // cr_sinpi, binary64
 double o = CrMath.cospi(0.5);  // cr_cospi, binary64
 double q = CrMath.hypot(3.0, 4.0); // cr_hypot, binary64
+double r = CrMath.asinh(0.5);  // cr_asinh, binary64
 ```
 
 The two overloads are separate implementations.
@@ -189,6 +191,8 @@ Correspondence between the two trees:
 | `src/binary64/cospi/cospi.c` (`cr_cospi`) | `io.github.ntysdd.coremath.binary64.CosPi` |
 | `src/binary32/hypot/hypotf.c` (`cr_hypotf`) | `io.github.ntysdd.coremath.binary32.HypotF` |
 | `src/binary64/hypot/hypot.c` (`cr_hypot`) | `io.github.ntysdd.coremath.binary64.Hypot` |
+| `src/binary32/asinh/asinhf.c` (`cr_asinhf`) | `io.github.ntysdd.coremath.binary32.AsinhF` |
+| `src/binary64/asinh/asinh.c` (`cr_asinh`) | `io.github.ntysdd.coremath.binary64.Asinh` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation
