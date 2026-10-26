@@ -50,6 +50,7 @@ rules that keep it that way.
 | `cbrt` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cbrt` |
 | `exp2` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp2` |
 | `log1p` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log1p` |
+| `expm1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/expm1` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -94,6 +95,7 @@ double i = CrMath.tanh(0.5);   // cr_tanh, binary64
 double j = CrMath.cbrt(0.5);   // cr_cbrt, binary64
 double k = CrMath.exp2(0.5);   // cr_exp2, binary64
 double l = CrMath.log1p(0.5);  // cr_log1p, binary64
+double m = CrMath.expm1(0.5);  // cr_expm1, binary64
 ```
 
 The two overloads are separate implementations.
@@ -173,6 +175,8 @@ Correspondence between the two trees:
 | `src/binary64/exp2/exp2.c` (`cr_exp2`) | `io.github.ntysdd.coremath.binary64.Exp2` |
 | `src/binary32/log1p/log1pf.c` (`cr_log1pf`) | `io.github.ntysdd.coremath.binary32.Log1pF` |
 | `src/binary64/log1p/log1p.c` (`cr_log1p`) | `io.github.ntysdd.coremath.binary64.Log1p` |
+| `src/binary32/expm1/expm1f.c` (`cr_expm1f`) | `io.github.ntysdd.coremath.binary32.Expm1F` |
+| `src/binary64/expm1/expm1.c` (`cr_expm1`) | `io.github.ntysdd.coremath.binary64.Expm1` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation

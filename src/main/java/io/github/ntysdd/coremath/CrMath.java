@@ -15,6 +15,7 @@ import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.CoshF;
 import io.github.ntysdd.coremath.binary32.ExpF;
 import io.github.ntysdd.coremath.binary32.Exp2F;
+import io.github.ntysdd.coremath.binary32.Expm1F;
 import io.github.ntysdd.coremath.binary32.Log10F;
 import io.github.ntysdd.coremath.binary32.Log2F;
 import io.github.ntysdd.coremath.binary32.LogF;
@@ -33,6 +34,7 @@ import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Cosh;
 import io.github.ntysdd.coremath.binary64.Exp;
 import io.github.ntysdd.coremath.binary64.Exp2;
+import io.github.ntysdd.coremath.binary64.Expm1;
 import io.github.ntysdd.coremath.binary64.Log10;
 import io.github.ntysdd.coremath.binary64.Log2;
 import io.github.ntysdd.coremath.binary64.Log;
@@ -836,5 +838,52 @@ public final class CrMath {
    */
   public static double log1p(double x) {
     return Log1p.compute(x);
+  }
+
+  /**
+   * {@code e^x - 1} of a binary32 value, accurately for small {@code x}; the
+   * translation of CORE-MATH {@code cr_expm1f}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of {@code e^x - 1}, in
+   * round-to-nearest-even. It is not the same function as {@code exp(x) - 1.0f}:
+   * for small {@code x} the subtraction would lose the bits that this function
+   * keeps, and {@code expm1(x)} is exact for every {@code x} whose result fits
+   * the format.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code expm1(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code expm1(-Infinity)} is {@code -1.0f}
+   *   <li>{@code expm1(+Infinity)} is {@code +Infinity}
+   *   <li>{@code expm1(NaN)} is NaN
+   *   <li>a finite argument whose result underflows rounds to {@code -1.0f} on
+   *       the negative side and to {@code +0.0f} on the positive side
+   * </ul>
+   *
+   * @param x the exponent
+   * @return the correctly rounded {@code e^x - 1}
+   */
+  public static float expm1(float x) {
+    return Expm1F.compute(x);
+  }
+
+  /**
+   * {@code e^x - 1} of a binary64 value, accurately for small {@code x}; the
+   * translation of CORE-MATH {@code cr_expm1}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of {@code e^x - 1}, in
+   * round-to-nearest-even. It is not the same function as {@code exp(x) - 1.0}:
+   * for small {@code x} the subtraction would lose the bits that this function
+   * keeps, and {@code expm1(x)} is exact for every {@code x} whose result fits
+   * the format.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param x the exponent
+   * @return the correctly rounded {@code e^x - 1}
+   */
+  public static double expm1(double x) {
+    return Expm1.compute(x);
   }
 }
