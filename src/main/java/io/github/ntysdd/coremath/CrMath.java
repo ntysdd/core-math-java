@@ -10,6 +10,7 @@ import io.github.ntysdd.coremath.binary32.Atan2F;
 import io.github.ntysdd.coremath.binary32.AtanF;
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.ExpF;
+import io.github.ntysdd.coremath.binary32.Log2F;
 import io.github.ntysdd.coremath.binary32.LogF;
 import io.github.ntysdd.coremath.binary32.PowF;
 import io.github.ntysdd.coremath.binary32.SinF;
@@ -18,6 +19,7 @@ import io.github.ntysdd.coremath.binary64.Atan2;
 import io.github.ntysdd.coremath.binary64.Atan;
 import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Exp;
+import io.github.ntysdd.coremath.binary64.Log2;
 import io.github.ntysdd.coremath.binary64.Log;
 import io.github.ntysdd.coremath.binary64.Pow;
 import io.github.ntysdd.coremath.binary64.Sin;
@@ -413,5 +415,46 @@ public final class CrMath {
    */
   public static double atan2(double y, double x) {
     return Atan2.compute(y, x);
+  }
+
+  /**
+   * Base-2 logarithm of a binary32 value; the translation of CORE-MATH
+   * {@code cr_log2f}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) base-2 logarithm of
+   * {@code x}, in round-to-nearest-even.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code log2(1.0f)} is {@code +0.0f}
+   *   <li>{@code log2(±0.0f)} is {@code -Infinity}
+   *   <li>{@code log2(x)} is NaN for {@code x < 0}
+   *   <li>{@code log2(+Infinity)} is {@code +Infinity}
+   *   <li>{@code log2(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded base-2 logarithm of {@code x}
+   */
+  public static float log2(float x) {
+    return Log2F.compute(x);
+  }
+
+  /**
+   * Base-2 logarithm of a binary64 value; the translation of CORE-MATH
+   * {@code cr_log2}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) base-2 logarithm of
+   * {@code x}, in round-to-nearest-even. In particular it is exact on the
+   * powers of two and their reciprocals, like the {@code float} overload.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded base-2 logarithm of {@code x}
+   */
+  public static double log2(double x) {
+    return Log2.compute(x);
   }
 }

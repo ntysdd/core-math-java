@@ -106,6 +106,7 @@ Add missing cases to this table instead of inventing a local convention.
 | `__attribute__((noinline))`, `__builtin_expect` | nothing, the JIT decides and profiles branches itself |
 | `#pragma STDC FENV_ACCESS` | nothing |
 | `static const` tables | `private static final` fields, same order, same values |
+| an array of a small anonymous struct of integers (`struct {ushort c0; short c1;} B[]` in `log2.c`) | `int[][]`, one row per entry, the columns in declaration order |
 | `#if`-selected variants | translate the one the reference build uses (GCC 10+ or Clang 17+, `-O2`, `-ffp-contract=off`, no FMA contraction unless the source calls `__builtin_fma`), drop the rest. This is the one place where code is removed rather than translated |
 
 Floating-point behavior that has to survive the translation:
