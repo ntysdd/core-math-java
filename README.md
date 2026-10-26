@@ -57,6 +57,7 @@ rules that keep it that way.
 | `asinh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/asinh` |
 | `acosh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/acosh` |
 | `atanh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atanh` |
+| `erf` | translated, tests pending | translated, tests pending | `src/binary{32,64}/erf` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -108,6 +109,7 @@ double q = CrMath.hypot(3.0, 4.0); // cr_hypot, binary64
 double r = CrMath.asinh(0.5);  // cr_asinh, binary64
 double s = CrMath.acosh(2.0);  // cr_acosh, binary64
 double u = CrMath.atanh(0.5);  // cr_atanh, binary64
+double v = CrMath.erf(0.5);    // cr_erf, binary64
 ```
 
 The two overloads are separate implementations.
@@ -201,6 +203,8 @@ Correspondence between the two trees:
 | `src/binary64/acosh/acosh.c` (`cr_acosh`) | `io.github.ntysdd.coremath.binary64.Acosh` |
 | `src/binary32/atanh/atanhf.c` (`cr_atanhf`) | `io.github.ntysdd.coremath.binary32.AtanhF` |
 | `src/binary64/atanh/atanh.c` (`cr_atanh`) | `io.github.ntysdd.coremath.binary64.Atanh` |
+| `src/binary32/erf/erff.c` (`cr_erff`) | `io.github.ntysdd.coremath.binary32.ErfF` |
+| `src/binary64/erf/erf.c` (`cr_erf`) | `io.github.ntysdd.coremath.binary64.Erf` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation

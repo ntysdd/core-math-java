@@ -20,6 +20,7 @@ import io.github.ntysdd.coremath.binary32.CosPiF;
 import io.github.ntysdd.coremath.binary32.ExpF;
 import io.github.ntysdd.coremath.binary32.Exp2F;
 import io.github.ntysdd.coremath.binary32.Expm1F;
+import io.github.ntysdd.coremath.binary32.ErfF;
 import io.github.ntysdd.coremath.binary32.HypotF;
 import io.github.ntysdd.coremath.binary32.Log10F;
 import io.github.ntysdd.coremath.binary32.Log2F;
@@ -45,6 +46,7 @@ import io.github.ntysdd.coremath.binary64.CosPi;
 import io.github.ntysdd.coremath.binary64.Exp;
 import io.github.ntysdd.coremath.binary64.Exp2;
 import io.github.ntysdd.coremath.binary64.Expm1;
+import io.github.ntysdd.coremath.binary64.Erf;
 import io.github.ntysdd.coremath.binary64.Hypot;
 import io.github.ntysdd.coremath.binary64.Log10;
 import io.github.ntysdd.coremath.binary64.Log2;
@@ -1142,5 +1144,45 @@ public final class CrMath {
    */
   public static double atanh(double x) {
     return Atanh.compute(x);
+  }
+
+  /**
+   * Error function of a binary32 value; the translation of CORE-MATH
+   * {@code cr_erff}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code 2/sqrt(pi) * integral(exp(-t*t), t = 0 .. x)}, in
+   * round-to-nearest-even.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code erf(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code erf(±Infinity)} is {@code ±1.0f}
+   *   <li>{@code erf(NaN)} is NaN
+   *   <li>a subnormal argument rounds to the subnormal {@code (2/sqrt(pi))x},
+   *       or to zero when that underflows
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded error function
+   */
+  public static float erf(float x) {
+    return ErfF.compute(x);
+  }
+
+  /**
+   * Error function of a binary64 value; the translation of CORE-MATH
+   * {@code cr_erf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code 2/sqrt(pi) * integral(exp(-t*t), t = 0 .. x)}, in
+   * round-to-nearest-even. The special cases are the ones of the
+   * {@code float} overload, with the binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded error function
+   */
+  public static double erf(double x) {
+    return Erf.compute(x);
   }
 }
