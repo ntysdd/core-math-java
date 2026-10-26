@@ -21,6 +21,7 @@ import io.github.ntysdd.coremath.binary32.ExpF;
 import io.github.ntysdd.coremath.binary32.Exp2F;
 import io.github.ntysdd.coremath.binary32.Expm1F;
 import io.github.ntysdd.coremath.binary32.ErfF;
+import io.github.ntysdd.coremath.binary32.ErfcF;
 import io.github.ntysdd.coremath.binary32.HypotF;
 import io.github.ntysdd.coremath.binary32.Log10F;
 import io.github.ntysdd.coremath.binary32.Log2F;
@@ -1184,5 +1185,31 @@ public final class CrMath {
    */
   public static double erf(double x) {
     return Erf.compute(x);
+  }
+
+  /**
+   * Complementary error function of a binary32 value; the translation of
+   * CORE-MATH {@code cr_erfcf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of {@code 1 - erf(x)},
+   * in round-to-nearest-even, evaluated so that it keeps its relative accuracy
+   * in the far tail instead of cancelling.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code erfc(+0.0f)} is {@code 1.0f} and {@code erfc(-0.0f)} is
+   *       {@code 1.0f}
+   *   <li>{@code erfc(+Infinity)} is {@code +0.0f} and
+   *       {@code erfc(-Infinity)} is {@code 2.0f}
+   *   <li>{@code erfc(NaN)} is NaN
+   *   <li>a large positive argument underflows to {@code +0.0f}, and a large
+   *       negative one rounds to {@code 2.0f}
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded complementary error function
+   */
+  public static float erfc(float x) {
+    return ErfcF.compute(x);
   }
 }
