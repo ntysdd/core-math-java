@@ -108,6 +108,8 @@ Add missing cases to this table instead of inventing a local convention.
 | `static const` tables | `private static final` fields, same order, same values |
 | an array of a small anonymous struct of integers (`struct {ushort c0; short c1;} B[]` in `log2.c`) | `int[][]`, one row per entry, the columns in declaration order |
 | an array of the union `{float f; uint32_t u;}` whose initializers set the float member (`st[]` in `log10f.c`) | `float[]` with the C literals plus an `f` suffix, and `Float.floatToRawIntBits` where the code reads the `u` member |
+| an array of a struct whose first member is an anonymous union (`struct {union{float arg; uint32_t uarg;}; float rh, rl;} st[]` in `sinhf.c`) | one array per column (`int[] stUarg`, `float[] stRh`, `float[] stRl`), leaving out the union member no one reads, and with an `f` suffix on the `float` columns so that they round like the C initializers |
+| an `#if defined(__x86_64__)` branch built on `x86intrin.h` (`as_ldexp`, `as_todenormal`, the `_mm_and_pd` masking of a rounded value in `sinh.c`, `cosh.c`, `tanh.c`) | the portable `#else` branch of the same `#if`, which computes the same bits with plain integer arithmetic |
 | `(const uint64_t *)pow10`, the bit view of a table of `double` (`log10.c`) | `Double.doubleToRawLongBits` applied to the entry at the use site; the table keeps the C spelling |
 | `unsigned int` arithmetic that wraps and is shifted logically (`0x267cfa2u*((unsigned int)e+1u)>>27` in `log10.c`) | the same wrapping arithmetic on `int`, which is defined to wrap, with `>>>` for the unsigned shift |
 | an `int64_t` local that holds at most 32 bits (`m` and `j` of `log10f.c`) | `int`, widening to `long` only where the C code shifts it into the significand (`log2f.c` does the same) |

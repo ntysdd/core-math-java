@@ -17,6 +17,7 @@ import io.github.ntysdd.coremath.binary32.Log2F;
 import io.github.ntysdd.coremath.binary32.LogF;
 import io.github.ntysdd.coremath.binary32.PowF;
 import io.github.ntysdd.coremath.binary32.SinF;
+import io.github.ntysdd.coremath.binary32.SinhF;
 import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary64.Acos;
 import io.github.ntysdd.coremath.binary64.Asin;
@@ -29,6 +30,7 @@ import io.github.ntysdd.coremath.binary64.Log2;
 import io.github.ntysdd.coremath.binary64.Log;
 import io.github.ntysdd.coremath.binary64.Pow;
 import io.github.ntysdd.coremath.binary64.Sin;
+import io.github.ntysdd.coremath.binary64.Sinh;
 import io.github.ntysdd.coremath.binary64.Tan;
 
 /**
@@ -582,5 +584,45 @@ public final class CrMath {
    */
   public static double acos(double x) {
     return Acos.compute(x);
+  }
+
+  /**
+   * Hyperbolic sine of a binary32 value; the translation of CORE-MATH
+   * {@code cr_sinhf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) hyperbolic sine of
+   * {@code x}, in round-to-nearest-even. Finite arguments whose result is too
+   * large round to {@code ±Infinity}, as the standard requires.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code sinh(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code sinh(±Infinity)} is {@code ±Infinity}
+   *   <li>{@code sinh(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded hyperbolic sine of {@code x}
+   */
+  public static float sinh(float x) {
+    return SinhF.compute(x);
+  }
+
+  /**
+   * Hyperbolic sine of a binary64 value; the translation of CORE-MATH
+   * {@code cr_sinh}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) hyperbolic sine of
+   * {@code x}, in round-to-nearest-even. Finite arguments whose result is too
+   * large round to {@code ±Infinity}, as the standard requires.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded hyperbolic sine of {@code x}
+   */
+  public static double sinh(double x) {
+    return Sinh.compute(x);
   }
 }
