@@ -81,38 +81,11 @@ format:
 ```java
 import io.github.ntysdd.coremath.CrMath;
 
-float  z = CrMath.sin(1.0f);    // cr_sinf, binary32
-float  w = CrMath.cos(1.0f);    // cr_cosf, binary32
-float  q = CrMath.tan(1.0f);    // cr_tanf, binary32
-float  e = CrMath.exp(1.0f);    // cr_expf, binary32
-float  g = CrMath.pow(2.0f, 3.0f); // cr_powf, binary32
-double y = CrMath.sin(1.0);     // cr_sin,  binary64
-double v = CrMath.cos(1.0);     // cr_cos,  binary64
-double p = CrMath.tan(1.0);     // cr_tan,  binary64
-double f = CrMath.exp(1.0);     // cr_exp,  binary64
-double h = CrMath.pow(2.0, 3.0); // cr_pow, binary64
-double a = CrMath.atan(1.0);    // cr_atan, binary64
-double b = CrMath.atan2(1.0, 2.0); // cr_atan2, binary64
-double c = CrMath.log2(3.0);   // cr_log2, binary64
-double d = CrMath.log10(3.0);  // cr_log10, binary64
-double e = CrMath.asin(0.5);   // cr_asin, binary64
-double f = CrMath.acos(0.5);   // cr_acos, binary64
-double g = CrMath.sinh(0.5);   // cr_sinh, binary64
-double h = CrMath.cosh(0.5);   // cr_cosh, binary64
-double i = CrMath.tanh(0.5);   // cr_tanh, binary64
-double j = CrMath.cbrt(0.5);   // cr_cbrt, binary64
-double k = CrMath.exp2(0.5);   // cr_exp2, binary64
-double l = CrMath.log1p(0.5);  // cr_log1p, binary64
-double m = CrMath.expm1(0.5);  // cr_expm1, binary64
-double n = CrMath.sinpi(0.5);  // cr_sinpi, binary64
-double o = CrMath.cospi(0.5);  // cr_cospi, binary64
-double q = CrMath.hypot(3.0, 4.0); // cr_hypot, binary64
-double r = CrMath.asinh(0.5);  // cr_asinh, binary64
-double s = CrMath.acosh(2.0);  // cr_acosh, binary64
-double u = CrMath.atanh(0.5);  // cr_atanh, binary64
-double v = CrMath.erf(0.5);    // cr_erf, binary64
-float  x = CrMath.erfc(0.5f);  // cr_erfcf, binary32
-double z = CrMath.erfc(0.5);   // cr_erfc, binary64
+float  a = CrMath.sin(1.0f);       // cr_sinf, binary32
+double b = CrMath.sin(1.0);        // cr_sin,  binary64
+float  c = CrMath.pow(2.0f, 3.0f); // cr_powf, binary32
+double d = CrMath.pow(2.0, 3.0);   // cr_pow,  binary64
+double e = CrMath.hypot(3.0, 4.0); // cr_hypot, binary64
 ```
 
 The two overloads are separate implementations.
