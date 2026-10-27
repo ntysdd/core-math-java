@@ -33,6 +33,7 @@ import io.github.ntysdd.coremath.binary32.SinhF;
 import io.github.ntysdd.coremath.binary32.SinPiF;
 import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary32.TanhF;
+import io.github.ntysdd.coremath.binary32.TanPiF;
 import io.github.ntysdd.coremath.binary64.Acos;
 import io.github.ntysdd.coremath.binary64.Acosh;
 import io.github.ntysdd.coremath.binary64.Asinh;
@@ -60,6 +61,7 @@ import io.github.ntysdd.coremath.binary64.Sinh;
 import io.github.ntysdd.coremath.binary64.SinPi;
 import io.github.ntysdd.coremath.binary64.Tan;
 import io.github.ntysdd.coremath.binary64.Tanh;
+import io.github.ntysdd.coremath.binary64.TanPi;
 
 /**
  * Correctly rounded elementary functions.
@@ -1230,5 +1232,54 @@ public final class CrMath {
    */
   public static double erfc(double x) {
     return Erfc.compute(x);
+  }
+
+  /**
+   * Tangent of {@code pi*x} of a binary32 value; the translation of CORE-MATH
+   * {@code cr_tanpif}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) tangent of {@code pi*x}, in
+   * round-to-nearest-even. It is not {@code (float) Math.tan(Math.PI*x)}: the
+   * argument of this function is exact, so the reduction inside it never loses
+   * the bits of {@code x} that the {@code pi} constant would smear.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code tanpi(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code tanpi(±Infinity)} is NaN
+   *   <li>{@code tanpi(NaN)} is NaN
+   *   <li>{@code tanpi(x)} is {@code ±1.0f} for {@code x = 1/4} modulo one,
+   *       with the sign of {@code tan(pi*x)}
+   *   <li>{@code tanpi(x)} is a signed zero for every integer {@code x}, with
+   *       the sign of {@code x} when {@code x} is even and the opposite sign
+   *       when it is odd
+   *   <li>{@code tanpi(x)} is an infinity for every {@code x = 1/2} modulo
+   *       one, with the sign of {@code tan(pi*x)}
+   *   <li>{@code tanpi(x)} is {@code ±0.0f} for {@code |x| > 2^23}, where every
+   *       binary32 argument is an even integer
+   * </ul>
+   *
+   * @param x the argument, in units of one half revolution
+   * @return the correctly rounded tangent of {@code pi*x}
+   */
+  public static float tanpi(float x) {
+    return TanPiF.compute(x);
+  }
+
+  /**
+   * Tangent of {@code pi*x} of a binary64 value; the translation of CORE-MATH
+   * {@code cr_tanpi}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) tangent of {@code pi*x}, in
+   * round-to-nearest-even. The special cases are the ones of the {@code float}
+   * overload, with the binary64 constants: in particular the zeros of the
+   * integers, the infinities of the half-integers and the {@code ±1.0} of the
+   * odd multiples of {@code 1/4}.
+   *
+   * @param x the argument, in units of one half revolution
+   * @return the correctly rounded tangent of {@code pi*x}
+   */
+  public static double tanpi(double x) {
+    return TanPi.compute(x);
   }
 }

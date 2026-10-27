@@ -92,6 +92,7 @@ Add missing cases to this table instead of inventing a local convention.
 | `(u128)x` where `x` is a `uint64_t` | `U128.of(x, 0)`, a widening with no shift. `U128.of(0, x)` is `x * 2^64` and is almost never what the cast means |
 | `__builtin_fma`, `__builtin_fmaf` | `Math.fma`, both overloads |
 | `__builtin_roundeven`, `rint` | `Math.rint` |
+| `__builtin_roundevenf` (`roundevenf_finite` of `tanpif.c`), and the `float` results of a `roundeven` helper | `(float) Math.rint`, the cast where the C value is a `float`: `Math.rint` takes and returns a `double`, and the conversion back is exact because the result is integral and below `2^23` in the branch that uses it |
 | `__builtin_round` | nothing direct: `Math.round` returns a `long` and saturates at the ends, `Math.rint` breaks ties to even. Upstream reaches it from the software fallback of `roundeven_finite`, which the reference build does not compile, and from `is_exact` in `pow.c` and `powf.c`, where the argument is a positive integer-valued floating-point number below 2^53, so `Math.round` of a `double` (resp. `float`) and `round` (resp. `roundf`) agree bit for bit |
 | `__builtin_mul_overflow (a, b, &r)` | `U128.mul(a, b)` plus a test that the high half is zero |
 | `switch` on a `uint64_t` | an `if` / `else if` chain, Java cannot switch on a `long` |
