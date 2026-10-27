@@ -7,6 +7,7 @@
 package io.github.ntysdd.coremath;
 
 import io.github.ntysdd.coremath.binary32.AcosF;
+import io.github.ntysdd.coremath.binary32.AcosPiF;
 import io.github.ntysdd.coremath.binary32.AcoshF;
 import io.github.ntysdd.coremath.binary32.AsinhF;
 import io.github.ntysdd.coremath.binary32.AtanhF;
@@ -37,6 +38,7 @@ import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary32.TanhF;
 import io.github.ntysdd.coremath.binary32.TanPiF;
 import io.github.ntysdd.coremath.binary64.Acos;
+import io.github.ntysdd.coremath.binary64.AcosPi;
 import io.github.ntysdd.coremath.binary64.Acosh;
 import io.github.ntysdd.coremath.binary64.Asinh;
 import io.github.ntysdd.coremath.binary64.Atanh;
@@ -1367,5 +1369,45 @@ public final class CrMath {
    */
   public static double asinpi(double x) {
     return AsinPi.compute(x);
+  }
+
+  /**
+   * Arccosine of a binary32 value divided by pi; the translation of CORE-MATH
+   * {@code cr_acospif}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code acos(x)/pi}, in round-to-nearest-even, which is the inverse of
+   * {@link #cospi(float)} on {@code [0, 1]}, and equals
+   * {@code 0.5 - asinpi(x)} mathematically but not bit for bit.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code acospi(1.0f)} is {@code +0.0f} and {@code acospi(-1.0f)} is
+   *       {@code 1.0f}
+   *   <li>{@code acospi(±0.0f)} is {@code 0.5f}
+   *   <li>{@code acospi(±Infinity)} is NaN, and every {@code |x| > 1} is NaN
+   *   <li>{@code acospi(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded arccosine of {@code x}, in units of pi
+   */
+  public static float acospi(float x) {
+    return AcosPiF.compute(x);
+  }
+
+  /**
+   * Arccosine of a binary64 value divided by pi; the translation of CORE-MATH
+   * {@code cr_acospi}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code acos(x)/pi}, in round-to-nearest-even. The special cases are the
+   * ones of the {@code float} overload, with the binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded arccosine of {@code x}, in units of pi
+   */
+  public static double acospi(double x) {
+    return AcosPi.compute(x);
   }
 }
