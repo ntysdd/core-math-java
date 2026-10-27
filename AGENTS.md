@@ -99,6 +99,7 @@ Add missing cases to this table instead of inventing a local convention.
 | `goto end` | the tail of the function is reached through an `else`; Java has no `goto` |
 | `__builtin_copysign`, `copysignf` | `Math.copySign` |
 | `__builtin_fabs`, `fabsf` | `Math.abs`, which clears the sign bit and leaves every other bit alone, NaN payload included |
+| `(u64)c[i][0]<<16` (`atanpi.c`), a `uint16_t` table element widened by zero extension | `(long) c[i][0]<<16`. The element is an `int` on the Java side, so the cast to `long` has to be written out; it is a value-preserving widening here because the table holds values below 2^16 |
 | `__builtin_ctz`, `clz`, `popcount` and their `l` / `ll` variants | `Long.numberOfTrailingZeros`, `numberOfLeadingZeros`, `bitCount`, or the `Integer` version when the C type is 32 bits. `clzl` counts on a 64-bit `long` under LP64, so it maps to the `Long` version. Zero is undefined upstream and returns the width in Java |
 | `__builtin_floor`, `floorf` | `Math.floor`, which returns a `double`; cast where the C code stores into a `float` |
 | `__builtin_ldexp` | `Math.scalb`, which scales by any power of two the format can hold, negative exponents included |
@@ -131,6 +132,7 @@ Add missing cases to this table instead of inventing a local convention.
 | an output parameter (`double *e`, `uint64_t *r`, `int *n`) | a one-element array, allocated per call. A local whose address the C code passes (`cl` in `polydd`, `pl` in `as_acos_refine`) becomes a one-element array as well |
 | a pointer to a table (`const double c[][2]`) | `double[][]`, passed as it is |
 | `sizeof(a)/sizeof(a[0])` | `a.length` |
+| an `#define N` that both sizes an array and bounds the loop over it (`#define EXCEPTIONS 20`, `static const double exceptions[EXCEPTIONS][3]`, `for (i = 0; i < EXCEPTIONS; i++)` in `atanpi.c`) | the macro goes away and both uses read `exceptionsTiny.length`: Java cannot size a field with another field, and `N` and the array length are the same number by construction |
 | a C flag, `int hard = (a <= b && b <= 0) || c > 47;` | `boolean`, because Java's relational and logical operators yield `boolean` |
 | a `static const` scalar inside a function whose name is taken by a table of the same class (`static const double c` in `acos.c`) | a field with a suffix, `cTiny`, and a comment naming the C declaration |
 | `#if`-selected variants | translate the one the reference build uses (GCC 10+ or Clang 17+, `-O2`, `-ffp-contract=off`, no FMA contraction unless the source calls `__builtin_fma`), drop the rest. This is the one place where code is removed rather than translated |

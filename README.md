@@ -60,6 +60,7 @@ rules that keep it that way.
 | `erf` | translated, tests pending | translated, tests pending | `src/binary{32,64}/erf` |
 | `erfc` | translated, tests pending | translated, tests pending | `src/binary{32,64}/erfc` |
 | `tanpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tanpi` |
+| `atanpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atanpi` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -186,6 +187,8 @@ Correspondence between the two trees:
 | `src/binary64/erfc/erfc.c` (`cr_erfc`) | `io.github.ntysdd.coremath.binary64.Erfc` |
 | `src/binary32/tanpi/tanpif.c` (`cr_tanpif`) | `io.github.ntysdd.coremath.binary32.TanPiF` |
 | `src/binary64/tanpi/tanpi.c` (`cr_tanpi`) | `io.github.ntysdd.coremath.binary64.TanPi` |
+| `src/binary32/atanpi/atanpif.c` (`cr_atanpif`) | `io.github.ntysdd.coremath.binary32.AtanPiF` |
+| `src/binary64/atanpi/atanpi.c` (`cr_atanpi`) | `io.github.ntysdd.coremath.binary64.AtanPi` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation

@@ -13,6 +13,7 @@ import io.github.ntysdd.coremath.binary32.AtanhF;
 import io.github.ntysdd.coremath.binary32.AsinF;
 import io.github.ntysdd.coremath.binary32.Atan2F;
 import io.github.ntysdd.coremath.binary32.AtanF;
+import io.github.ntysdd.coremath.binary32.AtanPiF;
 import io.github.ntysdd.coremath.binary32.CbrtF;
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.CoshF;
@@ -41,6 +42,7 @@ import io.github.ntysdd.coremath.binary64.Atanh;
 import io.github.ntysdd.coremath.binary64.Asin;
 import io.github.ntysdd.coremath.binary64.Atan2;
 import io.github.ntysdd.coremath.binary64.Atan;
+import io.github.ntysdd.coremath.binary64.AtanPi;
 import io.github.ntysdd.coremath.binary64.Cbrt;
 import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Cosh;
@@ -1281,5 +1283,47 @@ public final class CrMath {
    */
   public static double tanpi(double x) {
     return TanPi.compute(x);
+  }
+
+  /**
+   * Arctangent of a binary32 value divided by pi; the translation of
+   * CORE-MATH {@code cr_atanpif}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code atan(x)/pi}, in round-to-nearest-even, which is the inverse of
+   * {@link #tanpi(float)} on {@code (-1/2, 1/2)}.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code atanpi(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code atanpi(±Infinity)} is {@code ±0.5f}
+   *   <li>{@code atanpi(NaN)} is NaN
+   *   <li>{@code atanpi(±1.0f)} is {@code ±0.25f}
+   *   <li>{@code |atanpi(x)|} is below {@code 0.5}, and it reaches
+   *       {@code ±0.5f} for {@code |x| >= 0x1.45f306p+124}
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded arctangent of {@code x}, in units of pi
+   */
+  public static float atanpi(float x) {
+    return AtanPiF.compute(x);
+  }
+
+  /**
+   * Arctangent of a binary64 value divided by pi; the translation of
+   * CORE-MATH {@code cr_atanpi}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code atan(x)/pi}, in round-to-nearest-even. The special cases are the
+   * ones of the {@code float} overload, with the binary64 constants: in
+   * particular {@code atanpi(±1.0)} is {@code ±0.25} and {@code |atanpi(x)|}
+   * reaches {@code ±0.5} for {@code |x| >= 0x1.45f306dc9c883p+53}.
+   *
+   * @param x the argument
+   * @return the correctly rounded arctangent of {@code x}, in units of pi
+   */
+  public static double atanpi(double x) {
+    return AtanPi.compute(x);
   }
 }
