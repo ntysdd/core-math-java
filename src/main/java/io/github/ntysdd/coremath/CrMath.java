@@ -11,6 +11,7 @@ import io.github.ntysdd.coremath.binary32.AcoshF;
 import io.github.ntysdd.coremath.binary32.AsinhF;
 import io.github.ntysdd.coremath.binary32.AtanhF;
 import io.github.ntysdd.coremath.binary32.AsinF;
+import io.github.ntysdd.coremath.binary32.AsinPiF;
 import io.github.ntysdd.coremath.binary32.Atan2F;
 import io.github.ntysdd.coremath.binary32.AtanF;
 import io.github.ntysdd.coremath.binary32.AtanPiF;
@@ -40,6 +41,7 @@ import io.github.ntysdd.coremath.binary64.Acosh;
 import io.github.ntysdd.coremath.binary64.Asinh;
 import io.github.ntysdd.coremath.binary64.Atanh;
 import io.github.ntysdd.coremath.binary64.Asin;
+import io.github.ntysdd.coremath.binary64.AsinPi;
 import io.github.ntysdd.coremath.binary64.Atan2;
 import io.github.ntysdd.coremath.binary64.Atan;
 import io.github.ntysdd.coremath.binary64.AtanPi;
@@ -1325,5 +1327,45 @@ public final class CrMath {
    */
   public static double atanpi(double x) {
     return AtanPi.compute(x);
+  }
+
+  /**
+   * Arcsine of a binary32 value divided by pi; the translation of CORE-MATH
+   * {@code cr_asinpif}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code asin(x)/pi}, in round-to-nearest-even, which is the inverse of
+   * {@link #sinpi(float)} on {@code (-1/2, 1/2)}. It is not
+   * {@code (float) (Math.asin(x)/Math.PI)}: dividing by {@code pi} after the
+   * arcsine has been rounded would cost the last bit.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code asinpi(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code asinpi(±1.0f)} is {@code ±0.5f}
+   *   <li>{@code asinpi(NaN)} is NaN, and every {@code |x| > 1} is NaN
+   *   <li>{@code asinpi(±Infinity)} is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded arcsine of {@code x}, in units of pi
+   */
+  public static float asinpi(float x) {
+    return AsinPiF.compute(x);
+  }
+
+  /**
+   * Arcsine of a binary64 value divided by pi; the translation of CORE-MATH
+   * {@code cr_asinpi}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code asin(x)/pi}, in round-to-nearest-even. The special cases are the
+   * ones of the {@code float} overload, with the binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded arcsine of {@code x}, in units of pi
+   */
+  public static double asinpi(double x) {
+    return AsinPi.compute(x);
   }
 }
