@@ -71,6 +71,10 @@ public final class U128 {
     return new U128(lo|b.lo, hi|b.hi);
   }
 
+  public U128 xor(U128 b) {
+    return new U128(lo^b.lo, hi^b.hi);
+  }
+
   public U128 shl(int n) {
     if (n == 0)
       return this;

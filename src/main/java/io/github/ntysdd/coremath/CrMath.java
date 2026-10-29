@@ -32,6 +32,7 @@ import io.github.ntysdd.coremath.binary32.Log2F;
 import io.github.ntysdd.coremath.binary32.LogF;
 import io.github.ntysdd.coremath.binary32.Log1pF;
 import io.github.ntysdd.coremath.binary32.PowF;
+import io.github.ntysdd.coremath.binary32.RsqrtF;
 import io.github.ntysdd.coremath.binary32.SinF;
 import io.github.ntysdd.coremath.binary32.SinhF;
 import io.github.ntysdd.coremath.binary32.SinPiF;
@@ -64,6 +65,7 @@ import io.github.ntysdd.coremath.binary64.Log2;
 import io.github.ntysdd.coremath.binary64.Log;
 import io.github.ntysdd.coremath.binary64.Log1p;
 import io.github.ntysdd.coremath.binary64.Pow;
+import io.github.ntysdd.coremath.binary64.Rsqrt;
 import io.github.ntysdd.coremath.binary64.Sin;
 import io.github.ntysdd.coremath.binary64.Sinh;
 import io.github.ntysdd.coremath.binary64.SinPi;
@@ -1461,5 +1463,44 @@ public final class CrMath {
    */
   public static double atan2pi(double y, double x) {
     return Atan2Pi.compute(y, x);
+  }
+
+  /**
+   * Reciprocal square root of a binary32 value; the translation of CORE-MATH
+   * {@code cr_rsqrtf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code 1/sqrt(x)}, in round-to-nearest-even. It is not
+   * {@code 1.0f/Math.sqrt(x)}: that would round twice, and the last bit would
+   * be lost.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code rsqrt(+0.0f)} is {@code +Infinity} and {@code rsqrt(-0.0f)} is
+   *       {@code -Infinity}
+   *   <li>{@code rsqrt(+Infinity)} is {@code +0.0f}
+   *   <li>{@code rsqrt(NaN)} is NaN, and every negative argument is NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded reciprocal square root of {@code x}
+   */
+  public static float rsqrt(float x) {
+    return RsqrtF.compute(x);
+  }
+
+  /**
+   * Reciprocal square root of a binary64 value; the translation of CORE-MATH
+   * {@code cr_rsqrt}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code 1/sqrt(x)}, in round-to-nearest-even. The special cases are the ones
+   * of the {@code float} overload, with the binary64 constants.
+   *
+   * @param x the argument
+   * @return the correctly rounded reciprocal square root of {@code x}
+   */
+  public static double rsqrt(double x) {
+    return Rsqrt.compute(x);
   }
 }
