@@ -14,6 +14,7 @@ import io.github.ntysdd.coremath.binary32.AtanhF;
 import io.github.ntysdd.coremath.binary32.AsinF;
 import io.github.ntysdd.coremath.binary32.AsinPiF;
 import io.github.ntysdd.coremath.binary32.Atan2F;
+import io.github.ntysdd.coremath.binary32.Atan2PiF;
 import io.github.ntysdd.coremath.binary32.AtanF;
 import io.github.ntysdd.coremath.binary32.AtanPiF;
 import io.github.ntysdd.coremath.binary32.CbrtF;
@@ -45,6 +46,7 @@ import io.github.ntysdd.coremath.binary64.Atanh;
 import io.github.ntysdd.coremath.binary64.Asin;
 import io.github.ntysdd.coremath.binary64.AsinPi;
 import io.github.ntysdd.coremath.binary64.Atan2;
+import io.github.ntysdd.coremath.binary64.Atan2Pi;
 import io.github.ntysdd.coremath.binary64.Atan;
 import io.github.ntysdd.coremath.binary64.AtanPi;
 import io.github.ntysdd.coremath.binary64.Cbrt;
@@ -1409,5 +1411,55 @@ public final class CrMath {
    */
   public static double acospi(double x) {
     return AcosPi.compute(x);
+  }
+
+  /**
+   * Arctangent of {@code y/x} for two binary32 values, divided by pi; the
+   * translation of CORE-MATH {@code cr_atan2pif}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code atan2(y, x)/pi}, in round-to-nearest-even, with the quadrant taken
+   * from the signs of both arguments as in {@link Math#atan2}. It is not
+   * {@code (float) (Math.atan2(y, x)/Math.PI)}: dividing after the arctangent
+   * has been rounded would cost the last bit.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code atan2pi(±0.0f, +0.0f)} is {@code ±0.0f}, and
+   *       {@code atan2pi(±0.0f, -0.0f)} is {@code ±1.0f}
+   *   <li>{@code atan2pi(±0.0f, x)} is {@code ±0.0f} for {@code x > 0} and
+   *       {@code ±1.0f} for {@code x < 0}
+   *   <li>{@code atan2pi(y, ±0.0f)} is {@code ±0.5f} for finite nonzero
+   *       {@code y}
+   *   <li>{@code atan2pi(±Infinity, x)} is {@code ±0.5f}, and
+   *       {@code atan2pi(y, +Infinity)} is {@code ±0.0f} for finite {@code y}
+   *   <li>{@code atan2pi(±Infinity, -Infinity)} is {@code ±0.75f},
+   *       {@code atan2pi(±Infinity, +Infinity)} is {@code ±0.25f}, and
+   *       {@code atan2pi(y, -Infinity)} is {@code ±1.0f}
+   *   <li>{@code atan2pi(NaN, x)} and {@code atan2pi(y, NaN)} are NaN
+   * </ul>
+   *
+   * @param y the ordinate
+   * @param x the abscissa
+   * @return the correctly rounded arctangent of {@code y/x}, in units of pi
+   */
+  public static float atan2pi(float y, float x) {
+    return Atan2PiF.compute(y, x);
+  }
+
+  /**
+   * Arctangent of {@code y/x} for two binary64 values, divided by pi; the
+   * translation of CORE-MATH {@code cr_atan2pi}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of
+   * {@code atan2(y, x)/pi}, in round-to-nearest-even. The special cases are the
+   * ones of the {@code float} overload, with the binary64 constants.
+   *
+   * @param y the ordinate
+   * @param x the abscissa
+   * @return the correctly rounded arctangent of {@code y/x}, in units of pi
+   */
+  public static double atan2pi(double y, double x) {
+    return Atan2Pi.compute(y, x);
   }
 }

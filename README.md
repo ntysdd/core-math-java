@@ -62,7 +62,7 @@ rules that keep it that way.
 | `tanpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tanpi` |
 | `atanpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atanpi` |
 | `asinpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/asinpi` |
-| `acospi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/acospi` |
+| `atan2pi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atan2pi` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -195,6 +195,8 @@ Correspondence between the two trees:
 | `src/binary64/asinpi/asinpi.c` (`cr_asinpi`) | `io.github.ntysdd.coremath.binary64.AsinPi` |
 | `src/binary32/acospi/acospif.c` (`cr_acospif`) | `io.github.ntysdd.coremath.binary32.AcosPiF` |
 | `src/binary64/acospi/acospi.c` (`cr_acospi`) | `io.github.ntysdd.coremath.binary64.AcosPi` |
+| `src/binary32/atan2pi/atan2pif.c` (`cr_atan2pif`) | `io.github.ntysdd.coremath.binary32.Atan2PiF` |
+| `src/binary64/atan2pi/atan2pi.c` (`cr_atan2pi`) | `io.github.ntysdd.coremath.binary64.Atan2Pi` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation
