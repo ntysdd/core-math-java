@@ -70,7 +70,20 @@ import io.github.ntysdd.coremath.internal.U128;
  *       and {@code print_tint}, {@code is_normalized} and the {@code exit (1)}
  *       of an unexpected worst case are dropped exactly as they are there.
  *       {@code ONE}, {@code ONE_HALF} and {@code ONE_OVER_PI} are the three
- *       {@code tint_t} constants this file reads.
+ *       {@code tint_t} constants this file reads. Two helpers are <em>not</em>
+ *       the text of {@code Atan2.java}, because {@code atan2pi/tint.h} and
+ *       {@code atan2/tint.h} are not the same file: {@code tintTod} keeps the
+ *       subnormal shift without the sticky bit {@code | (ll > 0)} that the
+ *       {@code atan2} copy has, and it scales by
+ *       {@code __builtin_ldexp} ({@link Math#scalb}) where the {@code atan2}
+ *       copy uses its own {@code as_ldexp}. {@code tintFromd} and
+ *       {@code divTintD} are still {@code Atan2.java}'s text: the
+ *       {@code atan2pi} copy rescales every {@code |a| < 1} by {@code 2^53}
+ *       instead of only the subnormals, which is exact either way, and the
+ *       sticky-bit difference is unreachable for {@code atan2pi}'s inputs
+ *       (5M random pairs, the whole worst-case file and a directed set of
+ *       subnormal results give bit-identical results against a C build that
+ *       does carry the sticky bit).
  *   <li>{@code static const tint_t P[30]} and {@code Q[30]} become
  *       {@code Tint64[]} built with {@code new Tint64 (h, m, l, ex, sgn)}, in
  *       the same order as the C initialisers.
@@ -402,17 +415,10 @@ public final strictfp class Atan2Pi {
     a.m = a.l = 0;
   }
 
-  // copied from ../exp/exp.c
-  private static double asLdexp(double x, long i) {
-    long ix = Double.doubleToRawLongBits(x);
-    ix += i << 52;
-    return Double.longBitsToDouble(ix);
-  }
-
   // convert a to a double with correct rouding
   // If err=0, we are converting a double value.
   // Otherwise, err is a bound in ulps on the maximal error on a->l
-  // y,x are the inputs of atan2 (in case we can't round correctly)
+  // y,x are the inputs of atan2pi (in case we can't round correctly)
   private static double tintTod(Tint64 a, long err, double y, double x) {
     if (a.ex >= 1025) // overflow: |a| >= 2^1024
       return a.sgn != 0 ? -0x1p1023 - 0x1p1023 : 0x1p1023 + 0x1p1023;
@@ -444,7 +450,7 @@ public final strictfp class Atan2Pi {
     if (ex <= -1022) // subnormal case
     {
       int sh = -1021 - ex; // 1 <= sh <= 52
-      ll = (mm << (64 - sh)) | (ll >>> sh) | (ll > 0 ? 1 : 0);
+      ll = (mm << (64 - sh)) | (ll >>> sh);
       mm = (hh << (64 - sh)) | (mm >>> sh);
       hh = hh >>> sh;
       low = hh & 0x7ff;
@@ -470,7 +476,9 @@ public final strictfp class Atan2Pi {
     h = Math.fma(l, s, s * h);
     h *= 0x1p-52;
     // now -1021 <= ex <= 1024, thus 2^(ex-1) does not underflow/overflow
-    return h * asLdexp(1.0, ex - 1);
+    // atan2pi's copy of tint.h calls __builtin_ldexp here, where atan2's
+    // calls as_ldexp; both scale by an exact power of two
+    return h * Math.scalb(1.0, (int) (ex - 1));
   }
 
   /* Put in r an approximation of 1/A, assuming A is not zero.
