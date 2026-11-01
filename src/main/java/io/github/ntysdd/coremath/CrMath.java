@@ -70,6 +70,7 @@ import io.github.ntysdd.coremath.binary64.Expm1;
 import io.github.ntysdd.coremath.binary64.Erf;
 import io.github.ntysdd.coremath.binary64.Erfc;
 import io.github.ntysdd.coremath.binary64.Hypot;
+import io.github.ntysdd.coremath.binary64.Lgamma;
 import io.github.ntysdd.coremath.binary64.Log10;
 import io.github.ntysdd.coremath.binary64.Log10P1;
 import io.github.ntysdd.coremath.binary64.Log2;
@@ -1846,5 +1847,33 @@ public final class CrMath {
    */
   public static float lgamma(float x, int[] signgamp) {
     return LgammaF.compute(x, signgamp);
+  }
+
+  /**
+   * {@code log|gamma(x)|} of a binary64 value, with the sign of
+   * {@code gamma(x)}; the translation of CORE-MATH {@code cr_lgamma}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) logarithm, in
+   * round-to-nearest-even. When {@code signgamp} is not null, its first
+   * element receives the sign of {@code gamma(x)}, that is {@code 1} or
+   * {@code -1}, the value that the C entry point publishes through the
+   * process-global {@code signgam}; a null array says that the caller does not
+   * need it. The port has no shared state, so unlike the C function it is safe
+   * to call from several threads.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants: {@code lgamma(±0.0)} is {@code +Infinity},
+   * {@code lgamma(1.0)} and {@code lgamma(2.0)} are {@code +0.0}, the negative
+   * integers and {@code -Infinity} give {@code +Infinity}, and the sign
+   * written for a NaN and for a negative integer is {@code 1}, as the C source
+   * sets it arbitrarily there.
+   *
+   * @param x the argument
+   * @param signgamp a one-element array that receives the sign of
+   *     {@code gamma(x)}, or null
+   * @return the correctly rounded {@code log|gamma(x)|}
+   */
+  public static double lgamma(double x, int[] signgamp) {
+    return Lgamma.compute(x, signgamp);
   }
 }
