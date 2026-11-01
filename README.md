@@ -68,6 +68,7 @@ rules that keep it that way.
 | `exp10m1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp10m1` |
 | `log10p1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log10p1` |
 | `log2p1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log2p1` |
+| `tgamma` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tgamma` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -214,6 +215,8 @@ Correspondence between the two trees:
 | `src/binary64/log10p1/log10p1.c` (`cr_log10p1`) and `dint.h` | `io.github.ntysdd.coremath.binary64.Log10P1` |
 | `src/binary32/log2p1/log2p1f.c` (`cr_log2p1f`) | `io.github.ntysdd.coremath.binary32.Log2P1F` |
 | `src/binary64/log2p1/log2p1.c` (`cr_log2p1`) and `dint_log2p1.h` | `io.github.ntysdd.coremath.binary64.Log2P1` |
+| `src/binary32/tgamma/tgammaf.c` (`cr_tgammaf`) | `io.github.ntysdd.coremath.binary32.TgammaF` |
+| `src/binary64/tgamma/tgamma.c` (`cr_tgamma`) | `io.github.ntysdd.coremath.binary64.Tgamma` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation

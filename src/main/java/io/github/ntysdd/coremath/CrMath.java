@@ -44,6 +44,7 @@ import io.github.ntysdd.coremath.binary32.SinPiF;
 import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary32.TanhF;
 import io.github.ntysdd.coremath.binary32.TanPiF;
+import io.github.ntysdd.coremath.binary32.TgammaF;
 import io.github.ntysdd.coremath.binary64.Acos;
 import io.github.ntysdd.coremath.binary64.AcosPi;
 import io.github.ntysdd.coremath.binary64.Acosh;
@@ -82,6 +83,7 @@ import io.github.ntysdd.coremath.binary64.SinPi;
 import io.github.ntysdd.coremath.binary64.Tan;
 import io.github.ntysdd.coremath.binary64.Tanh;
 import io.github.ntysdd.coremath.binary64.TanPi;
+import io.github.ntysdd.coremath.binary64.Tgamma;
 
 /**
  * Correctly rounded elementary functions.
@@ -1759,5 +1761,52 @@ public final class CrMath {
    */
   public static double log2p1(double x) {
     return Log2P1.compute(x);
+  }
+
+  /**
+   * The gamma function of a binary32 value; the translation of CORE-MATH
+   * {@code cr_tgammaf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) {@code tgamma(x)}, in
+   * round-to-nearest-even. It is not {@code exp(lgamma(x))}: the sign and the
+   * exact values at the positive integers are part of the result.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code tgamma(±0.0f)} is {@code ±Infinity}, the pole at zero
+   *   <li>{@code tgamma(-n)} is NaN for every negative integer {@code n} and
+   *       for {@code -Infinity}
+   *   <li>{@code tgamma(+Infinity)} is {@code +Infinity} and
+   *       {@code tgamma(NaN)} is NaN
+   *   <li>the result overflows to {@code +Infinity} from
+   *       {@code x >= 0x1.18522p+5f}, and underflows to signed zero for
+   *       {@code x < -42}
+   * </ul>
+   *
+   * @param x the argument
+   * @return the correctly rounded {@code tgamma(x)}
+   */
+  public static float tgamma(float x) {
+    return TgammaF.compute(x);
+  }
+
+  /**
+   * The gamma function of a binary64 value; the translation of CORE-MATH
+   * {@code cr_tgamma}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) {@code tgamma(x)}, in
+   * round-to-nearest-even. It is not {@code exp(lgamma(x))}: the sign and the
+   * exact values at the positive integers are part of the result.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants: the overflow threshold is
+   * {@code x >= 0x1.573fae561f648p+7} and the underflow region starts at
+   * {@code x <= -184} for non-integer arguments.
+   *
+   * @param x the argument
+   * @return the correctly rounded {@code tgamma(x)}
+   */
+  public static double tgamma(double x) {
+    return Tgamma.compute(x);
   }
 }
