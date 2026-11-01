@@ -71,6 +71,7 @@ rules that keep it that way.
 | `tgamma` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tgamma` |
 | `lgamma` | translated, tests pending | translated, tests pending | `src/binary{32,64}/lgamma` |
 | `sincos` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sincos` |
+| `compound` | translated, tests pending | no upstream file | `src/binary32/compound` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -223,6 +224,7 @@ Correspondence between the two trees:
 | `src/binary64/lgamma/lgamma.c` (`cr_lgamma`) | `io.github.ntysdd.coremath.binary64.Lgamma` |
 | `src/binary32/sincos/sincosf.c` (`cr_sincosf`) | `io.github.ntysdd.coremath.binary32.SincosF` |
 | `src/binary64/sincos/sincos.c` (`cr_sincos`) | `io.github.ntysdd.coremath.binary64.Sincos` |
+| `src/binary32/compound/compoundf.c` (`cr_compoundf`) | `io.github.ntysdd.coremath.binary32.CompoundF` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation

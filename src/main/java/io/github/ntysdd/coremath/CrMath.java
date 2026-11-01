@@ -18,6 +18,7 @@ import io.github.ntysdd.coremath.binary32.Atan2PiF;
 import io.github.ntysdd.coremath.binary32.AtanF;
 import io.github.ntysdd.coremath.binary32.AtanPiF;
 import io.github.ntysdd.coremath.binary32.CbrtF;
+import io.github.ntysdd.coremath.binary32.CompoundF;
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.CoshF;
 import io.github.ntysdd.coremath.binary32.CosPiF;
@@ -1979,5 +1980,39 @@ public final class CrMath {
     double[] c = new double[1];
     Sincos.compute(x, s, c);
     return new SincosResult(s[0], c[0]);
+  }
+
+  /**
+   * {@code (1 + x)^y} of two binary32 values, the translation of CORE-MATH
+   * {@code cr_compoundf}. Upstream has no binary64 version of this function.
+   *
+   * <p>The result is correctly rounded (0.5 ulp) in round-to-nearest-even.
+   *
+   * <p>Special cases, the rules that IEEE 754-2019 gives for
+   * {@code compound (x, n)}:
+   * <ul>
+   *   <li>{@code compound(x, 0)} is {@code 1} for {@code x >= -1} or a quiet
+   *       NaN
+   *   <li>{@code compound(-1, n)} is {@code +Infinity} for {@code n < 0} and
+   *       {@code +0.0} for {@code n > 0}
+   *   <li>{@code compound(±0, n)} is {@code 1}
+   *   <li>{@code compound(+Infinity, n)} is {@code +Infinity} for
+   *       {@code n > 0} and {@code +0.0} for {@code n < 0}
+   *   <li>{@code compound(x, n)} is NaN for {@code x < -1}
+   *   <li>{@code compound(NaN, n)} is NaN for {@code n <> 0}
+   * </ul>
+   *
+   * <p>The C function raises {@code FE_INVALID}, {@code FE_DIVBYZERO} and
+   * {@code ERANGE} on some of those cases and saves and restores the
+   * floating-point flags around its intermediate computations. Java has no
+   * floating-point environment and no {@code errno}, so only the returned
+   * values are kept.
+   *
+   * @param x the base, {@code 1 + x}
+   * @param y the exponent
+   * @return the correctly rounded {@code (1 + x)^y}
+   */
+  public static float compound(float x, float y) {
+    return CompoundF.compute(x, y);
   }
 }
