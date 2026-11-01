@@ -36,6 +36,7 @@ import io.github.ntysdd.coremath.binary32.Log2F;
 import io.github.ntysdd.coremath.binary32.Log2P1F;
 import io.github.ntysdd.coremath.binary32.LogF;
 import io.github.ntysdd.coremath.binary32.Log1pF;
+import io.github.ntysdd.coremath.binary32.LgammaF;
 import io.github.ntysdd.coremath.binary32.PowF;
 import io.github.ntysdd.coremath.binary32.RsqrtF;
 import io.github.ntysdd.coremath.binary32.SinF;
@@ -1808,5 +1809,42 @@ public final class CrMath {
    */
   public static double tgamma(double x) {
     return Tgamma.compute(x);
+  }
+
+  /**
+   * {@code log|gamma(x)|} of a binary32 value, with the sign of
+   * {@code gamma(x)}; the translation of CORE-MATH {@code cr_lgammaf}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) logarithm, in
+   * round-to-nearest-even. When {@code signgamp} is not null, its first
+   * element receives the sign of {@code gamma(x)}, that is {@code 1} or
+   * {@code -1}; a null array says that the caller does not need it. This is
+   * the one place where the port deliberately differs from C: the C entry
+   * point publishes the sign through the process-global {@code signgam}, so
+   * two unsynchronised calls are a data race, which C11 5.1.2.4p25 makes
+   * undefined behaviour. The port has no shared state: both the value and the
+   * sign are functions of {@code x} alone.
+   *
+   * <p>Special cases, matching IEEE 754-2019 and the C entry point:
+   * <ul>
+   *   <li>{@code lgamma(±0.0f)} is {@code +Infinity}, and {@code lgamma(1.0f)}
+   *       and {@code lgamma(2.0f)} are {@code +0.0f}
+   *   <li>{@code lgamma(-n)} is {@code +Infinity} for every negative integer
+   *       {@code n}, and {@code lgamma(-Infinity)} is {@code +Infinity}
+   *   <li>{@code lgamma(+Infinity)} is {@code +Infinity} and
+   *       {@code lgamma(NaN)} is NaN
+   *   <li>for a negative argument the sign written to {@code signgamp} is
+   *       {@code -1} where {@code gamma} is negative, that is when
+   *       {@code floor(x)} is odd; for a NaN and for a negative integer it is
+   *       {@code 1}, as the C source sets it arbitrarily there
+   * </ul>
+   *
+   * @param x the argument
+   * @param signgamp a one-element array that receives the sign of
+   *     {@code gamma(x)}, or null
+   * @return the correctly rounded {@code log|gamma(x)|}
+   */
+  public static float lgamma(float x, int[] signgamp) {
+    return LgammaF.compute(x, signgamp);
   }
 }
