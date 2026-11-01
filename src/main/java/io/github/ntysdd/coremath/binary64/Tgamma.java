@@ -1067,6 +1067,8 @@ public strictfp class Tgamma {
        might overflow */
     long k;
     if(fx==x){ /* x is integer */
+      // this arm cannot be taken: |0| < 0.25, so the branch above has
+      // already returned 1/x; the C source keeps it and so does the port
       if(x == 0.0){
         return 1.0/x;
       }
@@ -1088,6 +1090,8 @@ public strictfp class Tgamma {
       /* For x <= -184, x non-integer, |gamma(x)| < 2^-1078.  */
       /* The C standard says that if the function underflows,
          errno is set to ERANGE. */
+      // the ternary always selects fx: a non-integer binary64 value that
+      // reaches this point has |fx| < 2^53, so the test is false
       k = (long) (fx < (double) Long.MIN_VALUE ? Long.MIN_VALUE : fx);
       return 0x1p-1022 * sgn[(int) (k&1)];
     }

@@ -227,6 +227,9 @@ public strictfp class LgammaF {
     float fx = (float) Math.floor(x), ax = Math.abs(x);
     int t = Float.floatToRawIntBits(ax);
     if(Integer.compareUnsigned(t, 0xff<<23) >= 0){ // NaN or Inf
+      // the C source assigns the process-global signgam here and at the
+      // other five places (see the class Javadoc); the port writes the
+      // caller's array instead and keeps no shared state
       if(signgamp != null) signgamp[0] = 1; // for nan we set signgam arbitrarily to 1
       if(t==(0xff<<23)){ // +-inf
         return x * x;

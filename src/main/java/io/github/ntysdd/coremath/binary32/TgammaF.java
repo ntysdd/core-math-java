@@ -181,6 +181,8 @@ public strictfp class TgammaF {
       k = (int) fx;
     }
     if(fx==x){ /* x is integer */
+      // this arm cannot be taken: |0| < 0x1p-18, so the branch above has
+      // already returned 1/x; the C source keeps it and so does the port
       if(x == 0.0f){
         return 1.0f/x;
       }

@@ -1526,6 +1526,7 @@ public strictfp class Lgamma {
     }
 
     long tl = Double.doubleToRawLongBits(fl);
+    // the C assignment to unsigned keeps only the low 32 bits of ft
     int ft = (int) ((tl+2)&(~0L>>>12));
     if(Integer.compareUnsigned(ft, 2) <= 0) return asLgammaDatabase(sx, fh + fl);
     return fh + fl;
@@ -1536,6 +1537,9 @@ public strictfp class Lgamma {
     long nx = t<<1;
     if(Long.compareUnsigned(nx, 0xfeaea9b24f16a34cL) >= 0){
       // |x| >= 0x1.006df1bfac84ep+1015
+      // the C source assigns the process-global signgam here and at the
+      // other five places (see the class Javadoc); the port writes the
+      // caller's array instead and keeps no shared state
       if(signgamp != null) signgamp[0] = 1;
       if(t == 0x7f5754d9278b51a6L) return 0x1.ffffffffffffep+1023 - 0x1p+969;
       if(t == 0x7f5754d9278b51a7L) return 0x1.fffffffffffffp+1023 - 0x1p+969;
@@ -1597,6 +1601,7 @@ public strictfp class Lgamma {
         double xt = Double.longBitsToDouble(t);
         au = (int) (t>>>37);
         int ou = au - ubrd[0];
+        // the C source multiplies in 32-bit unsigned arithmetic, so it wraps
         int prod = ou*0x150d;
         int j = (int) (((0x157ced865L - Integer.toUnsignedLong(prod))
                         *Integer.toUnsignedLong(ou) + 0x128000000000L) >>> 45);
@@ -1668,6 +1673,7 @@ public strictfp class Lgamma {
         eps = Math.abs(fh)*4.5e-20;
       } else {// x in [0.5, 8.29541] range
         int ou = au - ubrd[0];
+        // the C source multiplies in 32-bit unsigned arithmetic, so it wraps
         int prod = ou*0x150d;
         int j = (int) (((0x157ced865L - Integer.toUnsignedLong(prod))
                         *Integer.toUnsignedLong(ou) + 0x128000000000L) >>> 45);
