@@ -21,6 +21,7 @@ import io.github.ntysdd.coremath.binary32.CbrtF;
 import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.CoshF;
 import io.github.ntysdd.coremath.binary32.CosPiF;
+import io.github.ntysdd.coremath.binary32.Exp10F;
 import io.github.ntysdd.coremath.binary32.ExpF;
 import io.github.ntysdd.coremath.binary32.Exp2F;
 import io.github.ntysdd.coremath.binary32.Expm1F;
@@ -54,6 +55,7 @@ import io.github.ntysdd.coremath.binary64.Cbrt;
 import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Cosh;
 import io.github.ntysdd.coremath.binary64.CosPi;
+import io.github.ntysdd.coremath.binary64.Exp10;
 import io.github.ntysdd.coremath.binary64.Exp;
 import io.github.ntysdd.coremath.binary64.Exp2;
 import io.github.ntysdd.coremath.binary64.Expm1;
@@ -1502,5 +1504,50 @@ public final class CrMath {
    */
   public static double rsqrt(double x) {
     return Rsqrt.compute(x);
+  }
+
+  /**
+   * {@code 10^x} of a binary32 value; the translation of CORE-MATH
+   * {@code cr_exp10f}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of ten raised to
+   * {@code x}, in round-to-nearest-even, and is exact on every power of ten
+   * binary32 can express. It is not the same function as
+   * {@code (float) Math.pow(10.0, x)}, which is not correctly rounded.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code exp10(±0.0f)} is {@code 1.0f}
+   *   <li>{@code exp10(-Infinity)} is {@code +0.0f}
+   *   <li>{@code exp10(+Infinity)} is {@code +Infinity}
+   *   <li>{@code exp10(NaN)} is NaN
+   *   <li>a finite argument whose result overflows returns {@code +Infinity},
+   *       one below the smallest subnormal returns {@code +0.0f}
+   * </ul>
+   *
+   * @param x the exponent
+   * @return the correctly rounded {@code 10^x}
+   */
+  public static float exp10(float x) {
+    return Exp10F.compute(x);
+  }
+
+  /**
+   * {@code 10^x} of a binary64 value; the translation of CORE-MATH
+   * {@code cr_exp10}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of ten raised to
+   * {@code x}, in round-to-nearest-even, and is exact on every power of ten
+   * binary64 can express. It is not the same function as
+   * {@code Math.pow(10.0, x)}, which is not correctly rounded.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param x the exponent
+   * @return the correctly rounded {@code 10^x}
+   */
+  public static double exp10(double x) {
+    return Exp10.compute(x);
   }
 }

@@ -63,6 +63,7 @@ rules that keep it that way.
 | `atanpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atanpi` |
 | `asinpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/asinpi` |
 | `rsqrt` | translated, tests pending | translated, tests pending | `src/binary{32,64}/rsqrt` |
+| `exp10` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp10` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -199,6 +200,8 @@ Correspondence between the two trees:
 | `src/binary64/atan2pi/atan2pi.c` (`cr_atan2pi`) | `io.github.ntysdd.coremath.binary64.Atan2Pi` |
 | `src/binary32/rsqrt/rsqrtf.c` (`cr_rsqrtf`) | `io.github.ntysdd.coremath.binary32.RsqrtF` |
 | `src/binary64/rsqrt/rsqrt.c` (`cr_rsqrt`) | `io.github.ntysdd.coremath.binary64.Rsqrt` |
+| `src/binary32/exp10/exp10f.c` (`cr_exp10f`) | `io.github.ntysdd.coremath.binary32.Exp10F` |
+| `src/binary64/exp10/exp10.c` (`cr_exp10`) | `io.github.ntysdd.coremath.binary64.Exp10` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation

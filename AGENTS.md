@@ -129,12 +129,16 @@ Add missing cases to this table instead of inventing a local convention.
 | an array of a small anonymous struct of integers (`struct {ushort c0; short c1;} B[]` in `log2.c`) | `int[][]`, one row per entry, the columns in declaration order |
 | an array of the union `{float f; uint32_t u;}` whose initializers set the float member (`st[]` in `log10f.c`) | `float[]` with the C literals plus an `f` suffix, and `Float.floatToRawIntBits` where the code reads the `u` member |
 | an array of a struct whose first member is an anonymous union (`struct {union{float arg; uint32_t uarg;}; float rh, rl;} st[]` in `sinhf.c`) | one array per column (`int[] stUarg`, `float[] stRh`, `float[] stRl`), leaving out the union member no one reads, and with an `f` suffix on the `float` columns so that they round like the C initializers |
+| a plain `static const float` table of decimal integer literals (`static const float ex[] = {10, 100, …, 10000000000}` in `exp10f.c`) | `float[]` with an `f` suffix on every literal, which rounds exactly like the C initializer; the entries are `10^0` to `10^10`, all exact in binary32 |
 | an array of a struct mixing integer and floating members (`struct {int iq; double x, r, d;} db[]` in `sinpi.c` and `cospi.c`) | one array per column, in declaration order (`int[] dbIq`, `double[] dbX`, `double[] dbR`, `double[] dbD`), `sizeof(db)/sizeof(db[0])` becoming the length of the first column and the `unsigned i` of that loop an `int` |
 | a three-dimensional table (`static const double LL[4][17][3]` in `asinh.c`, `acosh.c` and `atanh.c`) | `double[][][]` with the same three indices and one row per line, since Java expresses the nested braces of the C initializer directly |
 | a table whose rows are initialised with different lengths (`static const double Tacc[10][30]` in `erfc.c`, rows of 21 to 30 coefficients) | `double[][]` with rows of exactly those lengths, since the C code only reads the initialised prefix of each row and the zero fill of the rest is never observed |
 | an `#if defined(__x86_64__)` branch built on `x86intrin.h` (`as_ldexp`, `as_todenormal`, the `_mm_and_pd` masking of a rounded value in `sinh.c`, `cosh.c`, `tanh.c`) | the portable `#else` branch of the same `#if`, which computes the same bits with plain integer arithmetic |
 | `(const uint64_t *)pow10`, the bit view of a table of `double` (`log10.c`) | `Double.doubleToRawLongBits` applied to the entry at the use site; the table keeps the C spelling |
 | `unsigned int` arithmetic that wraps and is shifted logically (`0x267cfa2u*((unsigned int)e+1u)>>27` in `log10.c`) | the same wrapping arithmetic on `int`, which is defined to wrap, with `>>>` for the unsigned shift |
+| an unsigned subtraction that wraps and is then compared (`unsigned k = (t.u >> 20) - 1016; if(k<=26)` in `exp10f.c`) | `int` with `Integer.compareUnsigned(k, 26)`. When `t.u>>20` is below 1016 the C value wraps to a huge unsigned number that fails the test, while the signed Java value is negative and would pass it |
+| a `b64u64_u` whose initializer sets the `u` member and which is read through `f` (`b64u64_u d = {.u = ((s>>m)&1)<<63 \| 0x3c90000000000000ull}` in `exp10.c`) | a `long` holding the bit pattern, with `Double.longBitsToDouble` at the read site, like every other use of the union |
+| an explicit `(uint64_t)` cast of an `int64_t` before a shift (`(uint64_t)(ja>>5)<<52` in `exp10f.c`) | nothing, the cast is a no-op: the arithmetic `long` shift gives the same bits and the `<<52` drops the same high ones, so write `((ja>>5)<<52)` |
 | an `int64_t` local that holds at most 32 bits (`m` and `j` of `log10f.c`) | `int`, widening to `long` only where the C code shifts it into the significand (`log2f.c` does the same) |
 | `#define` constants inside a function (`OFFSET`, `ONE_OVER_LOG10_H`, `ONE_OVER_LOG10_L`) | `private static final` fields, with a comment naming the C macro |
 | an output parameter (`double *e`, `uint64_t *r`, `int *n`) | a one-element array, allocated per call. A local whose address the C code passes (`cl` in `polydd`, `pl` in `as_acos_refine`) becomes a one-element array as well |
@@ -153,6 +157,10 @@ Floating-point behavior that has to survive the translation:
 * Where the C code builds a NaN by arithmetic (for example `0.0f/0.0f`, meant
   to raise `FE_INVALID`), write a NaN constant instead. Java has no
   floating-point exceptions; do not build NaNs by arithmetic.
+* Where the C code overflows a multiplication on purpose to return infinity
+  (`0x1p127f * 0x1p127f` in `exp2f.c` and `exp10f.c`), keep the multiplication:
+  Java overflows to `+Infinity` on the same operands. The rule above covers
+  NaNs only.
 
 ## 4. Style
 
