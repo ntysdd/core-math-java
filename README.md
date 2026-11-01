@@ -70,6 +70,7 @@ rules that keep it that way.
 | `log2p1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log2p1` |
 | `tgamma` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tgamma` |
 | `lgamma` | translated, tests pending | translated, tests pending | `src/binary{32,64}/lgamma` |
+| `sincos` | translated, tests pending | pending | `src/binary{32,64}/sincos` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -220,6 +221,7 @@ Correspondence between the two trees:
 | `src/binary64/tgamma/tgamma.c` (`cr_tgamma`) | `io.github.ntysdd.coremath.binary64.Tgamma` |
 | `src/binary32/lgamma/lgammaf.c` (`cr_lgammaf`) | `io.github.ntysdd.coremath.binary32.LgammaF` |
 | `src/binary64/lgamma/lgamma.c` (`cr_lgamma`) | `io.github.ntysdd.coremath.binary64.Lgamma` |
+| `src/binary32/sincos/sincosf.c` (`cr_sincosf`) | `io.github.ntysdd.coremath.binary32.SincosF` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation

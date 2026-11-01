@@ -42,6 +42,7 @@ import io.github.ntysdd.coremath.binary32.RsqrtF;
 import io.github.ntysdd.coremath.binary32.SinF;
 import io.github.ntysdd.coremath.binary32.SinhF;
 import io.github.ntysdd.coremath.binary32.SinPiF;
+import io.github.ntysdd.coremath.binary32.SincosF;
 import io.github.ntysdd.coremath.binary32.TanF;
 import io.github.ntysdd.coremath.binary32.TanhF;
 import io.github.ntysdd.coremath.binary32.TanPiF;
@@ -1875,5 +1876,55 @@ public final class CrMath {
    */
   public static double lgamma(double x, int[] signgamp) {
     return Lgamma.compute(x, signgamp);
+  }
+
+  /**
+   * The two results of {@link #sincos(float)}, in the order of the C entry
+   * point {@code cr_sincosf}: the sine first, the cosine second.
+   *
+   * <p>The class is a plain holder: the two fields are final and the only
+   * constructor is private, so the only way to obtain an instance is to call
+   * {@code sincos}. There is no setter and no equality: the values are the
+   * function's output, not a value type.
+   */
+  public static final class SincosResultF {
+
+    /** {@code sin(x)}. */
+    public final float sin;
+
+    /** {@code cos(x)}. */
+    public final float cos;
+
+    private SincosResultF(float sin, float cos) {
+      this.sin = sin;
+      this.cos = cos;
+    }
+  }
+
+  /**
+   * {@code sin(x)} and {@code cos(x)} of a binary32 value in one pass; the
+   * translation of CORE-MATH {@code cr_sincosf}.
+   *
+   * <p>Both results are correctly rounded (0.5 ulp) in round-to-nearest-even.
+   * The two values are computed together because the reduction modulo
+   * {@code pi/2} is shared, which is the whole point of {@code sincos}.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code sincos(±0.0f).sin} is {@code ±0.0f} and
+   *       {@code sincos(±0.0f).cos} is {@code 1.0f}
+   *   <li>{@code sincos(±Infinity)} is NaN for both components
+   *   <li>{@code sincos(NaN)} is NaN for both components, with the payload of
+   *       the argument when it is a quiet NaN
+   * </ul>
+   *
+   * @param x the argument
+   * @return the pair {@code (sin(x), cos(x))}
+   */
+  public static SincosResultF sincos(float x) {
+    float[] s = new float[1];
+    float[] c = new float[1];
+    SincosF.compute(x, s, c);
+    return new SincosResultF(s[0], c[0]);
   }
 }
