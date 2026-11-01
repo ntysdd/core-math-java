@@ -24,6 +24,7 @@ import io.github.ntysdd.coremath.binary32.CosPiF;
 import io.github.ntysdd.coremath.binary32.Exp10F;
 import io.github.ntysdd.coremath.binary32.ExpF;
 import io.github.ntysdd.coremath.binary32.Exp2F;
+import io.github.ntysdd.coremath.binary32.Exp2M1F;
 import io.github.ntysdd.coremath.binary32.Expm1F;
 import io.github.ntysdd.coremath.binary32.ErfF;
 import io.github.ntysdd.coremath.binary32.ErfcF;
@@ -58,6 +59,7 @@ import io.github.ntysdd.coremath.binary64.CosPi;
 import io.github.ntysdd.coremath.binary64.Exp10;
 import io.github.ntysdd.coremath.binary64.Exp;
 import io.github.ntysdd.coremath.binary64.Exp2;
+import io.github.ntysdd.coremath.binary64.Exp2M1;
 import io.github.ntysdd.coremath.binary64.Expm1;
 import io.github.ntysdd.coremath.binary64.Erf;
 import io.github.ntysdd.coremath.binary64.Erfc;
@@ -1549,5 +1551,60 @@ public final class CrMath {
    */
   public static double exp10(double x) {
     return Exp10.compute(x);
+  }
+
+  /**
+   * {@code 2^x - 1} of a binary32 value; the translation of CORE-MATH
+   * {@code cr_exp2m1f}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of two raised to
+   * {@code x}, minus one, in round-to-nearest-even, and is exact for the
+   * integers {@code x} in {@code -53 .. 53}. It is not the same function as
+   * {@code exp2(x) - 1.0f}: for small {@code x} the subtraction would cancel
+   * the leading bits that this function keeps.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code exp2m1(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code exp2m1(-Infinity)} is {@code -1.0f}
+   *   <li>{@code exp2m1(+Infinity)} is {@code +Infinity}
+   *   <li>{@code exp2m1(NaN)} is NaN
+   *   <li>{@code x <= -25} returns {@code -1.0f}, {@code x >= 128} returns
+   *       {@code +Infinity} except that the {@code +Infinity} argument itself
+   *       is returned
+   * </ul>
+   *
+   * @param x the exponent
+   * @return the correctly rounded {@code 2^x - 1}
+   */
+  public static float exp2m1(float x) {
+    return Exp2M1F.compute(x);
+  }
+
+  /**
+   * {@code 2^x - 1} of a binary64 value; the translation of CORE-MATH
+   * {@code cr_exp2m1}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of two raised to
+   * {@code x}, minus one, in round-to-nearest-even, and is exact for the
+   * integers {@code x} in {@code -53 .. 53}. It is not the same function as
+   * {@code exp2(x) - 1.0}: for small {@code x} the subtraction would cancel the
+   * leading bits that this function keeps.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code exp2m1(±0.0)} is {@code ±0.0}
+   *   <li>{@code exp2m1(-Infinity)} is {@code -1.0}
+   *   <li>{@code exp2m1(+Infinity)} is {@code +Infinity}
+   *   <li>{@code exp2m1(NaN)} is NaN
+   *   <li>{@code x <= -54} returns {@code -1.0} rounded once more to cover the
+   *       last bit, {@code x >= 1024} returns {@code +Infinity}
+   * </ul>
+   *
+   * @param x the exponent
+   * @return the correctly rounded {@code 2^x - 1}
+   */
+  public static double exp2m1(double x) {
+    return Exp2M1.compute(x);
   }
 }
