@@ -33,6 +33,7 @@ import io.github.ntysdd.coremath.binary32.HypotF;
 import io.github.ntysdd.coremath.binary32.Log10F;
 import io.github.ntysdd.coremath.binary32.Log10P1F;
 import io.github.ntysdd.coremath.binary32.Log2F;
+import io.github.ntysdd.coremath.binary32.Log2P1F;
 import io.github.ntysdd.coremath.binary32.LogF;
 import io.github.ntysdd.coremath.binary32.Log1pF;
 import io.github.ntysdd.coremath.binary32.PowF;
@@ -70,6 +71,7 @@ import io.github.ntysdd.coremath.binary64.Hypot;
 import io.github.ntysdd.coremath.binary64.Log10;
 import io.github.ntysdd.coremath.binary64.Log10P1;
 import io.github.ntysdd.coremath.binary64.Log2;
+import io.github.ntysdd.coremath.binary64.Log2P1;
 import io.github.ntysdd.coremath.binary64.Log;
 import io.github.ntysdd.coremath.binary64.Log1p;
 import io.github.ntysdd.coremath.binary64.Pow;
@@ -1712,5 +1714,50 @@ public final class CrMath {
    */
   public static double log10p1(double x) {
     return Log10P1.compute(x);
+  }
+
+  /**
+   * {@code log2(1+x)} of a binary32 value, accurately for small {@code x}; the
+   * translation of CORE-MATH {@code cr_log2p1f}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) base-2 logarithm of
+   * {@code 1+x}, in round-to-nearest-even, and is exact when {@code 1+x} is a
+   * power of two. It is not the same function as {@code log2(1.0f + x)}: for
+   * small {@code x} the addition would lose the bits that this function keeps.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code log2p1(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code log2p1(-1.0f)} is {@code -Infinity}
+   *   <li>{@code log2p1(x)} is NaN for {@code x < -1}
+   *   <li>{@code log2p1(+Infinity)} is {@code +Infinity}
+   *   <li>{@code log2p1(NaN)} is NaN
+   * </ul>
+   *
+   * @param x the argument, added to one
+   * @return the correctly rounded {@code log2(1+x)}
+   */
+  public static float log2p1(float x) {
+    return Log2P1F.compute(x);
+  }
+
+  /**
+   * {@code log2(1+x)} of a binary64 value, accurately for small {@code x}; the
+   * translation of CORE-MATH {@code cr_log2p1}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) base-2 logarithm of
+   * {@code 1+x}, in round-to-nearest-even, and is exact on {@code 2^n - 1} for
+   * {@code n = 1 .. 53}. It is not the same function as {@code log2(1.0 + x)}:
+   * for small {@code x} the addition would lose the bits that this function
+   * keeps.
+   *
+   * <p>The special cases are the ones of the {@code float} overload, with the
+   * binary64 constants.
+   *
+   * @param x the argument, added to one
+   * @return the correctly rounded {@code log2(1+x)}
+   */
+  public static double log2p1(double x) {
+    return Log2P1.compute(x);
   }
 }
