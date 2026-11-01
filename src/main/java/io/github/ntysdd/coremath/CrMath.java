@@ -22,6 +22,7 @@ import io.github.ntysdd.coremath.binary32.CosF;
 import io.github.ntysdd.coremath.binary32.CoshF;
 import io.github.ntysdd.coremath.binary32.CosPiF;
 import io.github.ntysdd.coremath.binary32.Exp10F;
+import io.github.ntysdd.coremath.binary32.Exp10M1F;
 import io.github.ntysdd.coremath.binary32.ExpF;
 import io.github.ntysdd.coremath.binary32.Exp2F;
 import io.github.ntysdd.coremath.binary32.Exp2M1F;
@@ -57,6 +58,7 @@ import io.github.ntysdd.coremath.binary64.Cos;
 import io.github.ntysdd.coremath.binary64.Cosh;
 import io.github.ntysdd.coremath.binary64.CosPi;
 import io.github.ntysdd.coremath.binary64.Exp10;
+import io.github.ntysdd.coremath.binary64.Exp10M1;
 import io.github.ntysdd.coremath.binary64.Exp;
 import io.github.ntysdd.coremath.binary64.Exp2;
 import io.github.ntysdd.coremath.binary64.Exp2M1;
@@ -1606,5 +1608,61 @@ public final class CrMath {
    */
   public static double exp2m1(double x) {
     return Exp2M1.compute(x);
+  }
+
+  /**
+   * {@code 10^x - 1} of a binary32 value; the translation of CORE-MATH
+   * {@code cr_exp10m1f}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of ten raised to
+   * {@code x}, minus one, in round-to-nearest-even, and is exact for the
+   * integers {@code x = 1 .. 7}, where {@code 10^x - 1} fits in binary32. It is
+   * not the same function as {@code exp10(x) - 1.0f}: for small {@code x} the
+   * subtraction would cancel the leading bits that this function keeps.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code exp10m1(±0.0f)} is {@code ±0.0f}
+   *   <li>{@code exp10m1(-Infinity)} is {@code -1.0f}
+   *   <li>{@code exp10m1(+Infinity)} is {@code +Infinity}
+   *   <li>{@code exp10m1(NaN)} is NaN
+   *   <li>{@code x <= -7.52575f} returns {@code -1.0f}
+   *   <li>{@code x > 38.5318f} returns {@code +Infinity}
+   * </ul>
+   *
+   * @param x the exponent
+   * @return the correctly rounded {@code 10^x - 1}
+   */
+  public static float exp10m1(float x) {
+    return Exp10M1F.compute(x);
+  }
+
+  /**
+   * {@code 10^x - 1} of a binary64 value; the translation of CORE-MATH
+   * {@code cr_exp10m1}.
+   *
+   * <p>The result is the correctly rounded (0.5 ulp) value of ten raised to
+   * {@code x}, minus one, in round-to-nearest-even, and is exact for the
+   * integers {@code x = 1 .. 15}. It is not the same function as
+   * {@code exp10(x) - 1.0}: for small {@code x} the subtraction would cancel
+   * the leading bits that this function keeps.
+   *
+   * <p>Special cases:
+   * <ul>
+   *   <li>{@code exp10m1(±0.0)} is {@code ±0.0}
+   *   <li>{@code exp10m1(-Infinity)} is {@code -1.0}
+   *   <li>{@code exp10m1(+Infinity)} is {@code +Infinity}
+   *   <li>{@code exp10m1(NaN)} is NaN
+   *   <li>{@code x <= -0x1.041704c068efp+4} (about {@code -16.26}) returns
+   *       {@code -1.0}
+   *   <li>{@code x > 0x1.34413509f79fep+8} (about {@code 308.25}) returns
+   *       {@code +Infinity}
+   * </ul>
+   *
+   * @param x the exponent
+   * @return the correctly rounded {@code 10^x - 1}
+   */
+  public static double exp10m1(double x) {
+    return Exp10M1.compute(x);
   }
 }

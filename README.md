@@ -65,6 +65,7 @@ rules that keep it that way.
 | `rsqrt` | translated, tests pending | translated, tests pending | `src/binary{32,64}/rsqrt` |
 | `exp10` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp10` |
 | `exp2m1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp2m1` |
+| `exp10m1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp10m1` |
 
 The translations compile and pass an offline smoke comparison, but none of them
 is accompanied by the vectors the verification procedure asks for yet.
@@ -205,6 +206,8 @@ Correspondence between the two trees:
 | `src/binary64/exp10/exp10.c` (`cr_exp10`) | `io.github.ntysdd.coremath.binary64.Exp10` |
 | `src/binary32/exp2m1/exp2m1f.c` (`cr_exp2m1f`) | `io.github.ntysdd.coremath.binary32.Exp2M1F` |
 | `src/binary64/exp2m1/exp2m1.c` (`cr_exp2m1`) | `io.github.ntysdd.coremath.binary64.Exp2M1` |
+| `src/binary32/exp10m1/exp10m1f.c` (`cr_exp10m1f`) | `io.github.ntysdd.coremath.binary32.Exp10M1F` |
+| `src/binary64/exp10m1/exp10m1.c` (`cr_exp10m1`) | `io.github.ntysdd.coremath.binary64.Exp10M1` |
 | public entry points | `io.github.ntysdd.coremath.CrMath` |
 
 `AGENTS.md` holds the rules for changing code here: translation
