@@ -81,6 +81,7 @@ import io.github.ntysdd.coremath.binary64.Log1p;
 import io.github.ntysdd.coremath.binary64.Pow;
 import io.github.ntysdd.coremath.binary64.Rsqrt;
 import io.github.ntysdd.coremath.binary64.Sin;
+import io.github.ntysdd.coremath.binary64.Sincos;
 import io.github.ntysdd.coremath.binary64.Sinh;
 import io.github.ntysdd.coremath.binary64.SinPi;
 import io.github.ntysdd.coremath.binary64.Tan;
@@ -1926,5 +1927,57 @@ public final class CrMath {
     float[] c = new float[1];
     SincosF.compute(x, s, c);
     return new SincosResultF(s[0], c[0]);
+  }
+
+  /**
+   * The two results of {@link #sincos(double)}, in the order of the C entry
+   * point {@code cr_sincos}: the sine first, the cosine second.
+   *
+   * <p>The class is a plain holder: the two fields are final and the only
+   * constructor is private, so the only way to obtain an instance is to call
+   * {@code sincos}. There is no setter and no equality: the values are the
+   * function's output, not a value type.
+   */
+  public static final class SincosResult {
+
+    /** {@code sin(x)}. */
+    public final double sin;
+
+    /** {@code cos(x)}. */
+    public final double cos;
+
+    private SincosResult(double sin, double cos) {
+      this.sin = sin;
+      this.cos = cos;
+    }
+  }
+
+  /**
+   * {@code sin(x)} and {@code cos(x)} of a binary64 value in one pass; the
+   * translation of CORE-MATH {@code cr_sincos}.
+   *
+   * <p>Both results are correctly rounded (0.5 ulp) in round-to-nearest-even.
+   * The two values are computed together because the reduction modulo
+   * {@code pi/2} is shared, which is the whole point of {@code sincos}.
+   *
+   * <p>Special cases, matching IEEE 754-2019:
+   * <ul>
+   *   <li>{@code sincos(±0.0).sin} is {@code ±0.0} and
+   *       {@code sincos(±0.0).cos} is {@code 1.0}
+   *   <li>{@code sincos(±Infinity)} and {@code sincos(NaN)} are NaN for both
+   *       components. The C entry point writes the fixed bit pattern
+   *       {@code 0xffffffffffffffff}, a quiet NaN with every payload bit set,
+   *       to both outputs, so unlike the {@code float} overload the sign and
+   *       the payload of a NaN argument are not propagated.
+   * </ul>
+   *
+   * @param x the argument
+   * @return the pair {@code (sin(x), cos(x))}
+   */
+  public static SincosResult sincos(double x) {
+    double[] s = new double[1];
+    double[] c = new double[1];
+    Sincos.compute(x, s, c);
+    return new SincosResult(s[0], c[0]);
   }
 }
