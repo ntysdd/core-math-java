@@ -1,14 +1,23 @@
 # core-math-java
 
 Java port of [CORE-MATH](https://core-math.gitlabpages.inria.fr/): correctly
-rounded (0.5 ulp) elementary math functions, translated from the C sources so
+rounded (0.5 ulp) mathematical functions, translated from the C sources so
 that the results are bit-for-bit identical to upstream, with one exception: the
 bit pattern of a NaN result is not part of the promise; the promise is only
 that the result is a NaN.
 
+Only the two binary floating-point formats that Java has types for are ported:
+binary32 (`float`) and binary64 (`double`). CORE-MATH also implements the same
+function set for binary16, bfloat16, binary80, binary128 and a
+format-generic variant; none of those is covered here.
+
 ## Status
 
-Early development.
+All 42 functions that CORE-MATH provides for binary32 and all 41 that it
+provides for binary64 are translated, 83 entry points in all, and every one of
+them except the ten of `sin`, `cos`, `tan`, `exp` and `log` has been checked bit
+for bit against a local build of the C sources. No JUnit test suite and no
+vector files exist yet.
 
 ## What this is
 
@@ -22,6 +31,12 @@ This is an unofficial port, not affiliated with the CORE-MATH project or with
 INRIA. Where the Java code and the C code disagree, the C code is right. If
 upstream itself is wrong, the bug is reported upstream rather than worked around
 here: <https://gitlab.inria.fr/core-math/core-math/-/issues>.
+
+The port currently follows commit
+`0ce0cbc15935e24c656280e5a46c34e89f301b7a` of the CORE-MATH repository: that is
+the commit the translations were taken from, and the one recorded in every file
+header. It is a snapshot, not a fixed policy: a newer upstream is picked up by
+replaying its diffs, as `AGENTS.md` describes.
 
 The translation is mechanical: same control flow, same constant tables in the
 same order, same variable names, so that anyone can put the C file and the Java
@@ -71,14 +86,17 @@ rules that keep it that way.
 | `tgamma` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tgamma` |
 | `lgamma` | translated, tests pending | translated, tests pending | `src/binary{32,64}/lgamma` |
 | `sincos` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sincos` |
-| `compound` | translated, tests pending | no upstream file | `src/binary32/compound` |
+| `compound` | translated, tests pending | not in CORE-MATH | `src/binary32/compound` |
 
-The translations compile and pass an offline smoke comparison, but none of them
-is accompanied by the vectors the verification procedure asks for yet.
+Every function has been checked bit for bit against a local build of the C
+sources (see *Verification*), with one gap: `sin`, `cos`, `tan`, `exp` and `log`
+predate that procedure and still have no oracle, ten entry points in all. None
+of the translations has the JUnit vectors yet.
 
-Nothing beyond the table above is scheduled. The longer-term direction, if the
-port continues, is the function set of IEEE 754-2019: `exp`, `log`, `pow`, the
-trigonometric family, their inverses and the hyperbolic variants.
+Everything in the table is written and compiles. CORE-MATH keeps growing, and
+this port follows it: when upstream adds a function, a format, or a new version
+of one of these files, the change is replayed here with the same mechanical
+translation. Nothing beyond the table is planned on this side.
 
 ## Requirements
 
