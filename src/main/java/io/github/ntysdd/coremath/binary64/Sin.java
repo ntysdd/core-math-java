@@ -156,7 +156,7 @@ public final strictfp class Sin {
     U128 ahbh = U128.mul(ah, bh);
     U128 ahbl = U128.mul(ah, bl);
     U128 albh = U128.mul(al, bh);
-    return ahbh.addLow(ahbl.hi + albh.hi);
+    return ahbh.add(ahbl.shr(64)).add(albh.shr(64));
   }
 
   /* Return Sr such that Sr/2^128 approximates sin2pi(r), for 0 <= r < 2^-14,

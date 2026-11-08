@@ -15,9 +15,9 @@ format-generic variant; none of those is covered here.
 
 All 42 functions that CORE-MATH provides for binary32 and all 41 that it
 provides for binary64 are translated, 83 entry points in all, and every one of
-them except the ten of `sin`, `cos`, `tan`, `exp` and `log` has been checked bit
-for bit against a local build of the C sources. No JUnit test suite and no
-vector files exist yet.
+them except the six of `tan`, `exp` and `log` has been checked bit for bit
+against a local build of the C sources. No JUnit test suite and no vector files
+exist yet.
 
 ## What this is
 
@@ -89,9 +89,9 @@ rules that keep it that way.
 | `compound` | translated, tests pending | not in CORE-MATH | `src/binary32/compound` |
 
 Every function has been checked bit for bit against a local build of the C
-sources (see *Verification*), with one gap: `sin`, `cos`, `tan`, `exp` and `log`
-predate that procedure and still have no oracle, ten entry points in all. None
-of the translations has the JUnit vectors yet.
+sources (see *Verification*), with one gap: `tan`, `exp` and `log` predate that
+procedure and still have no oracle, six entry points in all. None of the
+translations has the JUnit vectors yet.
 
 Everything in the table is written and compiles. CORE-MATH keeps growing, and
 this port follows it: when upstream adds a function, a format, or a new version
