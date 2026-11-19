@@ -17,7 +17,7 @@ All 42 functions that CORE-MATH provides for binary32 and all 41 that it
 provides for binary64 are translated, 83 entry points in all. Every one of them
 has been checked bit for bit against a local build of the C sources, and every
 one of them ships with a JUnit class fed by a committed vector file, so a
-checkout builds and verifies with nothing but a JDK: 134,921 test cases that run
+checkout builds and verifies with nothing but a JDK: 134,939 test cases that run
 in about ten seconds under `mvn verify`.
 
 ## What this is
@@ -205,6 +205,10 @@ for the elementary functions and about 25 ns for `tgamma`.
 None of this is a promise, and the repository carries no benchmark code: the
 figures came from a throwaway harness on one machine, and another JVM or
 another CPU will move them.
+
+The port is pinned to commit `0ce0cbc`. Upstream has since rewritten its
+binary64 cosine, and the rewrite is faster than the version translated here, so
+`cos` is the one entry point whose speed is behind what upstream ships now.
 
 ## Building and testing
 
