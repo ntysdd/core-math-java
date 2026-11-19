@@ -53,13 +53,17 @@ class TanPiTest {
     assertBits(0x0000000000000000L, CrMath.tanpi(-1.0), "tanpi(-1.0)");
     assertTrue(Double.isNaN(CrMath.tanpi(Double.POSITIVE_INFINITY)), "tanpi(+Infinity)");
     assertTrue(Double.isNaN(CrMath.tanpi(Double.NEGATIVE_INFINITY)), "tanpi(-Infinity)");
-    assertTrue(Double.isNaN(CrMath.tanpi(Double.longBitsToDouble(0x7ff8000000000000L))),
+    assertTrue(Double.isNaN(
+        CrMath.tanpi(Double.longBitsToDouble(0x7ff8000000000000L))),
         "tanpi(0x7ff8000000000000, quiet NaN)");
-    assertTrue(Double.isNaN(CrMath.tanpi(Double.longBitsToDouble(0x7ff0000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.tanpi(Double.longBitsToDouble(0x7ff0000000000001L))),
         "tanpi(0x7ff0000000000001, signalling NaN, smallest payload)");
-    assertTrue(Double.isNaN(CrMath.tanpi(Double.longBitsToDouble(0xfff8000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.tanpi(Double.longBitsToDouble(0xfff8000000000001L))),
         "tanpi(0xfff8000000000001, negative NaN with a payload)");
-    assertTrue(Double.isNaN(CrMath.tanpi(Double.longBitsToDouble(0x7fffffffffffffffL))),
+    assertTrue(Double.isNaN(
+        CrMath.tanpi(Double.longBitsToDouble(0x7fffffffffffffffL))),
         "tanpi(0x7fffffffffffffff, NaN with every payload bit set)");
   }
 

@@ -44,13 +44,17 @@ class AtanPiFTest {
     assertBits(0xbe800000L, CrMath.atanpi(-1.0f), "atanpif(-1.0)");
     assertBits(0x3f000000L, CrMath.atanpi(Float.POSITIVE_INFINITY), "atanpif(+Infinity)");
     assertBits(0xbf000000L, CrMath.atanpi(Float.NEGATIVE_INFINITY), "atanpif(-Infinity)");
-    assertTrue(Float.isNaN(CrMath.atanpi(Float.intBitsToFloat(0x7fc00000))),
+    assertTrue(Float.isNaN(
+        CrMath.atanpi(Float.intBitsToFloat(0x7fc00000))),
         "atanpif(0x7fc00000, quiet NaN)");
-    assertTrue(Float.isNaN(CrMath.atanpi(Float.intBitsToFloat(0x7f800001))),
+    assertTrue(Float.isNaN(
+        CrMath.atanpi(Float.intBitsToFloat(0x7f800001))),
         "atanpif(0x7f800001, signalling NaN, smallest payload)");
-    assertTrue(Float.isNaN(CrMath.atanpi(Float.intBitsToFloat(0xffc00001))),
+    assertTrue(Float.isNaN(
+        CrMath.atanpi(Float.intBitsToFloat(0xffc00001))),
         "atanpif(0xffc00001, negative NaN with a payload)");
-    assertTrue(Float.isNaN(CrMath.atanpi(Float.intBitsToFloat(0x7fffffff))),
+    assertTrue(Float.isNaN(
+        CrMath.atanpi(Float.intBitsToFloat(0x7fffffff))),
         "atanpif(0x7fffffff, NaN with every payload bit set)");
   }
 

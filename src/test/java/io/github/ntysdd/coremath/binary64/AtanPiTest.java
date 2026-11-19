@@ -47,15 +47,23 @@ class AtanPiTest {
     assertBits(0x8000000000000000L, CrMath.atanpi(-0.0), "atanpi(-0.0)");
     assertBits(0x3fd0000000000000L, CrMath.atanpi(1.0), "atanpi(1.0)");
     assertBits(0xbfd0000000000000L, CrMath.atanpi(-1.0), "atanpi(-1.0)");
-    assertBits(0x3fe0000000000000L, CrMath.atanpi(Double.POSITIVE_INFINITY), "atanpi(+Infinity)");
-    assertBits(0xbfe0000000000000L, CrMath.atanpi(Double.NEGATIVE_INFINITY), "atanpi(-Infinity)");
-    assertTrue(Double.isNaN(CrMath.atanpi(Double.longBitsToDouble(0x7ff8000000000000L))),
+    assertBits(0x3fe0000000000000L,
+        CrMath.atanpi(Double.POSITIVE_INFINITY),
+        "atanpi(+Infinity)");
+    assertBits(0xbfe0000000000000L,
+        CrMath.atanpi(Double.NEGATIVE_INFINITY),
+        "atanpi(-Infinity)");
+    assertTrue(Double.isNaN(
+        CrMath.atanpi(Double.longBitsToDouble(0x7ff8000000000000L))),
         "atanpi(0x7ff8000000000000, quiet NaN)");
-    assertTrue(Double.isNaN(CrMath.atanpi(Double.longBitsToDouble(0x7ff0000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.atanpi(Double.longBitsToDouble(0x7ff0000000000001L))),
         "atanpi(0x7ff0000000000001, signalling NaN, smallest payload)");
-    assertTrue(Double.isNaN(CrMath.atanpi(Double.longBitsToDouble(0xfff8000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.atanpi(Double.longBitsToDouble(0xfff8000000000001L))),
         "atanpi(0xfff8000000000001, negative NaN with a payload)");
-    assertTrue(Double.isNaN(CrMath.atanpi(Double.longBitsToDouble(0x7fffffffffffffffL))),
+    assertTrue(Double.isNaN(
+        CrMath.atanpi(Double.longBitsToDouble(0x7fffffffffffffffL))),
         "atanpi(0x7fffffffffffffff, NaN with every payload bit set)");
   }
 

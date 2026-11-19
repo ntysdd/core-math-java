@@ -48,14 +48,20 @@ class Expm1Test {
     assertBits(0x7ff0000000000000L, CrMath.expm1(Double.POSITIVE_INFINITY), "expm1(+Infinity)");
     assertBits(0xbff0000000000000L, CrMath.expm1(Double.NEGATIVE_INFINITY), "expm1(-Infinity)");
     assertBits(0x7ff0000000000000L, CrMath.expm1(Double.MAX_VALUE), "expm1(Double.MAX_VALUE)");
-    assertBits(0xbff0000000000000L, CrMath.expm1(-Double.MAX_VALUE), "expm1(-Double.MAX_VALUE)");
-    assertTrue(Double.isNaN(CrMath.expm1(Double.longBitsToDouble(0x7ff8000000000000L))),
+    assertBits(0xbff0000000000000L,
+        CrMath.expm1(-Double.MAX_VALUE),
+        "expm1(-Double.MAX_VALUE)");
+    assertTrue(Double.isNaN(
+        CrMath.expm1(Double.longBitsToDouble(0x7ff8000000000000L))),
         "expm1(0x7ff8000000000000, quiet NaN)");
-    assertTrue(Double.isNaN(CrMath.expm1(Double.longBitsToDouble(0x7ff0000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.expm1(Double.longBitsToDouble(0x7ff0000000000001L))),
         "expm1(0x7ff0000000000001, signalling NaN, smallest payload)");
-    assertTrue(Double.isNaN(CrMath.expm1(Double.longBitsToDouble(0xfff8000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.expm1(Double.longBitsToDouble(0xfff8000000000001L))),
         "expm1(0xfff8000000000001, negative NaN with a payload)");
-    assertTrue(Double.isNaN(CrMath.expm1(Double.longBitsToDouble(0x7fffffffffffffffL))),
+    assertTrue(Double.isNaN(
+        CrMath.expm1(Double.longBitsToDouble(0x7fffffffffffffffL))),
         "expm1(0x7fffffffffffffff, NaN with every payload bit set)");
   }
 

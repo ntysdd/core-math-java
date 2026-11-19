@@ -46,13 +46,17 @@ class ErfFTest {
     assertBits(0xbf800000L, CrMath.erf(Float.NEGATIVE_INFINITY), "erff(-Infinity)");
     assertBits(0x3f800000L, CrMath.erf(Float.MAX_VALUE), "erff(Float.MAX_VALUE)");
     assertBits(0xbf800000L, CrMath.erf(-Float.MAX_VALUE), "erff(-Float.MAX_VALUE)");
-    assertTrue(Float.isNaN(CrMath.erf(Float.intBitsToFloat(0x7fc00000))),
+    assertTrue(Float.isNaN(
+        CrMath.erf(Float.intBitsToFloat(0x7fc00000))),
         "erff(0x7fc00000, quiet NaN)");
-    assertTrue(Float.isNaN(CrMath.erf(Float.intBitsToFloat(0x7f800001))),
+    assertTrue(Float.isNaN(
+        CrMath.erf(Float.intBitsToFloat(0x7f800001))),
         "erff(0x7f800001, signalling NaN, smallest payload)");
-    assertTrue(Float.isNaN(CrMath.erf(Float.intBitsToFloat(0xffc00001))),
+    assertTrue(Float.isNaN(
+        CrMath.erf(Float.intBitsToFloat(0xffc00001))),
         "erff(0xffc00001, negative NaN with a payload)");
-    assertTrue(Float.isNaN(CrMath.erf(Float.intBitsToFloat(0x7fffffff))),
+    assertTrue(Float.isNaN(
+        CrMath.erf(Float.intBitsToFloat(0x7fffffff))),
         "erff(0x7fffffff, NaN with every payload bit set)");
   }
 

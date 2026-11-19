@@ -47,17 +47,29 @@ class Exp2M1Test {
     assertBits(0x8000000000000000L, CrMath.exp2m1(-0.0), "exp2m1(-0.0)");
     assertBits(0x3ff0000000000000L, CrMath.exp2m1(1.0), "exp2m1(1.0)");
     assertBits(0xbfe0000000000000L, CrMath.exp2m1(-1.0), "exp2m1(-1.0)");
-    assertBits(0x7ff0000000000000L, CrMath.exp2m1(Double.POSITIVE_INFINITY), "exp2m1(+Infinity)");
-    assertBits(0xbff0000000000000L, CrMath.exp2m1(Double.NEGATIVE_INFINITY), "exp2m1(-Infinity)");
-    assertBits(0x7ff0000000000000L, CrMath.exp2m1(Double.MAX_VALUE), "exp2m1(Double.MAX_VALUE)");
-    assertBits(0xbff0000000000000L, CrMath.exp2m1(-Double.MAX_VALUE), "exp2m1(-Double.MAX_VALUE)");
-    assertTrue(Double.isNaN(CrMath.exp2m1(Double.longBitsToDouble(0x7ff8000000000000L))),
+    assertBits(0x7ff0000000000000L,
+        CrMath.exp2m1(Double.POSITIVE_INFINITY),
+        "exp2m1(+Infinity)");
+    assertBits(0xbff0000000000000L,
+        CrMath.exp2m1(Double.NEGATIVE_INFINITY),
+        "exp2m1(-Infinity)");
+    assertBits(0x7ff0000000000000L,
+        CrMath.exp2m1(Double.MAX_VALUE),
+        "exp2m1(Double.MAX_VALUE)");
+    assertBits(0xbff0000000000000L,
+        CrMath.exp2m1(-Double.MAX_VALUE),
+        "exp2m1(-Double.MAX_VALUE)");
+    assertTrue(Double.isNaN(
+        CrMath.exp2m1(Double.longBitsToDouble(0x7ff8000000000000L))),
         "exp2m1(0x7ff8000000000000, quiet NaN)");
-    assertTrue(Double.isNaN(CrMath.exp2m1(Double.longBitsToDouble(0x7ff0000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.exp2m1(Double.longBitsToDouble(0x7ff0000000000001L))),
         "exp2m1(0x7ff0000000000001, signalling NaN, smallest payload)");
-    assertTrue(Double.isNaN(CrMath.exp2m1(Double.longBitsToDouble(0xfff8000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.exp2m1(Double.longBitsToDouble(0xfff8000000000001L))),
         "exp2m1(0xfff8000000000001, negative NaN with a payload)");
-    assertTrue(Double.isNaN(CrMath.exp2m1(Double.longBitsToDouble(0x7fffffffffffffffL))),
+    assertTrue(Double.isNaN(
+        CrMath.exp2m1(Double.longBitsToDouble(0x7fffffffffffffffL))),
         "exp2m1(0x7fffffffffffffff, NaN with every payload bit set)");
   }
 

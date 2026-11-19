@@ -52,13 +52,17 @@ class CosPiTest {
     assertBits(0x3ff0000000000000L, CrMath.cospi(2.0), "cospi(2.0)");
     assertTrue(Double.isNaN(CrMath.cospi(Double.POSITIVE_INFINITY)), "cospi(+Infinity)");
     assertTrue(Double.isNaN(CrMath.cospi(Double.NEGATIVE_INFINITY)), "cospi(-Infinity)");
-    assertTrue(Double.isNaN(CrMath.cospi(Double.longBitsToDouble(0x7ff8000000000000L))),
+    assertTrue(Double.isNaN(
+        CrMath.cospi(Double.longBitsToDouble(0x7ff8000000000000L))),
         "cospi(0x7ff8000000000000, quiet NaN)");
-    assertTrue(Double.isNaN(CrMath.cospi(Double.longBitsToDouble(0x7ff0000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.cospi(Double.longBitsToDouble(0x7ff0000000000001L))),
         "cospi(0x7ff0000000000001, signalling NaN, smallest payload)");
-    assertTrue(Double.isNaN(CrMath.cospi(Double.longBitsToDouble(0xfff8000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.cospi(Double.longBitsToDouble(0xfff8000000000001L))),
         "cospi(0xfff8000000000001, negative NaN with a payload)");
-    assertTrue(Double.isNaN(CrMath.cospi(Double.longBitsToDouble(0x7fffffffffffffffL))),
+    assertTrue(Double.isNaN(
+        CrMath.cospi(Double.longBitsToDouble(0x7fffffffffffffffL))),
         "cospi(0x7fffffffffffffff, NaN with every payload bit set)");
   }
 

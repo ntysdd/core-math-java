@@ -46,13 +46,17 @@ class AcosFTest {
     assertTrue(Float.isNaN(CrMath.acos(-2.0f)), "acosf(-2.0)");
     assertTrue(Float.isNaN(CrMath.acos(Float.POSITIVE_INFINITY)), "acosf(+Infinity)");
     assertTrue(Float.isNaN(CrMath.acos(Float.NEGATIVE_INFINITY)), "acosf(-Infinity)");
-    assertTrue(Float.isNaN(CrMath.acos(Float.intBitsToFloat(0x7fc00000))),
+    assertTrue(Float.isNaN(
+        CrMath.acos(Float.intBitsToFloat(0x7fc00000))),
         "acosf(0x7fc00000, quiet NaN)");
-    assertTrue(Float.isNaN(CrMath.acos(Float.intBitsToFloat(0x7f800001))),
+    assertTrue(Float.isNaN(
+        CrMath.acos(Float.intBitsToFloat(0x7f800001))),
         "acosf(0x7f800001, signalling NaN, smallest payload)");
-    assertTrue(Float.isNaN(CrMath.acos(Float.intBitsToFloat(0xffc00001))),
+    assertTrue(Float.isNaN(
+        CrMath.acos(Float.intBitsToFloat(0xffc00001))),
         "acosf(0xffc00001, negative NaN with a payload)");
-    assertTrue(Float.isNaN(CrMath.acos(Float.intBitsToFloat(0x7fffffff))),
+    assertTrue(Float.isNaN(
+        CrMath.acos(Float.intBitsToFloat(0x7fffffff))),
         "acosf(0x7fffffff, NaN with every payload bit set)");
   }
 

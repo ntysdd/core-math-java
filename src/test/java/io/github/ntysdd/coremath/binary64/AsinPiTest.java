@@ -51,13 +51,17 @@ class AsinPiTest {
     assertTrue(Double.isNaN(CrMath.asinpi(2.0)), "asinpi(2.0)");
     assertTrue(Double.isNaN(CrMath.asinpi(Double.POSITIVE_INFINITY)), "asinpi(+Infinity)");
     assertTrue(Double.isNaN(CrMath.asinpi(Double.NEGATIVE_INFINITY)), "asinpi(-Infinity)");
-    assertTrue(Double.isNaN(CrMath.asinpi(Double.longBitsToDouble(0x7ff8000000000000L))),
+    assertTrue(Double.isNaN(
+        CrMath.asinpi(Double.longBitsToDouble(0x7ff8000000000000L))),
         "asinpi(0x7ff8000000000000, quiet NaN)");
-    assertTrue(Double.isNaN(CrMath.asinpi(Double.longBitsToDouble(0x7ff0000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.asinpi(Double.longBitsToDouble(0x7ff0000000000001L))),
         "asinpi(0x7ff0000000000001, signalling NaN, smallest payload)");
-    assertTrue(Double.isNaN(CrMath.asinpi(Double.longBitsToDouble(0xfff8000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.asinpi(Double.longBitsToDouble(0xfff8000000000001L))),
         "asinpi(0xfff8000000000001, negative NaN with a payload)");
-    assertTrue(Double.isNaN(CrMath.asinpi(Double.longBitsToDouble(0x7fffffffffffffffL))),
+    assertTrue(Double.isNaN(
+        CrMath.asinpi(Double.longBitsToDouble(0x7fffffffffffffffL))),
         "asinpi(0x7fffffffffffffff, NaN with every payload bit set)");
   }
 

@@ -49,17 +49,25 @@ class TgammaTest {
     assertBits(0x3ff0000000000000L, CrMath.tgamma(2.0), "tgamma(2.0)");
     assertBits(0x4038000000000000L, CrMath.tgamma(5.0), "tgamma(5.0)");
     assertTrue(Double.isNaN(CrMath.tgamma(-1.0)), "tgamma(-1.0)");
-    assertBits(0x7ff0000000000000L, CrMath.tgamma(Double.POSITIVE_INFINITY), "tgamma(+Infinity)");
+    assertBits(0x7ff0000000000000L,
+        CrMath.tgamma(Double.POSITIVE_INFINITY),
+        "tgamma(+Infinity)");
     assertTrue(Double.isNaN(CrMath.tgamma(Double.NEGATIVE_INFINITY)), "tgamma(-Infinity)");
-    assertBits(0x7ff0000000000000L, CrMath.tgamma(Double.MAX_VALUE), "tgamma(Double.MAX_VALUE)");
+    assertBits(0x7ff0000000000000L,
+        CrMath.tgamma(Double.MAX_VALUE),
+        "tgamma(Double.MAX_VALUE)");
     assertTrue(Double.isNaN(CrMath.tgamma(-Double.MAX_VALUE)), "tgamma(-Double.MAX_VALUE)");
-    assertTrue(Double.isNaN(CrMath.tgamma(Double.longBitsToDouble(0x7ff8000000000000L))),
+    assertTrue(Double.isNaN(
+        CrMath.tgamma(Double.longBitsToDouble(0x7ff8000000000000L))),
         "tgamma(0x7ff8000000000000, quiet NaN)");
-    assertTrue(Double.isNaN(CrMath.tgamma(Double.longBitsToDouble(0x7ff0000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.tgamma(Double.longBitsToDouble(0x7ff0000000000001L))),
         "tgamma(0x7ff0000000000001, signalling NaN, smallest payload)");
-    assertTrue(Double.isNaN(CrMath.tgamma(Double.longBitsToDouble(0xfff8000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.tgamma(Double.longBitsToDouble(0xfff8000000000001L))),
         "tgamma(0xfff8000000000001, negative NaN with a payload)");
-    assertTrue(Double.isNaN(CrMath.tgamma(Double.longBitsToDouble(0x7fffffffffffffffL))),
+    assertTrue(Double.isNaN(
+        CrMath.tgamma(Double.longBitsToDouble(0x7fffffffffffffffL))),
         "tgamma(0x7fffffffffffffff, NaN with every payload bit set)");
   }
 

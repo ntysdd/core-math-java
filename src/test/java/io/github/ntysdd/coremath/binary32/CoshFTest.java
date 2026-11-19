@@ -43,13 +43,17 @@ class CoshFTest {
     assertBits(0x7f800000L, CrMath.cosh(Float.POSITIVE_INFINITY), "coshf(+Infinity)");
     assertBits(0x7f800000L, CrMath.cosh(Float.NEGATIVE_INFINITY), "coshf(-Infinity)");
     assertBits(0x7f800000L, CrMath.cosh(Float.MAX_VALUE), "coshf(Float.MAX_VALUE)");
-    assertTrue(Float.isNaN(CrMath.cosh(Float.intBitsToFloat(0x7fc00000))),
+    assertTrue(Float.isNaN(
+        CrMath.cosh(Float.intBitsToFloat(0x7fc00000))),
         "coshf(0x7fc00000, quiet NaN)");
-    assertTrue(Float.isNaN(CrMath.cosh(Float.intBitsToFloat(0x7f800001))),
+    assertTrue(Float.isNaN(
+        CrMath.cosh(Float.intBitsToFloat(0x7f800001))),
         "coshf(0x7f800001, signalling NaN, smallest payload)");
-    assertTrue(Float.isNaN(CrMath.cosh(Float.intBitsToFloat(0xffc00001))),
+    assertTrue(Float.isNaN(
+        CrMath.cosh(Float.intBitsToFloat(0xffc00001))),
         "coshf(0xffc00001, negative NaN with a payload)");
-    assertTrue(Float.isNaN(CrMath.cosh(Float.intBitsToFloat(0x7fffffff))),
+    assertTrue(Float.isNaN(
+        CrMath.cosh(Float.intBitsToFloat(0x7fffffff))),
         "coshf(0x7fffffff, NaN with every payload bit set)");
   }
 

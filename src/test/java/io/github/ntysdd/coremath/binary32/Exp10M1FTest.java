@@ -46,13 +46,17 @@ class Exp10M1FTest {
     assertBits(0xbf800000L, CrMath.exp10m1(Float.NEGATIVE_INFINITY), "exp10m1f(-Infinity)");
     assertBits(0x7f800000L, CrMath.exp10m1(Float.MAX_VALUE), "exp10m1f(Float.MAX_VALUE)");
     assertBits(0xbf800000L, CrMath.exp10m1(-Float.MAX_VALUE), "exp10m1f(-Float.MAX_VALUE)");
-    assertTrue(Float.isNaN(CrMath.exp10m1(Float.intBitsToFloat(0x7fc00000))),
+    assertTrue(Float.isNaN(
+        CrMath.exp10m1(Float.intBitsToFloat(0x7fc00000))),
         "exp10m1f(0x7fc00000, quiet NaN)");
-    assertTrue(Float.isNaN(CrMath.exp10m1(Float.intBitsToFloat(0x7f800001))),
+    assertTrue(Float.isNaN(
+        CrMath.exp10m1(Float.intBitsToFloat(0x7f800001))),
         "exp10m1f(0x7f800001, signalling NaN, smallest payload)");
-    assertTrue(Float.isNaN(CrMath.exp10m1(Float.intBitsToFloat(0xffc00001))),
+    assertTrue(Float.isNaN(
+        CrMath.exp10m1(Float.intBitsToFloat(0xffc00001))),
         "exp10m1f(0xffc00001, negative NaN with a payload)");
-    assertTrue(Float.isNaN(CrMath.exp10m1(Float.intBitsToFloat(0x7fffffff))),
+    assertTrue(Float.isNaN(
+        CrMath.exp10m1(Float.intBitsToFloat(0x7fffffff))),
         "exp10m1f(0x7fffffff, NaN with every payload bit set)");
   }
 

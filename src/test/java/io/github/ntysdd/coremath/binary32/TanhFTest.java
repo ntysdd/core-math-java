@@ -44,13 +44,17 @@ class TanhFTest {
     assertBits(0xbf800000L, CrMath.tanh(Float.NEGATIVE_INFINITY), "tanhf(-Infinity)");
     assertBits(0x3f800000L, CrMath.tanh(Float.MAX_VALUE), "tanhf(Float.MAX_VALUE)");
     assertBits(0xbf800000L, CrMath.tanh(-Float.MAX_VALUE), "tanhf(-Float.MAX_VALUE)");
-    assertTrue(Float.isNaN(CrMath.tanh(Float.intBitsToFloat(0x7fc00000))),
+    assertTrue(Float.isNaN(
+        CrMath.tanh(Float.intBitsToFloat(0x7fc00000))),
         "tanhf(0x7fc00000, quiet NaN)");
-    assertTrue(Float.isNaN(CrMath.tanh(Float.intBitsToFloat(0x7f800001))),
+    assertTrue(Float.isNaN(
+        CrMath.tanh(Float.intBitsToFloat(0x7f800001))),
         "tanhf(0x7f800001, signalling NaN, smallest payload)");
-    assertTrue(Float.isNaN(CrMath.tanh(Float.intBitsToFloat(0xffc00001))),
+    assertTrue(Float.isNaN(
+        CrMath.tanh(Float.intBitsToFloat(0xffc00001))),
         "tanhf(0xffc00001, negative NaN with a payload)");
-    assertTrue(Float.isNaN(CrMath.tanh(Float.intBitsToFloat(0x7fffffff))),
+    assertTrue(Float.isNaN(
+        CrMath.tanh(Float.intBitsToFloat(0x7fffffff))),
         "tanhf(0x7fffffff, NaN with every payload bit set)");
   }
 

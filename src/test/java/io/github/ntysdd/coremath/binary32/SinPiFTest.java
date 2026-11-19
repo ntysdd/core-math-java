@@ -47,13 +47,17 @@ class SinPiFTest {
     assertBits(0x00000000L, CrMath.sinpi(2.0f), "sinpif(2.0)");
     assertTrue(Float.isNaN(CrMath.sinpi(Float.POSITIVE_INFINITY)), "sinpif(+Infinity)");
     assertTrue(Float.isNaN(CrMath.sinpi(Float.NEGATIVE_INFINITY)), "sinpif(-Infinity)");
-    assertTrue(Float.isNaN(CrMath.sinpi(Float.intBitsToFloat(0x7fc00000))),
+    assertTrue(Float.isNaN(
+        CrMath.sinpi(Float.intBitsToFloat(0x7fc00000))),
         "sinpif(0x7fc00000, quiet NaN)");
-    assertTrue(Float.isNaN(CrMath.sinpi(Float.intBitsToFloat(0x7f800001))),
+    assertTrue(Float.isNaN(
+        CrMath.sinpi(Float.intBitsToFloat(0x7f800001))),
         "sinpif(0x7f800001, signalling NaN, smallest payload)");
-    assertTrue(Float.isNaN(CrMath.sinpi(Float.intBitsToFloat(0xffc00001))),
+    assertTrue(Float.isNaN(
+        CrMath.sinpi(Float.intBitsToFloat(0xffc00001))),
         "sinpif(0xffc00001, negative NaN with a payload)");
-    assertTrue(Float.isNaN(CrMath.sinpi(Float.intBitsToFloat(0x7fffffff))),
+    assertTrue(Float.isNaN(
+        CrMath.sinpi(Float.intBitsToFloat(0x7fffffff))),
         "sinpif(0x7fffffff, NaN with every payload bit set)");
   }
 

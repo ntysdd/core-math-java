@@ -48,13 +48,17 @@ class TgammaFTest {
     assertTrue(Float.isNaN(CrMath.tgamma(Float.NEGATIVE_INFINITY)), "tgammaf(-Infinity)");
     assertBits(0x7f800000L, CrMath.tgamma(Float.MAX_VALUE), "tgammaf(Float.MAX_VALUE)");
     assertTrue(Float.isNaN(CrMath.tgamma(-Float.MAX_VALUE)), "tgammaf(-Float.MAX_VALUE)");
-    assertTrue(Float.isNaN(CrMath.tgamma(Float.intBitsToFloat(0x7fc00000))),
+    assertTrue(Float.isNaN(
+        CrMath.tgamma(Float.intBitsToFloat(0x7fc00000))),
         "tgammaf(0x7fc00000, quiet NaN)");
-    assertTrue(Float.isNaN(CrMath.tgamma(Float.intBitsToFloat(0x7f800001))),
+    assertTrue(Float.isNaN(
+        CrMath.tgamma(Float.intBitsToFloat(0x7f800001))),
         "tgammaf(0x7f800001, signalling NaN, smallest payload)");
-    assertTrue(Float.isNaN(CrMath.tgamma(Float.intBitsToFloat(0xffc00001))),
+    assertTrue(Float.isNaN(
+        CrMath.tgamma(Float.intBitsToFloat(0xffc00001))),
         "tgammaf(0xffc00001, negative NaN with a payload)");
-    assertTrue(Float.isNaN(CrMath.tgamma(Float.intBitsToFloat(0x7fffffff))),
+    assertTrue(Float.isNaN(
+        CrMath.tgamma(Float.intBitsToFloat(0x7fffffff))),
         "tgammaf(0x7fffffff, NaN with every payload bit set)");
   }
 

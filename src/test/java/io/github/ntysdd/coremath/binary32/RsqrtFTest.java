@@ -45,13 +45,17 @@ class RsqrtFTest {
     assertBits(0x00000000L, CrMath.rsqrt(Float.POSITIVE_INFINITY), "rsqrtf(+Infinity)");
     assertTrue(Float.isNaN(CrMath.rsqrt(Float.NEGATIVE_INFINITY)), "rsqrtf(-Infinity)");
     assertBits(0x1f800000L, CrMath.rsqrt(Float.MAX_VALUE), "rsqrtf(Float.MAX_VALUE)");
-    assertTrue(Float.isNaN(CrMath.rsqrt(Float.intBitsToFloat(0x7fc00000))),
+    assertTrue(Float.isNaN(
+        CrMath.rsqrt(Float.intBitsToFloat(0x7fc00000))),
         "rsqrtf(0x7fc00000, quiet NaN)");
-    assertTrue(Float.isNaN(CrMath.rsqrt(Float.intBitsToFloat(0x7f800001))),
+    assertTrue(Float.isNaN(
+        CrMath.rsqrt(Float.intBitsToFloat(0x7f800001))),
         "rsqrtf(0x7f800001, signalling NaN, smallest payload)");
-    assertTrue(Float.isNaN(CrMath.rsqrt(Float.intBitsToFloat(0xffc00001))),
+    assertTrue(Float.isNaN(
+        CrMath.rsqrt(Float.intBitsToFloat(0xffc00001))),
         "rsqrtf(0xffc00001, negative NaN with a payload)");
-    assertTrue(Float.isNaN(CrMath.rsqrt(Float.intBitsToFloat(0x7fffffff))),
+    assertTrue(Float.isNaN(
+        CrMath.rsqrt(Float.intBitsToFloat(0x7fffffff))),
         "rsqrtf(0x7fffffff, NaN with every payload bit set)");
   }
 

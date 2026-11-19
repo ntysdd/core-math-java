@@ -47,13 +47,17 @@ class CosPiFTest {
     assertBits(0x3f800000L, CrMath.cospi(2.0f), "cospif(2.0)");
     assertTrue(Float.isNaN(CrMath.cospi(Float.POSITIVE_INFINITY)), "cospif(+Infinity)");
     assertTrue(Float.isNaN(CrMath.cospi(Float.NEGATIVE_INFINITY)), "cospif(-Infinity)");
-    assertTrue(Float.isNaN(CrMath.cospi(Float.intBitsToFloat(0x7fc00000))),
+    assertTrue(Float.isNaN(
+        CrMath.cospi(Float.intBitsToFloat(0x7fc00000))),
         "cospif(0x7fc00000, quiet NaN)");
-    assertTrue(Float.isNaN(CrMath.cospi(Float.intBitsToFloat(0x7f800001))),
+    assertTrue(Float.isNaN(
+        CrMath.cospi(Float.intBitsToFloat(0x7f800001))),
         "cospif(0x7f800001, signalling NaN, smallest payload)");
-    assertTrue(Float.isNaN(CrMath.cospi(Float.intBitsToFloat(0xffc00001))),
+    assertTrue(Float.isNaN(
+        CrMath.cospi(Float.intBitsToFloat(0xffc00001))),
         "cospif(0xffc00001, negative NaN with a payload)");
-    assertTrue(Float.isNaN(CrMath.cospi(Float.intBitsToFloat(0x7fffffff))),
+    assertTrue(Float.isNaN(
+        CrMath.cospi(Float.intBitsToFloat(0x7fffffff))),
         "cospif(0x7fffffff, NaN with every payload bit set)");
   }
 

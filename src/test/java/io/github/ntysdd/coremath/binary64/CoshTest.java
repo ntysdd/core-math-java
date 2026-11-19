@@ -48,13 +48,17 @@ class CoshTest {
     assertBits(0x7ff0000000000000L, CrMath.cosh(Double.POSITIVE_INFINITY), "cosh(+Infinity)");
     assertBits(0x7ff0000000000000L, CrMath.cosh(Double.NEGATIVE_INFINITY), "cosh(-Infinity)");
     assertBits(0x7ff0000000000000L, CrMath.cosh(Double.MAX_VALUE), "cosh(Double.MAX_VALUE)");
-    assertTrue(Double.isNaN(CrMath.cosh(Double.longBitsToDouble(0x7ff8000000000000L))),
+    assertTrue(Double.isNaN(
+        CrMath.cosh(Double.longBitsToDouble(0x7ff8000000000000L))),
         "cosh(0x7ff8000000000000, quiet NaN)");
-    assertTrue(Double.isNaN(CrMath.cosh(Double.longBitsToDouble(0x7ff0000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.cosh(Double.longBitsToDouble(0x7ff0000000000001L))),
         "cosh(0x7ff0000000000001, signalling NaN, smallest payload)");
-    assertTrue(Double.isNaN(CrMath.cosh(Double.longBitsToDouble(0xfff8000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.cosh(Double.longBitsToDouble(0xfff8000000000001L))),
         "cosh(0xfff8000000000001, negative NaN with a payload)");
-    assertTrue(Double.isNaN(CrMath.cosh(Double.longBitsToDouble(0x7fffffffffffffffL))),
+    assertTrue(Double.isNaN(
+        CrMath.cosh(Double.longBitsToDouble(0x7fffffffffffffffL))),
         "cosh(0x7fffffffffffffff, NaN with every payload bit set)");
   }
 

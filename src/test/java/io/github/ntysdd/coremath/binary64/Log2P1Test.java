@@ -48,15 +48,21 @@ class Log2P1Test {
     assertBits(0x3ff0000000000000L, CrMath.log2p1(1.0), "log2p1(1.0)");
     assertBits(0xfff0000000000000L, CrMath.log2p1(-1.0), "log2p1(-1.0)");
     assertTrue(Double.isNaN(CrMath.log2p1(-2.0)), "log2p1(-2.0)");
-    assertBits(0x7ff0000000000000L, CrMath.log2p1(Double.POSITIVE_INFINITY), "log2p1(+Infinity)");
+    assertBits(0x7ff0000000000000L,
+        CrMath.log2p1(Double.POSITIVE_INFINITY),
+        "log2p1(+Infinity)");
     assertTrue(Double.isNaN(CrMath.log2p1(Double.NEGATIVE_INFINITY)), "log2p1(-Infinity)");
-    assertTrue(Double.isNaN(CrMath.log2p1(Double.longBitsToDouble(0x7ff8000000000000L))),
+    assertTrue(Double.isNaN(
+        CrMath.log2p1(Double.longBitsToDouble(0x7ff8000000000000L))),
         "log2p1(0x7ff8000000000000, quiet NaN)");
-    assertTrue(Double.isNaN(CrMath.log2p1(Double.longBitsToDouble(0x7ff0000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.log2p1(Double.longBitsToDouble(0x7ff0000000000001L))),
         "log2p1(0x7ff0000000000001, signalling NaN, smallest payload)");
-    assertTrue(Double.isNaN(CrMath.log2p1(Double.longBitsToDouble(0xfff8000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.log2p1(Double.longBitsToDouble(0xfff8000000000001L))),
         "log2p1(0xfff8000000000001, negative NaN with a payload)");
-    assertTrue(Double.isNaN(CrMath.log2p1(Double.longBitsToDouble(0x7fffffffffffffffL))),
+    assertTrue(Double.isNaN(
+        CrMath.log2p1(Double.longBitsToDouble(0x7fffffffffffffffL))),
         "log2p1(0x7fffffffffffffff, NaN with every payload bit set)");
   }
 

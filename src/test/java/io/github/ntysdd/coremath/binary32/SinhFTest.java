@@ -44,13 +44,17 @@ class SinhFTest {
     assertBits(0xff800000L, CrMath.sinh(Float.NEGATIVE_INFINITY), "sinhf(-Infinity)");
     assertBits(0x7f800000L, CrMath.sinh(Float.MAX_VALUE), "sinhf(Float.MAX_VALUE)");
     assertBits(0xff800000L, CrMath.sinh(-Float.MAX_VALUE), "sinhf(-Float.MAX_VALUE)");
-    assertTrue(Float.isNaN(CrMath.sinh(Float.intBitsToFloat(0x7fc00000))),
+    assertTrue(Float.isNaN(
+        CrMath.sinh(Float.intBitsToFloat(0x7fc00000))),
         "sinhf(0x7fc00000, quiet NaN)");
-    assertTrue(Float.isNaN(CrMath.sinh(Float.intBitsToFloat(0x7f800001))),
+    assertTrue(Float.isNaN(
+        CrMath.sinh(Float.intBitsToFloat(0x7f800001))),
         "sinhf(0x7f800001, signalling NaN, smallest payload)");
-    assertTrue(Float.isNaN(CrMath.sinh(Float.intBitsToFloat(0xffc00001))),
+    assertTrue(Float.isNaN(
+        CrMath.sinh(Float.intBitsToFloat(0xffc00001))),
         "sinhf(0xffc00001, negative NaN with a payload)");
-    assertTrue(Float.isNaN(CrMath.sinh(Float.intBitsToFloat(0x7fffffff))),
+    assertTrue(Float.isNaN(
+        CrMath.sinh(Float.intBitsToFloat(0x7fffffff))),
         "sinhf(0x7fffffff, NaN with every payload bit set)");
   }
 

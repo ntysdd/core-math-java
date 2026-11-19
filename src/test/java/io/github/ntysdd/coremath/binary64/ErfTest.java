@@ -51,13 +51,17 @@ class ErfTest {
     assertBits(0xbff0000000000000L, CrMath.erf(Double.NEGATIVE_INFINITY), "erf(-Infinity)");
     assertBits(0x3ff0000000000000L, CrMath.erf(Double.MAX_VALUE), "erf(Double.MAX_VALUE)");
     assertBits(0xbff0000000000000L, CrMath.erf(-Double.MAX_VALUE), "erf(-Double.MAX_VALUE)");
-    assertTrue(Double.isNaN(CrMath.erf(Double.longBitsToDouble(0x7ff8000000000000L))),
+    assertTrue(Double.isNaN(
+        CrMath.erf(Double.longBitsToDouble(0x7ff8000000000000L))),
         "erf(0x7ff8000000000000, quiet NaN)");
-    assertTrue(Double.isNaN(CrMath.erf(Double.longBitsToDouble(0x7ff0000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.erf(Double.longBitsToDouble(0x7ff0000000000001L))),
         "erf(0x7ff0000000000001, signalling NaN, smallest payload)");
-    assertTrue(Double.isNaN(CrMath.erf(Double.longBitsToDouble(0xfff8000000000001L))),
+    assertTrue(Double.isNaN(
+        CrMath.erf(Double.longBitsToDouble(0xfff8000000000001L))),
         "erf(0xfff8000000000001, negative NaN with a payload)");
-    assertTrue(Double.isNaN(CrMath.erf(Double.longBitsToDouble(0x7fffffffffffffffL))),
+    assertTrue(Double.isNaN(
+        CrMath.erf(Double.longBitsToDouble(0x7fffffffffffffffL))),
         "erf(0x7fffffffffffffff, NaN with every payload bit set)");
   }
 

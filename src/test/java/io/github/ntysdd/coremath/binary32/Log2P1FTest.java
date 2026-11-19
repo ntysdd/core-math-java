@@ -45,13 +45,17 @@ class Log2P1FTest {
     assertTrue(Float.isNaN(CrMath.log2p1(-2.0f)), "log2p1f(-2.0)");
     assertBits(0x7f800000L, CrMath.log2p1(Float.POSITIVE_INFINITY), "log2p1f(+Infinity)");
     assertTrue(Float.isNaN(CrMath.log2p1(Float.NEGATIVE_INFINITY)), "log2p1f(-Infinity)");
-    assertTrue(Float.isNaN(CrMath.log2p1(Float.intBitsToFloat(0x7fc00000))),
+    assertTrue(Float.isNaN(
+        CrMath.log2p1(Float.intBitsToFloat(0x7fc00000))),
         "log2p1f(0x7fc00000, quiet NaN)");
-    assertTrue(Float.isNaN(CrMath.log2p1(Float.intBitsToFloat(0x7f800001))),
+    assertTrue(Float.isNaN(
+        CrMath.log2p1(Float.intBitsToFloat(0x7f800001))),
         "log2p1f(0x7f800001, signalling NaN, smallest payload)");
-    assertTrue(Float.isNaN(CrMath.log2p1(Float.intBitsToFloat(0xffc00001))),
+    assertTrue(Float.isNaN(
+        CrMath.log2p1(Float.intBitsToFloat(0xffc00001))),
         "log2p1f(0xffc00001, negative NaN with a payload)");
-    assertTrue(Float.isNaN(CrMath.log2p1(Float.intBitsToFloat(0x7fffffff))),
+    assertTrue(Float.isNaN(
+        CrMath.log2p1(Float.intBitsToFloat(0x7fffffff))),
         "log2p1f(0x7fffffff, NaN with every payload bit set)");
   }
 
