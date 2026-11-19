@@ -14,6 +14,8 @@
 # thresholds: compute(): ax > 0x99000000, ax < 0x73000000, ax < 0x66000000, ax <
 #   0x822d97c8, ax == 0x7e75b8a2, ax == 0x7f4f0654, ax == 0x8c333330 and ax >= 0xff<<24,
 #   with ax = u<<1; the rows of as_sinf_database()
+# double rounding: 2 inputs of the binary32 domain where (float) cr_sin(x) and
+#   cr_sinf(x) disagree, from tools/cmref --frontier; they are among the directed cases
 # worst cases: no upstream .wc file for this format
 # random: xorshift64 from seed 0x9e3779b97f4a7c15, one draw per case, 1000 cases, in the
 #   order they were drawn

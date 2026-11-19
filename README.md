@@ -16,8 +16,9 @@ format-generic variant; none of those is covered here.
 All 42 functions that CORE-MATH provides for binary32 and all 41 that it
 provides for binary64 are translated, 83 entry points in all, and every one of
 them has been checked bit for bit against a local build of the C sources. The
-JUnit suite and its vector files are being filled in one function at a time:
-`sin` has them, and the scope table below marks what is still pending.
+JUnit suite and its vector files are being filled in a few functions at a time:
+`sin`, `cos`, `tan` and `exp` have them, and the scope table below marks what
+is still pending.
 
 ## What this is
 
@@ -48,9 +49,9 @@ rules that keep it that way.
 | Function | binary32 (`float`) | binary64 (`double`) | Upstream source |
 | --- | --- | --- | --- |
 | `sin` | translated, tested | translated, tested | `src/binary{32,64}/sin` |
-| `cos` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cos` |
-| `tan` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tan` |
-| `exp` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp` |
+| `cos` | translated, tested | translated, tested | `src/binary{32,64}/cos` |
+| `tan` | translated, tested | translated, tested | `src/binary{32,64}/tan` |
+| `exp` | translated, tested | translated, tested | `src/binary{32,64}/exp` |
 | `log` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log` |
 | `pow` | translated, tests pending | translated, tests pending | `src/binary{32,64}/pow` |
 | `atan` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atan` |
@@ -141,6 +142,12 @@ suite repeats that check on the vectors committed under
    `0x9e3779b97f4a7c15`, the seed the generator and the test share. The test
    recomputes the inputs and fails if a row does not match them, so a
    hand-edited sweep cannot pass unnoticed.
+4. For binary32, the double-rounding frontier: the inputs of the whole binary32
+   domain where the float result and the binary64 result rounded to float
+   disagree, found by `tools/cmref --frontier`. Those are the inputs where the
+   correctly rounded float result is decided by the last bit, the closest
+   thing binary32 has to an upstream `.wc` file, and they go into the directed
+   section.
 
 A vector file has one section per set, introduced by a `#---` marker, with one
 case per line: the input arguments and the expected results as hexadecimal bit

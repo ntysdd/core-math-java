@@ -12,6 +12,13 @@
  * prints "<input bits> <result bits>" per line, with a third column for
  * lgamma (signgam) and for sincos (the cosine; the sine is the second
  * column, the order of cr_sincos).
+ *
+ *   cmref --frontier <function>
+ * scans the whole binary32 domain and prints, one per line as a hexadecimal
+ * bit pattern, the inputs whose binary32 result differs from the binary64
+ * result rounded to float.  Those are the inputs where the correctly rounded
+ * float result is decided by the last bit, the binary32 analogue of an
+ * upstream .wc file; tools/mkvectors.py adds them to the directed cases.
  */
 
 #include <math.h>
@@ -164,6 +171,64 @@ static const binary_t BINARY_FUNCTIONS[] = {
 
 #define COUNT(a) (sizeof (a) / sizeof (a[0]))
 
+static int cmp_bits (const void *pa, const void *pb)
+{
+  uint32_t a = *(const uint32_t *) pa, b = *(const uint32_t *) pb;
+  return a < b ? -1 : a > b;
+}
+
+/* the binary32 domain, one input at a time: keep the inputs where the float
+   result and the binary64 result rounded to float disagree, NaN payload
+   differences aside.  OpenMP spreads it over the cores when the build has
+   it; without it the pragma is a comment and the scan is just slower. */
+static int frontier (const char *name)
+{
+  const unary_t *f = NULL;
+  for (size_t i = 0; i < COUNT (UNARY_FUNCTIONS); i++)
+    if (strcmp (name, UNARY_FUNCTIONS[i].name) == 0)
+      f = &UNARY_FUNCTIONS[i];
+  if (f == NULL)
+    {
+      fprintf (stderr, "cmref: --frontier needs a unary function, not %s\n", name);
+      return 2;
+    }
+
+  size_t cap = 1 << 20, n = 0;
+  uint32_t *hits = malloc (cap * sizeof *hits);
+  if (hits == NULL)
+    {
+      fprintf (stderr, "cmref: out of memory\n");
+      return 2;
+    }
+#pragma omp parallel for schedule (dynamic)
+  for (int high = 0; high < (1 << 16); high++)
+    for (int low = 0; low < (1 << 16); low++)
+      {
+        uint32_t u = ((uint32_t) high << 16) | (uint32_t) low;
+        float x;
+        memcpy (&x, &u, 4);
+        float y32 = f->f32 (x), y64 = (float) f->f64 ((double) x);
+        uint32_t a, b;
+        memcpy (&a, &y32, 4);
+        memcpy (&b, &y64, 4);
+        if (a != b && !(isnan (y32) && isnan (y64)))
+          {
+#pragma omp critical
+            {
+              if (n < cap) hits[n++] = u;
+            }
+          }
+      }
+  qsort (hits, n, sizeof *hits, cmp_bits);
+  for (size_t i = 0; i < n; i++) printf ("%08x\n", (unsigned) hits[i]);
+  if (n == cap)
+    fprintf (stderr, "cmref: %zu inputs, the list is truncated\n", n);
+  else
+    fprintf (stderr, "cmref: %zu inputs of the binary32 domain\n", n);
+  free (hits);
+  return 0;
+}
+
 /* reads one hexadecimal bit pattern, skipping comments and blank lines */
 static int get_bits (char *line, uint64_t *v)
 {
@@ -175,9 +240,12 @@ static int get_bits (char *line, uint64_t *v)
 
 int main (int argc, char *argv[])
 {
+  if (argc == 3 && strcmp (argv[1], "--frontier") == 0)
+    return frontier (argv[2]);
   if (argc != 3 || (strcmp (argv[2], "32") != 0 && strcmp (argv[2], "64") != 0))
     {
       fprintf (stderr, "usage: cmref <function> <32|64>\n");
+      fprintf (stderr, "       cmref --frontier <function>\n");
       return 2;
     }
   const char *name = argv[1];

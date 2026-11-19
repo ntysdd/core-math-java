@@ -64,6 +64,27 @@ THRESHOLDS = {
             "e = (t>>52)&0x7ff; crSinModerate(): |x| < 0x1p-16; the "
             "0x1.7137449123ef6p-26 bound of the small path",
     },
+    "cos": {
+        32: "compute(): ax > 0x99000000, ax < 0x74000000, ax < 0x82a41896 "
+            "and ax == 0x812d97c8, with ax = u<<1; asCosfBig(): "
+            "ax >= 0xff<<24; the rows of as_cosf_database()",
+        64: "compute(): e == 0x7ff and |x| <= 0x1.6a09e667f3bccp-27, with "
+            "e = (t>>52)&0x7ff",
+    },
+    "tan": {
+        32: "compute(): e < 127+28, e < 115, e < 102 and e < 0xff, with "
+            "e = (u>>23)&0xff; the rounding test against the rows of st[]",
+        64: "compute(): e == 0x7ff and |x| <= 0x1.d12ed0af1a27ep-27, with "
+            "e = (t>>52)&0x7ff",
+    },
+    "exp": {
+        32: "compute(): ax > 0x8562e42e, ax < 0x6f93813e and ax >= 0xff<<24 "
+            "with ax = u<<1; u > 0xc2ce8ec0 and u > 0x42b17217 on the raw "
+            "bits; the rounding test ub != lb",
+        64: "compute(): |x| <= 0x1p-54, |x| >= 0x1.62e42fefa39fp+9, "
+            "|x| >= 0x1.74910d52d3052p+9 and x < -0x1.6232bdd7abcd2p+9; "
+            "the rounding test ub != lb",
+    },
 }
 
 COLUMNS = {
@@ -167,6 +188,25 @@ def straddle_exponent(e, width):
     return rows
 
 
+def straddle_bits(bits, width):
+    """The bit patterns around a constant the translation compares raw bits
+    with, in the unsigned order of the C comparison."""
+    sign = 1 << (width - 1)
+    top = (1 << width) - 1
+    rows = []
+    for d in (-1, 0, 1):
+        value = bits + d
+        if 0 <= value <= top:
+            rows.append((value,))
+    return rows
+
+
+def straddle_magnitude(bits, width):
+    """The same, for a comparison of the magnitude, in both signs."""
+    sign = 1 << (width - 1)
+    return straddle_bits(bits, width) + [(sign | b,) for b, in straddle_bits(bits, width)]
+
+
 def near(value, width, steps=2):
     """The value and its neighbours in its format, both signs."""
     out = []
@@ -179,14 +219,12 @@ def near(value, width, steps=2):
     return out
 
 
-def directed(name, width):
-    if name != "sin":
-        raise SystemExit("mkvectors: no directed cases for %s yet" % name)
+def sin_cases(width):
     rows = specials(width)
     if width == 32:
         # cr_sinf compares the doubled magnitude against these
         for ax in (0x99000000, 0x73000000, 0x66000000, 0x822d97c8,
-                   0x7e75b8a2, 0x7f4f0654, 0x8c333330):
+                   0x7e75b8a2, 0x7f4f0654, 0x8c333330, 0xff << 24):
             rows += straddle_ax(ax, 32)
         # the rows of as_sinf_database(), the last one unreachable
         for arg in ("0x1.33333p+13", "0x1.75b8a2p-1", "0x1.4f0654p+0",
@@ -204,7 +242,93 @@ def directed(name, width):
             rows += signed(float.fromhex(arg), 64)
         rows += near(math.ldexp(1.0, 31), 64)
         rows += near(math.ldexp(1.0, -26), 64)
-    return uniq(sorted(rows))
+    return rows
+
+
+def cos_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_cosf compares the doubled magnitude against these
+        for ax in (0x99000000, 0x74000000, 0x82a41896, 0x812d97c8, 0xff << 24):
+            rows += straddle_ax(ax, 32)
+        # the rows of as_cosf_database()
+        for arg in ("0x1.2d97c8p+2", "0x1.4555p+51", "0x1.48a858p+54",
+                    "0x1.3170fp+63", "0x1.2b9622p+67"):
+            rows += signed(float.fromhex(arg), 32)
+        # the moderate path below 2^-11 and the huge path above 2^26
+        rows += near(math.ldexp(1.0, -11), 32)
+        rows += signed(math.ldexp(1.0, 126), 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_cos: |x| <= 0x1.6a09e667f3bccp-27, and the exponent 0x7ff cases
+        rows += straddle_magnitude(0x3e46a09e667f3bcc, 64)
+        for e in (0x3ff - 27, 0x3ff - 26, 0x7fe):
+            rows += straddle_exponent(e, 64)
+        for arg in ("0x1.6a09e667f3bccp-27", "0x1.6a09e667f3bcdp-27",
+                    "0x1p+1000", "0x1.fffffffffffffp+1023"):
+            rows += signed(float.fromhex(arg), 64)
+        rows += near(math.ldexp(1.0, -27), 64)
+    return rows
+
+
+def tan_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_tanf: e = (u>>23)&0xff against 127+28, 115, 102 and 0xff
+        for e in (0x7f + 27, 0x7f + 28, 114, 115, 101, 102, 0xfe):
+            rows += straddle_exponent(e, 32)
+        # the rows of the st[] table of the rounding test
+        for arg in ("0x1.143ec4p+0", "0x1.ada6aap+27", "0x1.af61dap+48",
+                    "0x1.0088bcp+52", "0x1.f90dfcp+72", "0x1.cc4e22p+85",
+                    "0x1.a6ce12p+86", "0x1.6a0b76p+102"):
+            rows += signed(float.fromhex(arg), 32)
+        # the huge path above 2^28 and the small path below 2^-13
+        rows += signed(math.ldexp(1.0, 127), 32)
+        rows += signed(3.4028234663852886e38, 32)
+        rows += near(math.ldexp(1.0, -13), 32)
+    else:
+        # cr_tan: |x| <= 0x1.d12ed0af1a27ep-27, and the exponent 0x7ff cases
+        rows += straddle_magnitude(0x3e4d12ed0af1a27e, 64)
+        for e in (0x3ff - 27, 0x3ff - 26, 0x7fe):
+            rows += straddle_exponent(e, 64)
+        for arg in ("0x1.d12ed0af1a27ep-27", "0x1.d12ed0af1a27fp-27",
+                    "0x1p+1000", "0x1.fffffffffffffp+1023"):
+            rows += signed(float.fromhex(arg), 64)
+        rows += near(math.ldexp(1.0, -27), 64)
+    return rows
+
+
+def exp_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_expf: ux = u<<1 against these, then u on the raw bits
+        for ax in (0x8562e42e, 0x6f93813e, 0xff << 24):
+            rows += straddle_ax(ax, 32)
+        for bits in (0xc2ce8ec0, 0x42b17217):
+            rows += straddle_bits(bits, 32)
+        for arg in ("0x1.93813ep-16", "0x1.62e42ep+6", "0x1.9d1d8p+6"):
+            rows += signed(float.fromhex(arg), 32)
+    else:
+        # cr_exp: |x| <= 0x1p-54, |x| >= 0x1.62e42fefa39fp+9 and the two
+        # underflow boundaries, all on the magnitude bits
+        for bits in (0x3c90000000000000, 0x40862e42fefa39f0,
+                     0x40874910d52d3052, 0x7ff0000000000000):
+            rows += straddle_magnitude(bits, 64)
+        rows += straddle_bits(0xc086232bdd7abcd2, 64)
+        for arg in ("0x1p-54", "0x1.62e42fefa39fp+9", "0x1.74910d52d3052p+9",
+                    "0x1.6232bdd7abcd2p+9", "0x1.fffffffffffffp+1023"):
+            rows += signed(float.fromhex(arg), 64)
+    return rows
+
+
+BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
+            "exp": exp_cases}
+
+
+def directed(name, width):
+    if name not in BUILDERS:
+        raise SystemExit("mkvectors: no directed cases for %s yet" % name)
+    return uniq(sorted(BUILDERS[name](width)))
 
 
 def wc_tokens(line, width):
@@ -288,6 +412,16 @@ def random_cases(width, draws):
     return rows
 
 
+def frontier(name, width):
+    """The binary32 inputs where the float result and the binary64 result
+    rounded to float disagree; cmref --frontier scans the whole domain."""
+    if width != 32 or KIND[name] != "unary":
+        return []
+    done = subprocess.run([str(cref_path()), "--frontier", name],
+                          capture_output=True, text=True, check=True)
+    return [(int(line, 16),) for line in done.stdout.split()]
+
+
 def run(name, width, rows):
     text = "".join(" ".join(hx(v, width) for v in row) + "\n" for row in rows)
     done = subprocess.run([str(cref_path()), name, str(width)], input=text,
@@ -311,7 +445,7 @@ def wrap(prefix, text, width=88):
                          break_long_words=False, break_on_hyphens=False)
 
 
-def header(name, width, kind, wc_name, wc_total):
+def header(name, width, kind, wc_name, wc_total, front):
     lines = []
     if width == 64:
         source = "src/binary64/%s/%s.c (cr_%s)" % (name, name, name)
@@ -336,6 +470,11 @@ def header(name, width, kind, wc_name, wc_total):
         lines += wrap("# thresholds: ", THRESHOLDS[name][width])
     else:
         lines.append("# thresholds: none checked yet")
+    if front:
+        lines += wrap("# double rounding: ",
+                      "%d inputs of the binary32 domain where (float) cr_%s(x) "
+                      "and cr_%sf(x) disagree, from tools/cmref --frontier; "
+                      "they are among the directed cases" % (front, name, name))
     if wc_name is None:
         lines.append("# worst cases: no upstream .wc file for this format")
     else:
@@ -355,15 +494,20 @@ def build(name):
     widths = [32] if kind == "binary32" else [32, 64]
     for width in widths:
         wc, wc_path, wc_total = worst_cases(name, width, kind)
+        direct = directed(name, width)
+        front = frontier(name, width)
+        if front:
+            direct = uniq(sorted(direct + front))
         sections = [
-            ("directed", directed(name, width)),
+            ("directed", direct),
             ("worst cases", wc),
             ("random", random_cases(width, DRAWS[kind])),
         ]
         inputs = [row for _, rows in sections for row in rows]
         results = run(name, width, inputs)
         out = header(name, width, kind,
-                     None if wc_path is None else wc_path.name, wc_total)
+                     None if wc_path is None else wc_path.name, wc_total,
+                     len(front))
         at = 0
         for title, rows in sections:
             if not rows:

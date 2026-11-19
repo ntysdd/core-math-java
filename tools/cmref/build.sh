@@ -8,13 +8,14 @@
 # -ffp-contract=off, plus -mfma so that the __builtin_fma calls of the C
 # sources become exact hardware fmas and nothing else is contracted.  The
 # dialect is GNU C, because the sources use the asm keyword of the x86-64
-# fast paths.
+# fast paths.  -fopenmp only speeds up the --frontier scan; drop it if the
+# toolchain has no OpenMP, the scan then runs on one core.
 set -eu
 
 here=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 CORE_MATH=${CORE_MATH:-"$here/../../../core-math"}
 CC=${CC:-gcc}
-CFLAGS=${CFLAGS:--O2 -ffp-contract=off -mfma -fno-math-errno -std=gnu99}
+CFLAGS=${CFLAGS:--O2 -ffp-contract=off -mfma -fno-math-errno -std=gnu99 -fopenmp}
 
 if [ ! -d "$CORE_MATH/src/binary64" ]; then
   echo "cmref: no CORE-MATH checkout at $CORE_MATH" >&2
