@@ -62,9 +62,9 @@ rules that keep it that way.
 | `sinh` | translated, tested | translated, tested | `src/binary{32,64}/sinh` |
 | `cosh` | translated, tested | translated, tested | `src/binary{32,64}/cosh` |
 | `tanh` | translated, tested | translated, tested | `src/binary{32,64}/tanh` |
-| `cbrt` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cbrt` |
-| `exp2` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp2` |
-| `log1p` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log1p` |
+| `cbrt` | translated, tested | translated, tested | `src/binary{32,64}/cbrt` |
+| `exp2` | translated, tested | translated, tested | `src/binary{32,64}/exp2` |
+| `log1p` | translated, tested | translated, tested | `src/binary{32,64}/log1p` |
 | `expm1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/expm1` |
 | `sinpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sinpi` |
 | `cospi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cospi` |

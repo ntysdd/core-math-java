@@ -194,6 +194,95 @@ SPEC = {
             ],
         },
     },
+    "cbrt": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("cbrtf(+0.0)", "0.0f", "0x00000000"),
+                ("cbrtf(-0.0)", "-0.0f", "0x80000000"),
+                ("cbrtf(8.0)", "8.0f", "0x40000000"),
+                ("cbrtf(-8.0)", "-8.0f", "0xc0000000"),
+                ("cbrtf(+Infinity)", "Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("cbrtf(-Infinity)", "Float.NEGATIVE_INFINITY", "0xff800000"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("cbrt(+0.0)", "0.0", "0x0000000000000000"),
+                ("cbrt(-0.0)", "-0.0", "0x8000000000000000"),
+                ("cbrt(8.0)", "8.0", "0x4000000000000000"),
+                ("cbrt(-8.0)", "-8.0", "0xc000000000000000"),
+                ("cbrt(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("cbrt(-Infinity)", "Double.NEGATIVE_INFINITY",
+                 "0xfff0000000000000"),
+            ],
+        },
+    },
+    "exp2": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("exp2f(+0.0)", "0.0f", "0x3f800000"),
+                ("exp2f(-0.0)", "-0.0f", "0x3f800000"),
+                ("exp2f(8.0)", "8.0f", "0x43800000"),
+                ("exp2f(-8.0)", "-8.0f", "0x3b800000"),
+                ("exp2f(+Infinity)", "Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("exp2f(-Infinity)", "Float.NEGATIVE_INFINITY", "0x00000000"),
+                ("exp2f(Float.MAX_VALUE)", "Float.MAX_VALUE", "0x7f800000"),
+                ("exp2f(-Float.MAX_VALUE)", "-Float.MAX_VALUE", "0x00000000"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("exp2(+0.0)", "0.0", "0x3ff0000000000000"),
+                ("exp2(-0.0)", "-0.0", "0x3ff0000000000000"),
+                ("exp2(8.0)", "8.0", "0x4070000000000000"),
+                ("exp2(-8.0)", "-8.0", "0x3f70000000000000"),
+                ("exp2(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("exp2(-Infinity)", "Double.NEGATIVE_INFINITY",
+                 "0x0000000000000000"),
+                ("exp2(Double.MAX_VALUE)", "Double.MAX_VALUE",
+                 "0x7ff0000000000000"),
+                ("exp2(-Double.MAX_VALUE)", "-Double.MAX_VALUE",
+                 "0x0000000000000000"),
+            ],
+        },
+    },
+    "log1p": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("log1pf(+0.0)", "0.0f", "0x00000000"),
+                ("log1pf(-0.0)", "-0.0f", "0x80000000"),
+                ("log1pf(-1.0)", "-1.0f", "0xff800000"),
+                ("log1pf(-2.0)", "-2.0f", "nan"),
+                ("log1pf(+Infinity)", "Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("log1pf(-Infinity)", "Float.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("log1p(+0.0)", "0.0", "0x0000000000000000"),
+                ("log1p(-0.0)", "-0.0", "0x8000000000000000"),
+                ("log1p(-1.0)", "-1.0", "0xfff0000000000000"),
+                ("log1p(-2.0)", "-2.0", "nan"),
+                ("log1p(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("log1p(-Infinity)", "Double.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+    },
 }
 
 HEADER = '''package io.github.ntysdd.coremath.{package};

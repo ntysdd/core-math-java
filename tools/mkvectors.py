@@ -145,6 +145,26 @@ THRESHOLDS = {
         64: "compute(): |x| against 0x1.30fc1931f09cap+4, 3.683, 0.25 and "
             "0x1.d12ed0af1a27fp-27",
     },
+    "cbrt": {
+        32: "compute(): au = u<<1 against 1<<24 (subnormal) and 0xff<<24 "
+            "(inf, NaN)",
+        64: "compute(): ((e+1)&0x7ff) < 2, that is the subnormal case and the "
+            "inf/NaN case, and ix == 0",
+    },
+    "exp2": {
+        32: "compute(): the integer fast path (k in [0,9) and t<<(9+k) == 0), "
+            "ux against 0x86000000, 0x65000000 and 0x79e7526e, t against "
+            "0xc3000000 and 0xc3150000, and the entries 0x3b429d37, "
+            "0xbcf3a937 and 0xb8d3d026",
+        64: "compute(): |x| against 1024 and 0x1.71547652b82fep-54, and ix "
+            "against -1075 and -1022",
+    },
+    "log1p": {
+        32: "compute(): ux >= 0xbf800000, ax >= 0x7f800000, and |x| against "
+            "0x1.1p-6 and 2^-25",
+        64: "compute(): |x| against 0.0625, 2^-53, 2^-12 and 0x1.19bp-21, and "
+            "the raw bits against 2^53, -1, 2^106 and 2^1024",
+    },
 }
 
 COLUMNS = {
@@ -616,11 +636,91 @@ def tanh_cases(width):
     return rows
 
 
+def cbrt_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_cbrtf: au = u<<1 against 1<<24 (subnormal) and 0xff<<24 (inf, NaN)
+        for ax in (1 << 24, 0xff << 24):
+            rows += straddle_ax(ax, 32)
+        for v in (1.0, 2.0, 8.0, 0.5):
+            rows += signed(v, 32)
+            rows += near(v, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_cbrt: ((e+1)&0x7ff) < 2 selects the subnormal and the inf/NaN case
+        for e in (0, 1, 0x7fe, 0x7ff):
+            rows += straddle_exponent(e, 64)
+        for v in (1.0, 2.0, 4.0, 8.0, 0.5):
+            rows += signed(v, 64)
+            rows += near(v, 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def exp2_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # the exact integers of the fast path, then the boundaries of the rest
+        for i in (1, 2, 3, 8, 16, 127, 128, 255, 256, 511, 512,
+                  -1, -23, -126, -127, -149, -150):
+            rows += [(f32(float(i)),), (f32(float(i)) | 0x80000000,)]
+        for ax in (0x86000000, 0x65000000, 0x79e7526e):
+            rows += straddle_ax(ax, 32)
+        for bits in (0xc3000000, 0xc3150000, 0x3b429d37, 0xbcf3a937,
+                     0xb8d3d026):
+            rows += straddle_bits(bits, 32)
+        rows += signed(0.5, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_exp2: |x| against 1024 and 0x1.71547652b82fep-54, then the raw
+        # bits against -1075 and -1022
+        for ax in (0x8120000000000000, 0xffe0000000000000):
+            rows += straddle_ax(ax, 64)
+        for bits in (0xc090cc0000000000, 0x792e2a8eca5705fc,
+                     0xc08ff00000000000):
+            rows += straddle_bits(bits, 64)
+        for i in (1, 2, 3, 64, 1023, 1024, -1, -1022, -1074, -1075):
+            rows += signed(float(i), 64)
+        rows += signed(0.5, 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def log1p_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_log1pf: ux >= 0xbf800000 (x <= -1) and ax >= 0x7f800000 on the
+        # raw bits, then |x| against 0x1.1p-6 and 2^-25
+        for bits in (0xbf800000, 0x7f800000):
+            rows += straddle_bits(bits, 32)
+        for ax in (0x3c880000, 0x33000000):
+            rows += straddle_ax(ax, 32)
+        rows += near(-1.0, 32)
+        rows += signed(float.fromhex("0x1.fffffep-1"), 32)
+        rows += signed(1.0, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_log1p: |x| against 0.0625, 2^-53, 2^-12 and 0x1.19bp-21 on the
+        # doubled magnitude, then the raw bits against 2^53, -1, 2^106 and 2^1024
+        for ax in (0x7f60000000000000, 0x7940000000000000,
+                   0x7e60000000000000, 0x7d43360000000000):
+            rows += straddle_ax(ax, 64)
+        for bits in (0x4340000000000000, 0xbff0000000000000,
+                     0x4690000000000000, 0x7ff0000000000000):
+            rows += straddle_bits(bits, 64)
+        rows += near(-1.0, 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp-1"), 64)
+        rows += signed(1.0, 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
 BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "exp": exp_cases, "log": log_cases, "log2": log2_cases,
             "log10": log10_cases, "atan": atan_cases, "asin": asin_cases,
             "acos": acos_cases, "sinh": sinh_cases, "cosh": cosh_cases,
-            "tanh": tanh_cases}
+            "tanh": tanh_cases, "cbrt": cbrt_cases, "exp2": exp2_cases,
+            "log1p": log1p_cases}
 
 
 def directed(name, width):
