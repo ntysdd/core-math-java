@@ -149,7 +149,10 @@ suite repeats that check on the vectors committed under
    disagree, found by `tools/cmref --frontier`. Those are the inputs where the
    correctly rounded float result is decided by the last bit, the closest
    thing binary32 has to an upstream `.wc` file, and they go into the directed
-   section.
+   section. The scan walks the domain of a one-argument function; the
+   two-argument ones (`atan2`, `atan2pi`, `hypot`, `pow`, `compound`) have 2^64
+   argument pairs and their headers say `double rounding: no scan` rather than
+   quoting a count.
 
 A vector file has one section per set, introduced by a `#---` marker, with one
 case per line: the input arguments and the expected results as hexadecimal bit
@@ -170,7 +173,10 @@ python3 tools/mkvectors.py --all
 `tools/cmref/cmref.c` is one small driver over the upstream entry points, built
 with the reference flags (`-O2 -ffp-contract=off -mfma`). Neither the driver
 nor its built binary is part of the Maven build, and the binary is not
-committed.
+committed. `tools/gentests.py` writes the JUnit classes from a small table of
+function names and special values, so that the classes that differ in nothing
+but those stay consistent; it is a development aid as well and never runs under
+Maven.
 
 Large runs, such as the exhaustive sweep of all 2^32 binary32 inputs or a long
 random sweep for binary64, stay offline in chunks: the same driver prints the
