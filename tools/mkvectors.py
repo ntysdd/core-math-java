@@ -1636,7 +1636,7 @@ def header(name, width, kind, wc_name, wc_total, front):
                       "%d inputs of the binary32 domain where (float) cr_%s(x) "
                       "and cr_%sf(x) disagree, from tools/cmref --frontier; "
                       "they are among the directed cases" % (front, name, name))
-    elif KIND[name] != "unary":
+    elif KIND[name] in ("binary", "binary32"):
         lines += wrap("# double rounding: ",
                       "no scan.  --frontier walks the whole binary32 domain "
                       "of a one-argument function, and a two-argument function "
