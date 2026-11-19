@@ -212,16 +212,30 @@ Every function ships with tests in `src/test/java` covering:
    inputs through `CrMath` is enough; do not call the translated helper directly
    to manufacture coverage, and do not hold up a review over a row that upstream
    itself never reaches.
-4. A sample of upstream worst cases from `sin.wc` (binary64 only; the binary32
-   directory has no worst-case file, exhaustive is the only option there).
-5. A deterministic pseudo-random sweep, using a small xorshift in the test class
-   with a fixed seed. No external RNG, no `ThreadLocalRandom`.
+4. A sample of the upstream worst cases, from the function's `.wc` file.
+   Upstream ships one for every binary64 function and for the five binary32
+   two-argument functions (`atan2`, `atan2pi`, `compound`, `hypot`, `pow`); for
+   the other binary32 functions the directed cases and the random sweep carry
+   the load.
+5. A deterministic pseudo-random sweep from a small xorshift with a fixed seed.
+   It lives in the shared test helper rather than in each test class, because
+   the helper also re-derives the inputs and fails when a committed row does not
+   match them, which is what stops a hand-edited sweep from passing. No external
+   RNG, no `ThreadLocalRandom`.
 
 Test rules:
 
-* Expected values are hex bit patterns committed as resources, one case per line.
-  A NaN expected value keeps the bits the C build printed, since they document
-  what the reference did, but the assertion is `isNaN`.
+* Expected values are hex bit patterns committed as resources, one case per
+  line, under `src/test/resources/vectors/binary32` and
+  `src/test/resources/vectors/binary64`, with a `#` header naming the upstream
+  commit and the reference build and one `#---` section per set of cases. A NaN
+  expected value keeps the bits the C build printed, since they document what
+  the reference did, but the assertion is `isNaN`.
+* Neither a vector file nor a test class is edited by hand: `tools/mkvectors.py`
+  writes the vectors from the C driver and `tools/gentests.py` writes the class
+  from a table of function names and special values. Both reproduce what is
+  committed, so a diff after regenerating shows the change that is actually
+  wanted.
 * Tests are deterministic, offline, and finish in seconds under `mvn verify`.
   Long runs are documented in the README as manual procedures.
 * Do not weaken an assertion to make it pass. If a vector disagrees with the
