@@ -3,6 +3,10 @@ target/
 # Compiled class file
 *.class
 
+# The reference printer of tools/cmref, built from a local CORE-MATH checkout
+tools/cmref/cmref
+tools/cmref/cmref.exe
+
 # Log file
 *.log
 

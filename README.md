@@ -15,8 +15,9 @@ format-generic variant; none of those is covered here.
 
 All 42 functions that CORE-MATH provides for binary32 and all 41 that it
 provides for binary64 are translated, 83 entry points in all, and every one of
-them has been checked bit for bit against a local build of the C sources. No
-JUnit test suite and no vector files exist yet.
+them has been checked bit for bit against a local build of the C sources. The
+JUnit suite and its vector files are being filled in one function at a time:
+`sin` has them, and the scope table below marks what is still pending.
 
 ## What this is
 
@@ -46,7 +47,7 @@ rules that keep it that way.
 
 | Function | binary32 (`float`) | binary64 (`double`) | Upstream source |
 | --- | --- | --- | --- |
-| `sin` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sin` |
+| `sin` | translated, tested | translated, tested | `src/binary{32,64}/sin` |
 | `cos` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cos` |
 | `tan` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tan` |
 | `exp` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp` |
@@ -91,7 +92,8 @@ Every function has been checked bit for bit against a local build of the C
 sources (see *Verification*): the upstream `.wc` worst-case file where one
 exists, five million pseudo-random inputs per format, and a directed set that
 covers the special values and every comparison threshold of the translation.
-None of the translations has the JUnit vectors yet.
+The same three sets are what the JUnit vectors hold, function by function as
+they are committed.
 
 Everything in the table is written and compiles. CORE-MATH keeps growing, and
 this port follows it: when upstream adds a function, a format, or a new version
@@ -123,35 +125,57 @@ The two overloads are separate implementations.
 
 ## Verification
 
-The C implementation is the oracle. This project claims only that the Java code
-returns the bits the C code returns.
+The C implementation is the reference. This project claims only that the Java
+code returns the bits the C code returns.
 
-Testing is differential against a local build of upstream:
+Every function is checked against a local build of upstream, and the JUnit
+suite repeats that check on the vectors committed under
+`src/test/resources/vectors`. Three sets make up a function's vectors:
 
-1. Build the upstream C source in a scratch directory outside this repository.
-2. Generate vectors: a deterministic pseudo-random sample, the upstream worst
-   cases (`sin.wc`, binary64 only; binary32 has no worst-case file and is swept
-   exhaustively instead), and every special input that appears in the
-   implementation.
-3. Commit a representative subset as test resources, one line per case with the
-   input and expected output as hex bit patterns, and assert exact equality in
-   the JUnit tests. A line whose expected output is a NaN asserts that the port
-   returns a NaN, not a particular bit pattern.
+1. The directed cases: the special values of `AGENTS.md` section 5.1, both
+   sides of every comparison threshold of the translation, and the exceptional
+   entries of the tables the entry point consults.
+2. A uniform sample of the upstream `.wc` worst cases, where upstream has such
+   a file.
+3. A deterministic pseudo-random sweep: a 64-bit xorshift seeded with
+   `0x9e3779b97f4a7c15`, the seed the generator and the test share. The test
+   recomputes the inputs and fails if a row does not match them, so a
+   hand-edited sweep cannot pass unnoticed.
+
+A vector file has one section per set, introduced by a `#---` marker, with one
+case per line: the input arguments and the expected results as hexadecimal bit
+patterns. Its header names the upstream commit, the reference build and how
+each section was produced. A line whose expected result is a NaN asserts that
+the port returns a NaN, not a particular bit pattern, because the bit pattern of
+a NaN is not part of the promise.
+
+The vectors are committed as plain text, so `mvn verify` needs nothing but a
+JDK. Regenerating them needs a local CORE-MATH checkout and a C compiler:
+
+```bash
+CORE_MATH=/path/to/core-math sh tools/cmref/build.sh
+python3 tools/mkvectors.py sin      # one function, both formats
+python3 tools/mkvectors.py --all
+```
+
+`tools/cmref/cmref.c` is one small driver over the upstream entry points, built
+with the reference flags (`-O2 -ffp-contract=off -mfma`). Neither the driver
+nor its built binary is part of the Maven build, and the binary is not
+committed.
 
 Large runs, such as the exhaustive sweep of all 2^32 binary32 inputs or a long
-random sweep for binary64, happen offline in chunks: a C driver prints the
-expected block, a throwaway Java runner compares it against the port, and the
-loop is scripted. None of that is part of the default build.
-
-The vectors are checked in as plain text.
+random sweep for binary64, stay offline in chunks: the same driver prints the
+expected block, and a scratch runner compares it against the port. None of that
+is part of the default build.
 
 ## Building and testing
 
 The commands are:
 
 ```bash
-mvn -q verify          # compile, run tests, build the jar
-mvn -q -Dtest=SinFTest test
+mvn -q verify                  # compile, run tests, build the jar
+mvn -q -Dtest=SinFTest test    # one test class
+mvn -q -Dtest=SinTest test
 ```
 
 ## Developing
