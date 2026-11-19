@@ -460,14 +460,114 @@ SPEC = {
             ],
         },
     },
+    "erf": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("erff(+0.0)", "0.0f", "0x00000000"),
+                ("erff(-0.0)", "-0.0f", "0x80000000"),
+                ("erff(0.5)", "0.5f", "0x3f053f7b"),
+                ("erff(1.0)", "1.0f", "0x3f57bb3d"),
+                ("erff(+Infinity)", "Float.POSITIVE_INFINITY", "0x3f800000"),
+                ("erff(-Infinity)", "Float.NEGATIVE_INFINITY", "0xbf800000"),
+                ("erff(Float.MAX_VALUE)", "Float.MAX_VALUE", "0x3f800000"),
+                ("erff(-Float.MAX_VALUE)", "-Float.MAX_VALUE", "0xbf800000"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("erf(+0.0)", "0.0", "0x0000000000000000"),
+                ("erf(-0.0)", "-0.0", "0x8000000000000000"),
+                ("erf(0.5)", "0.5", "0x3fe0a7ef5c18edd2"),
+                ("erf(1.0)", "1.0", "0x3feaf767a741088b"),
+                ("erf(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x3ff0000000000000"),
+                ("erf(-Infinity)", "Double.NEGATIVE_INFINITY",
+                 "0xbff0000000000000"),
+                ("erf(Double.MAX_VALUE)", "Double.MAX_VALUE",
+                 "0x3ff0000000000000"),
+                ("erf(-Double.MAX_VALUE)", "-Double.MAX_VALUE",
+                 "0xbff0000000000000"),
+            ],
+        },
+    },
+    "erfc": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("erfcf(+0.0)", "0.0f", "0x3f800000"),
+                ("erfcf(-0.0)", "-0.0f", "0x3f800000"),
+                ("erfcf(1.0)", "1.0f", "0x3e21130b"),
+                ("erfcf(+Infinity)", "Float.POSITIVE_INFINITY", "0x00000000"),
+                ("erfcf(-Infinity)", "Float.NEGATIVE_INFINITY", "0x40000000"),
+                ("erfcf(Float.MAX_VALUE)", "Float.MAX_VALUE", "0x00000000"),
+                ("erfcf(-Float.MAX_VALUE)", "-Float.MAX_VALUE", "0x40000000"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("erfc(+0.0)", "0.0", "0x3ff0000000000000"),
+                ("erfc(-0.0)", "-0.0", "0x3ff0000000000000"),
+                ("erfc(1.0)", "1.0", "0x3fc4226162fbddd5"),
+                ("erfc(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x0000000000000000"),
+                ("erfc(-Infinity)", "Double.NEGATIVE_INFINITY",
+                 "0x4000000000000000"),
+                ("erfc(Double.MAX_VALUE)", "Double.MAX_VALUE",
+                 "0x0000000000000000"),
+                ("erfc(-Double.MAX_VALUE)", "-Double.MAX_VALUE",
+                 "0x4000000000000000"),
+            ],
+        },
+    },
+    "tanpi": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("tanpif(+0.0)", "0.0f", "0x00000000"),
+                ("tanpif(-0.0)", "-0.0f", "0x80000000"),
+                ("tanpif(0.25)", "0.25f", "0x3f800000"),
+                ("tanpif(-0.25)", "-0.25f", "0xbf800000"),
+                ("tanpif(0.5)", "0.5f", "0x7f800000"),
+                ("tanpif(-0.5)", "-0.5f", "0xff800000"),
+                ("tanpif(1.0)", "1.0f", "0x80000000"),
+                ("tanpif(-1.0)", "-1.0f", "0x00000000"),
+                ("tanpif(+Infinity)", "Float.POSITIVE_INFINITY", "nan"),
+                ("tanpif(-Infinity)", "Float.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("tanpi(+0.0)", "0.0", "0x0000000000000000"),
+                ("tanpi(-0.0)", "-0.0", "0x8000000000000000"),
+                ("tanpi(0.25)", "0.25", "0x3ff0000000000000"),
+                ("tanpi(-0.25)", "-0.25", "0xbff0000000000000"),
+                ("tanpi(0.5)", "0.5", "0x7ff0000000000000"),
+                ("tanpi(-0.5)", "-0.5", "0xfff0000000000000"),
+                ("tanpi(1.0)", "1.0", "0x8000000000000000"),
+                ("tanpi(-1.0)", "-1.0", "0x0000000000000000"),
+                ("tanpi(+Infinity)", "Double.POSITIVE_INFINITY", "nan"),
+                ("tanpi(-Infinity)", "Double.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+    },
 }
 
 # the class name of the translation where it does not follow from the
 # function name by capitalising it
 JAVA_NAME = {
-    "sinpi": "SinPi", "cospi": "CosPi", "atan2": "Atan2",
-    "atan2pi": "Atan2Pi", "exp2m1": "Exp2M1", "exp10m1": "Exp10M1",
-    "log10p1": "Log10P1", "log2p1": "Log2P1",
+    "sinpi": "SinPi", "cospi": "CosPi", "tanpi": "TanPi",
+    "atan2": "Atan2", "atan2pi": "Atan2Pi", "exp2m1": "Exp2M1",
+    "exp10m1": "Exp10M1", "log10p1": "Log10P1", "log2p1": "Log2P1",
 }
 
 HEADER = '''package io.github.ntysdd.coremath.{package};

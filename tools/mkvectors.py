@@ -199,6 +199,26 @@ THRESHOLDS = {
             "0x7f000000, and |x| = 1, 1 < |x| and NaN through asSpecial()",
         64: "compute(): |x| against 1, 0.25 and 0x1.d12ed0af1a27fp-27",
     },
+    "erf": {
+        32: "compute(): |x| against 0x1.f5a888p+1, 0x1.cp-2 and the inf/NaN "
+            "bound; the 1/16 and 1/32 grid of the polynomial table",
+        64: "compute(): |x| against 0x1.7afb48dc96626p+2, the NaN bound and "
+            "2^-61; the 1/16 and 1/32 grid of the polynomial table",
+    },
+    "erfc": {
+        32: "compute(): the raw bits against -0x1.ea8f94p+1, -Inf/NaN, "
+            "0x1.41bbf8p+3, +Inf/NaN, 0x1.7p-4, -0x1.d93ec4p-17 and "
+            "0x1.c5bf88p-26",
+        64: "compute(): the raw bits against -0x1.7744f8f74e94bp2, -Inf/NaN, "
+            "0x1.b39dc41e48bfdp+4, +Inf/NaN and the 0x1.c5bf891b4ef6ap-54 "
+            "bound",
+    },
+    "tanpi": {
+        32: "compute(): e against 150<<23 (|x| > 2^23) and 0xff<<23, and the "
+            "exact multiples of 1/4",
+        64: "compute(): |x| against 2^-12, 2^46 and 2^53, and the exact "
+            "multiples of 1/4",
+    },
 }
 
 COLUMNS = {
@@ -896,6 +916,82 @@ def atanh_cases(width):
     return rows
 
 
+def erf_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_erff: |x| against 0x1.f5a888p+1 and 0x1.cp-2, the inf/NaN bound,
+        # and the 1/16 grid on which the polynomial table changes row
+        for bits in (0x407ad444, 0x3ee00000, 0xff << 23):
+            rows += straddle_bits(bits, 32)
+        for k in range(0, 65):
+            rows += signed(k / 16.0, 32)
+        for k in range(0, 33):
+            rows += signed(k / 32.0, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_erf: |x| against 0x1.7afb48dc96626p+2, the NaN bound and 2^-61,
+        # and the same 1/16 and 1/32 grid
+        for bits in (0x4017afb48dc96626, 0x7ff0000000000000):
+            rows += straddle_bits(bits, 64)
+        for e in (0x3ff - 62, 0x3ff - 61):
+            rows += straddle_exponent(e, 64)
+        for k in range(0, 65):
+            rows += signed(k / 16.0, 64)
+        for k in range(0, 33):
+            rows += signed(k / 32.0, 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def erfc_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_erfcf: the raw bits against the two tails and the 0x40051000
+        # split of the polynomial, and |x| against the three small bounds
+        for bits in (0xc07547ca, 0xff800000, 0x4120ddfc, 0x7f800000,
+                     0x3db80000, 0xb76c9f62, 0x32e2dfc4, 0x40051000):
+            rows += straddle_bits(bits, 32)
+        for arg in ("0x1.ea8f94p+1", "0x1.41bbf8p+3", "0x1.7p-4",
+                    "0x1.c5bf88p-26"):
+            rows += signed(float.fromhex(arg), 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_erfc: the raw bits against the negative tail and the 0x1.7744f8f74e94bp2,
+        # 0x1.c5bf891b4ef6ap-54 and 0x1.b39dc41e48bfdp+4 bounds
+        for bits in (0xc017744f8f74e94b, 0xfff0000000000000,
+                     0x403b39dc41e48bfd, 0x7ff0000000000000):
+            rows += straddle_bits(bits, 64)
+        for arg in ("0x1.7744f8f74e94bp+2", "0x1.c5bf891b4ef6ap-54",
+                    "0x1.b39dc41e48bfdp+4"):
+            rows += signed(float.fromhex(arg), 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def tanpi_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_tanpif: e against 150<<23 and 0xff<<23, and the exact multiples
+        # of 1/4 that the fast path turns into +-0, +-1 and +-Infinity
+        for e in (0x7f + 23, 0x7f + 24, 0xff):
+            rows += straddle_exponent(e, 32)
+        for k in range(-8, 9):
+            rows += signed(k / 4.0, 32)
+            rows += signed(k + 0.5, 32)
+        rows += signed(float.fromhex("0x1.45f3p-128"), 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_tanpi: |x| against 2^-12, 2^46 and 2^53, and the same multiples
+        for e in (0x3ff - 13, 0x3ff - 12, 0x3ff + 45, 0x3ff + 46,
+                  0x3ff + 53, 0x7ff):
+            rows += straddle_exponent(e, 64)
+        for k in range(-8, 9):
+            rows += signed(k / 4.0, 64)
+            rows += signed(k + 0.5, 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
 BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "exp": exp_cases, "log": log_cases, "log2": log2_cases,
             "log10": log10_cases, "atan": atan_cases, "asin": asin_cases,
@@ -903,7 +999,8 @@ BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "tanh": tanh_cases, "cbrt": cbrt_cases, "exp2": exp2_cases,
             "log1p": log1p_cases, "expm1": expm1_cases,
             "sinpi": sinpi_cases, "cospi": cospi_cases,
-            "asinh": asinh_cases, "acosh": acosh_cases, "atanh": atanh_cases}
+            "asinh": asinh_cases, "acosh": acosh_cases, "atanh": atanh_cases,
+            "erf": erf_cases, "erfc": erfc_cases, "tanpi": tanpi_cases}
 
 
 def directed(name, width):

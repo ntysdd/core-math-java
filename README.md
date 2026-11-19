@@ -72,9 +72,9 @@ rules that keep it that way.
 | `asinh` | translated, tested | translated, tested | `src/binary{32,64}/asinh` |
 | `acosh` | translated, tested | translated, tested | `src/binary{32,64}/acosh` |
 | `atanh` | translated, tested | translated, tested | `src/binary{32,64}/atanh` |
-| `erf` | translated, tests pending | translated, tests pending | `src/binary{32,64}/erf` |
-| `erfc` | translated, tests pending | translated, tests pending | `src/binary{32,64}/erfc` |
-| `tanpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tanpi` |
+| `erf` | translated, tested | translated, tested | `src/binary{32,64}/erf` |
+| `erfc` | translated, tested | translated, tested | `src/binary{32,64}/erfc` |
+| `tanpi` | translated, tested | translated, tested | `src/binary{32,64}/tanpi` |
 | `atanpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atanpi` |
 | `asinpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/asinpi` |
 | `rsqrt` | translated, tests pending | translated, tests pending | `src/binary{32,64}/rsqrt` |
