@@ -16,9 +16,8 @@ format-generic variant; none of those is covered here.
 All 42 functions that CORE-MATH provides for binary32 and all 41 that it
 provides for binary64 are translated, 83 entry points in all, and every one of
 them has been checked bit for bit against a local build of the C sources. The
-JUnit suite and its vector files are being filled in a few functions at a time:
-`sin`, `cos`, `tan`, `exp`, `log`, `log2`, `log10`, `atan`, `asin` and `acos`
-have them, and the scope table below marks what is still pending.
+JUnit suite and its vector files are being filled in function by function; the
+scope table below marks what is done.
 
 ## What this is
 
@@ -60,9 +59,9 @@ rules that keep it that way.
 | `log10` | translated, tested | translated, tested | `src/binary{32,64}/log10` |
 | `asin` | translated, tested | translated, tested | `src/binary{32,64}/asin` |
 | `acos` | translated, tested | translated, tested | `src/binary{32,64}/acos` |
-| `sinh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sinh` |
-| `cosh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cosh` |
-| `tanh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tanh` |
+| `sinh` | translated, tested | translated, tested | `src/binary{32,64}/sinh` |
+| `cosh` | translated, tested | translated, tested | `src/binary{32,64}/cosh` |
+| `tanh` | translated, tested | translated, tested | `src/binary{32,64}/tanh` |
 | `cbrt` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cbrt` |
 | `exp2` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp2` |
 | `log1p` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log1p` |

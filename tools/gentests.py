@@ -107,6 +107,93 @@ SPEC = {
             ],
         },
     },
+    "sinh": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("sinhf(+0.0)", "0.0f", "0x00000000"),
+                ("sinhf(-0.0)", "-0.0f", "0x80000000"),
+                ("sinhf(+Infinity)", "Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("sinhf(-Infinity)", "Float.NEGATIVE_INFINITY", "0xff800000"),
+                ("sinhf(Float.MAX_VALUE)", "Float.MAX_VALUE", "0x7f800000"),
+                ("sinhf(-Float.MAX_VALUE)", "-Float.MAX_VALUE", "0xff800000"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("sinh(+0.0)", "0.0", "0x0000000000000000"),
+                ("sinh(-0.0)", "-0.0", "0x8000000000000000"),
+                ("sinh(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("sinh(-Infinity)", "Double.NEGATIVE_INFINITY",
+                 "0xfff0000000000000"),
+                ("sinh(Double.MAX_VALUE)", "Double.MAX_VALUE",
+                 "0x7ff0000000000000"),
+                ("sinh(-Double.MAX_VALUE)", "-Double.MAX_VALUE",
+                 "0xfff0000000000000"),
+            ],
+        },
+    },
+    "cosh": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("coshf(+0.0)", "0.0f", "0x3f800000"),
+                ("coshf(-0.0)", "-0.0f", "0x3f800000"),
+                ("coshf(+Infinity)", "Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("coshf(-Infinity)", "Float.NEGATIVE_INFINITY", "0x7f800000"),
+                ("coshf(Float.MAX_VALUE)", "Float.MAX_VALUE", "0x7f800000"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("cosh(+0.0)", "0.0", "0x3ff0000000000000"),
+                ("cosh(-0.0)", "-0.0", "0x3ff0000000000000"),
+                ("cosh(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("cosh(-Infinity)", "Double.NEGATIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("cosh(Double.MAX_VALUE)", "Double.MAX_VALUE",
+                 "0x7ff0000000000000"),
+            ],
+        },
+    },
+    "tanh": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("tanhf(+0.0)", "0.0f", "0x00000000"),
+                ("tanhf(-0.0)", "-0.0f", "0x80000000"),
+                ("tanhf(+Infinity)", "Float.POSITIVE_INFINITY", "0x3f800000"),
+                ("tanhf(-Infinity)", "Float.NEGATIVE_INFINITY", "0xbf800000"),
+                ("tanhf(Float.MAX_VALUE)", "Float.MAX_VALUE", "0x3f800000"),
+                ("tanhf(-Float.MAX_VALUE)", "-Float.MAX_VALUE", "0xbf800000"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("tanh(+0.0)", "0.0", "0x0000000000000000"),
+                ("tanh(-0.0)", "-0.0", "0x8000000000000000"),
+                ("tanh(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x3ff0000000000000"),
+                ("tanh(-Infinity)", "Double.NEGATIVE_INFINITY",
+                 "0xbff0000000000000"),
+                ("tanh(Double.MAX_VALUE)", "Double.MAX_VALUE",
+                 "0x3ff0000000000000"),
+                ("tanh(-Double.MAX_VALUE)", "-Double.MAX_VALUE",
+                 "0xbff0000000000000"),
+            ],
+        },
+    },
 }
 
 HEADER = '''package io.github.ntysdd.coremath.{package};

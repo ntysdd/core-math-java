@@ -19,6 +19,7 @@ reference build and how each section was produced.  Every row is one input
 import math
 import os
 import pathlib
+import re
 import struct
 import subprocess
 import sys
@@ -124,6 +125,25 @@ THRESHOLDS = {
             "accurate path",
         64: "compute(): ax = ix<<1 against 0x7fc0<<48, 0x7fe0<<48, "
             "0xffe0<<48, 2^-15 and x0 = 0x1.cb3b3869747f4p-55",
+    },
+    "sinh": {
+        32: "compute(): ax = u<<1 against 0x8565a9f8, 0xff<<24, 0x7c000000, "
+            "0x74250bfe (the stUarg entry) and 0x66000000",
+        64: "compute(): |x| against 0.25, x0 = 0x1.7137449123ef7p-26, "
+            "0x1.633ce8fb9f87dp+9, 5 and 36.736801; the rows of "
+            "as_sinh_database()",
+    },
+    "cosh": {
+        32: "compute(): ax = u<<1 against 0x8565a9f8, 0xff<<24, 0x7c000000, "
+            "0x74000000 and 0x66000000",
+        64: "compute(): |x| against 0.125, 2^-26, 0x1.633ce8fb9f87dp+9, 5 and "
+            "36.736801; the rows of as_cosh_database()",
+    },
+    "tanh": {
+        32: "compute(): e against 115 and 102, and ux<<1 against "
+            "0x41102cb3<<1",
+        64: "compute(): |x| against 0x1.30fc1931f09cap+4, 3.683, 0.25 and "
+            "0x1.d12ed0af1a27fp-27",
     },
 }
 
@@ -503,10 +523,104 @@ def acos_cases(width):
     return rows
 
 
+def c_table(name, width, marker="db[][3]"):
+    """The first column of a table of the C source, both signs.
+
+    The rows are the inputs of an exceptional database such as
+    as_sinh_database(), so they belong in the vectors: they are the inputs
+    where the translation deliberately departs from the generic path.
+    """
+    fname = name if width == 64 else name + "f"
+    path = (UPSTREAM / "src" / ("binary64" if width == 64 else "binary32")
+            / name / (fname + ".c"))
+    text = path.read_text(encoding="utf-8")
+    start = text.index(marker)
+    end = text.index("};", start)
+    rows = []
+    for arg in re.findall(r"\{\s*(0x[0-9a-fA-F.]+p[-+]?[0-9]+)", text[start:end]):
+        rows += signed(float.fromhex(arg), width)
+    if not rows:
+        sys.exit("mkvectors: no rows in the table %s of %s" % (marker, path))
+    return rows
+
+
+def sinh_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_sinhf: ax = u<<1 against 0x8565a9f8, 0xff<<24, 0x7c000000,
+        # 0x74250bfe (the stUarg entry) and 0x66000000
+        for ax in (0x8565a9f8, 0xff << 24, 0x7c000000, 0x74250bfe, 0x66000000):
+            rows += straddle_ax(ax, 32)
+        rows += signed(0.125, 32)
+        rows += near(0.125, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_sinh: |x| against 0.25, x0 = 0x1.7137449123ef7p-26, the overflow
+        # bound 0x1.633ce8fb9f87dp+9 and the two regime edges 5 and 36.736801
+        for bits in (0x3fd0000000000000, 0x3e57137449123ef7,
+                     0x408633ce8fb9f87d, 0x7ff0000000000000,
+                     0x4014000000000000, 0x40425e4f7b2737fa):
+            rows += straddle_magnitude(bits, 64)
+        rows += signed(0.25, 64)
+        rows += near(0.25, 64)
+        # the rows of as_sinh_database()
+        rows += c_table("sinh", 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def cosh_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_coshf: ax = u<<1 against 0x8565a9f8, 0xff<<24, 0x7c000000,
+        # 0x74000000 and 0x66000000
+        for ax in (0x8565a9f8, 0xff << 24, 0x7c000000, 0x74000000, 0x66000000):
+            rows += straddle_ax(ax, 32)
+        rows += signed(0.125, 32)
+        rows += near(0.125, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_cosh: |x| against 0.125, 2^-26, the overflow bound and the two
+        # regime edges
+        for bits in (0x3fc0000000000000, 0x3e50000000000000,
+                     0x408633ce8fb9f87d, 0x7ff0000000000000,
+                     0x4014000000000000, 0x40425e4f7b2737fa):
+            rows += straddle_magnitude(bits, 64)
+        rows += signed(0.125, 64)
+        rows += near(0.125, 64)
+        # the rows of as_cosh_database()
+        rows += c_table("cosh", 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def tanh_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_tanhf: e = (u>>23)&0xff against 115 and 102, and ux<<1 against
+        # 0x41102cb3<<1
+        for e in (101, 102, 114, 115, 0xfe):
+            rows += straddle_exponent(e, 32)
+        rows += straddle_ax(0x82205966, 32)
+        rows += signed(1.0, 32)
+        rows += near(1.0, 32)
+    else:
+        # cr_tanh: |x| against 0x1.30fc1931f09cap+4, inf, 3.683, 0.25 and
+        # 0x1.d12ed0af1a27fp-27
+        for bits in (0x40330fc1931f09ca, 0x7ff0000000000000,
+                     0x400d76c8b4395810, 0x3fd0000000000000,
+                     0x3e4d12ed0af1a27f):
+            rows += straddle_magnitude(bits, 64)
+        rows += signed(1.0, 64)
+        rows += near(1.0, 64)
+    return rows
+
+
 BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "exp": exp_cases, "log": log_cases, "log2": log2_cases,
             "log10": log10_cases, "atan": atan_cases, "asin": asin_cases,
-            "acos": acos_cases}
+            "acos": acos_cases, "sinh": sinh_cases, "cosh": cosh_cases,
+            "tanh": tanh_cases}
 
 
 def directed(name, width):
