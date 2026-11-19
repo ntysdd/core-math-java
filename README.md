@@ -14,10 +14,11 @@ format-generic variant; none of those is covered here.
 ## Status
 
 All 42 functions that CORE-MATH provides for binary32 and all 41 that it
-provides for binary64 are translated, 83 entry points in all, and every one of
-them has been checked bit for bit against a local build of the C sources. The
-JUnit suite and its vector files are being filled in function by function; the
-scope table below marks what is done.
+provides for binary64 are translated, 83 entry points in all. Every one of them
+has been checked bit for bit against a local build of the C sources, and every
+one of them ships with a JUnit class fed by a committed vector file, so a
+checkout builds and verifies with nothing but a JDK: 134,921 test cases that run
+in about ten seconds under `mvn verify`.
 
 ## What this is
 
@@ -52,9 +53,9 @@ rules that keep it that way.
 | `tan` | translated, tested | translated, tested | `src/binary{32,64}/tan` |
 | `exp` | translated, tested | translated, tested | `src/binary{32,64}/exp` |
 | `log` | translated, tested | translated, tested | `src/binary{32,64}/log` |
-| `pow` | translated, tests pending | translated, tests pending | `src/binary{32,64}/pow` |
+| `pow` | translated, tested | translated, tested | `src/binary{32,64}/pow` |
 | `atan` | translated, tested | translated, tested | `src/binary{32,64}/atan` |
-| `atan2` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atan2` |
+| `atan2` | translated, tested | translated, tested | `src/binary{32,64}/atan2` |
 | `log2` | translated, tested | translated, tested | `src/binary{32,64}/log2` |
 | `log10` | translated, tested | translated, tested | `src/binary{32,64}/log10` |
 | `asin` | translated, tested | translated, tested | `src/binary{32,64}/asin` |
@@ -68,7 +69,7 @@ rules that keep it that way.
 | `expm1` | translated, tested | translated, tested | `src/binary{32,64}/expm1` |
 | `sinpi` | translated, tested | translated, tested | `src/binary{32,64}/sinpi` |
 | `cospi` | translated, tested | translated, tested | `src/binary{32,64}/cospi` |
-| `hypot` | translated, tests pending | translated, tests pending | `src/binary{32,64}/hypot` |
+| `hypot` | translated, tested | translated, tested | `src/binary{32,64}/hypot` |
 | `asinh` | translated, tested | translated, tested | `src/binary{32,64}/asinh` |
 | `acosh` | translated, tested | translated, tested | `src/binary{32,64}/acosh` |
 | `atanh` | translated, tested | translated, tested | `src/binary{32,64}/atanh` |
@@ -87,8 +88,8 @@ rules that keep it that way.
 | `tgamma` | translated, tested | translated, tested | `src/binary{32,64}/tgamma` |
 | `lgamma` | translated, tested | translated, tested | `src/binary{32,64}/lgamma` |
 | `sincos` | translated, tested | translated, tested | `src/binary{32,64}/sincos` |
-| `atan2pi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atan2pi` |
-| `compound` | translated, tests pending | not in CORE-MATH | `src/binary32/compound` |
+| `atan2pi` | translated, tested | translated, tested | `src/binary{32,64}/atan2pi` |
+| `compound` | translated, tested | not in CORE-MATH | `src/binary32/compound` |
 
 Every function has been checked bit for bit against a local build of the C
 sources (see *Verification*): the upstream `.wc` worst-case file where one

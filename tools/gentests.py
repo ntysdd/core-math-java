@@ -874,6 +874,200 @@ SPEC = {
             ],
         },
     },
+    "atan2": {
+        32: {
+            "arity": 2,
+            "worst": True,
+            "special": [
+                ("atan2f(0.0f, 0.0f)", "0.0f, 0.0f", "0x00000000"),
+                ("atan2f(-0.0f, 0.0f)", "-0.0f, 0.0f", "0x80000000"),
+                ("atan2f(0.0f, -0.0f)", "0.0f, -0.0f", "0x40490fdb"),
+                ("atan2f(1.0f, 1.0f)", "1.0f, 1.0f", "0x3f490fdb"),
+                ("atan2f(-1.0f, 1.0f)", "-1.0f, 1.0f", "0xbf490fdb"),
+                ("atan2f(1.0f, -1.0f)", "1.0f, -1.0f", "0x4016cbe4"),
+                ("atan2f(1.0f, 0.0f)", "1.0f, 0.0f", "0x3fc90fdb"),
+                ("atan2f(-1.0f, 0.0f)", "-1.0f, 0.0f", "0xbfc90fdb"),
+                ("atan2f(+Infinity, +Infinity)",
+                 "Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY",
+                 "0x3f490fdb"),
+                ("atan2f(1.0f, +Infinity)",
+                 "1.0f, Float.POSITIVE_INFINITY", "0x00000000"),
+                ("atan2f(NaN, 1.0f)",
+                 "Float.intBitsToFloat(0x7fc00000), 1.0f", "nan"),
+            ],
+        },
+        64: {
+            "arity": 2,
+            "worst": True,
+            "special": [
+                ("atan2(0.0, 0.0)", "0.0, 0.0", "0x0000000000000000"),
+                ("atan2(-0.0, 0.0)", "-0.0, 0.0", "0x8000000000000000"),
+                ("atan2(0.0, -0.0)", "0.0, -0.0", "0x400921fb54442d18"),
+                ("atan2(1.0, 1.0)", "1.0, 1.0", "0x3fe921fb54442d18"),
+                ("atan2(-1.0, 1.0)", "-1.0, 1.0", "0xbfe921fb54442d18"),
+                ("atan2(1.0, -1.0)", "1.0, -1.0", "0x4002d97c7f3321d2"),
+                ("atan2(1.0, 0.0)", "1.0, 0.0", "0x3ff921fb54442d18"),
+                ("atan2(-1.0, 0.0)", "-1.0, 0.0", "0xbff921fb54442d18"),
+                ("atan2(+Infinity, +Infinity)",
+                 "Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY",
+                 "0x3fe921fb54442d18"),
+                ("atan2(1.0, +Infinity)",
+                 "1.0, Double.POSITIVE_INFINITY", "0x0000000000000000"),
+                ("atan2(NaN, 1.0)",
+                 "Double.longBitsToDouble(0x7ff8000000000000L), 1.0", "nan"),
+            ],
+        },
+    },
+    "hypot": {
+        32: {
+            "arity": 2,
+            "worst": True,
+            "special": [
+                ("hypotf(0.0f, 0.0f)", "0.0f, 0.0f", "0x00000000"),
+                ("hypotf(-0.0f, -0.0f)", "-0.0f, -0.0f", "0x00000000"),
+                ("hypotf(3.0f, 4.0f)", "3.0f, 4.0f", "0x40a00000"),
+                ("hypotf(1.0f, 1.0f)", "1.0f, 1.0f", "0x3fb504f3"),
+                ("hypotf(+Infinity, NaN)",
+                 "Float.POSITIVE_INFINITY, Float.intBitsToFloat(0x7fc00000)",
+                 "0x7f800000"),
+                ("hypotf(NaN, +Infinity)",
+                 "Float.intBitsToFloat(0x7fc00000), Float.POSITIVE_INFINITY",
+                 "0x7f800000"),
+                ("hypotf(1.0f, NaN)",
+                 "1.0f, Float.intBitsToFloat(0x7fc00000)", "nan"),
+                ("hypotf(Float.MAX_VALUE, Float.MAX_VALUE)",
+                 "Float.MAX_VALUE, Float.MAX_VALUE", "0x7f800000"),
+            ],
+        },
+        64: {
+            "arity": 2,
+            "worst": True,
+            "special": [
+                ("hypot(0.0, 0.0)", "0.0, 0.0", "0x0000000000000000"),
+                ("hypot(-0.0, -0.0)", "-0.0, -0.0", "0x0000000000000000"),
+                ("hypot(3.0, 4.0)", "3.0, 4.0", "0x4014000000000000"),
+                ("hypot(1.0, 1.0)", "1.0, 1.0", "0x3ff6a09e667f3bcd"),
+                ("hypot(+Infinity, NaN)",
+                 "Double.POSITIVE_INFINITY, "
+                 "Double.longBitsToDouble(0x7ff8000000000000L)",
+                 "0x7ff0000000000000"),
+                ("hypot(NaN, +Infinity)",
+                 "Double.longBitsToDouble(0x7ff8000000000000L), "
+                 "Double.POSITIVE_INFINITY", "0x7ff0000000000000"),
+                ("hypot(1.0, NaN)",
+                 "1.0, Double.longBitsToDouble(0x7ff8000000000000L)", "nan"),
+                ("hypot(Double.MAX_VALUE, Double.MAX_VALUE)",
+                 "Double.MAX_VALUE, Double.MAX_VALUE",
+                 "0x7ff0000000000000"),
+            ],
+        },
+    },
+    "pow": {
+        32: {
+            "arity": 2,
+            "worst": True,
+            "special": [
+                ("powf(0.0f, 0.0f)", "0.0f, 0.0f", "0x3f800000"),
+                ("powf(0.0f, -1.0f)", "0.0f, -1.0f", "0x7f800000"),
+                ("powf(-0.0f, -1.0f)", "-0.0f, -1.0f", "0xff800000"),
+                ("powf(-0.0f, -2.0f)", "-0.0f, -2.0f", "0x7f800000"),
+                ("powf(1.0f, NaN)",
+                 "1.0f, Float.intBitsToFloat(0x7fc00000)", "0x3f800000"),
+                ("powf(NaN, 0.0f)",
+                 "Float.intBitsToFloat(0x7fc00000), 0.0f", "0x3f800000"),
+                ("powf(-1.0f, +Infinity)",
+                 "-1.0f, Float.POSITIVE_INFINITY", "0x3f800000"),
+                ("powf(+Infinity, 0.0f)",
+                 "Float.POSITIVE_INFINITY, 0.0f", "0x3f800000"),
+                ("powf(2.0f, 10.0f)", "2.0f, 10.0f", "0x44800000"),
+                ("powf(2.0f, -1.0f)", "2.0f, -1.0f", "0x3f000000"),
+                ("powf(-2.0f, 3.0f)", "-2.0f, 3.0f", "0xc1000000"),
+                ("powf(-2.0f, 0.5f)", "-2.0f, 0.5f", "nan"),
+            ],
+        },
+        64: {
+            "arity": 2,
+            "worst": True,
+            "special": [
+                ("pow(0.0, 0.0)", "0.0, 0.0", "0x3ff0000000000000"),
+                ("pow(0.0, -1.0)", "0.0, -1.0", "0x7ff0000000000000"),
+                ("pow(-0.0, -1.0)", "-0.0, -1.0", "0xfff0000000000000"),
+                ("pow(-0.0, -2.0)", "-0.0, -2.0", "0x7ff0000000000000"),
+                ("pow(1.0, NaN)",
+                 "1.0, Double.longBitsToDouble(0x7ff8000000000000L)",
+                 "0x3ff0000000000000"),
+                ("pow(NaN, 0.0)",
+                 "Double.longBitsToDouble(0x7ff8000000000000L), 0.0",
+                 "0x3ff0000000000000"),
+                ("pow(-1.0, +Infinity)",
+                 "-1.0, Double.POSITIVE_INFINITY", "0x3ff0000000000000"),
+                ("pow(+Infinity, 0.0)",
+                 "Double.POSITIVE_INFINITY, 0.0", "0x3ff0000000000000"),
+                ("pow(2.0, 10.0)", "2.0, 10.0", "0x4090000000000000"),
+                ("pow(2.0, -1.0)", "2.0, -1.0", "0x3fe0000000000000"),
+                ("pow(-2.0, 3.0)", "-2.0, 3.0", "0xc020000000000000"),
+                ("pow(-2.0, 0.5)", "-2.0, 0.5", "nan"),
+            ],
+        },
+    },
+    "atan2pi": {
+        32: {
+            "arity": 2,
+            "worst": True,
+            "special": [
+                ("atan2pif(0.0f, 0.0f)", "0.0f, 0.0f", "0x00000000"),
+                ("atan2pif(-0.0f, 0.0f)", "-0.0f, 0.0f", "0x80000000"),
+                ("atan2pif(0.0f, -0.0f)", "0.0f, -0.0f", "0x3f800000"),
+                ("atan2pif(1.0f, 1.0f)", "1.0f, 1.0f", "0x3e800000"),
+                ("atan2pif(-1.0f, 1.0f)", "-1.0f, 1.0f", "0xbe800000"),
+                ("atan2pif(1.0f, 0.0f)", "1.0f, 0.0f", "0x3f000000"),
+                ("atan2pif(+Infinity, +Infinity)",
+                 "Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY",
+                 "0x3e800000"),
+                ("atan2pif(NaN, 1.0f)",
+                 "Float.intBitsToFloat(0x7fc00000), 1.0f", "nan"),
+            ],
+        },
+        64: {
+            "arity": 2,
+            "worst": True,
+            "special": [
+                ("atan2pi(0.0, 0.0)", "0.0, 0.0", "0x0000000000000000"),
+                ("atan2pi(-0.0, 0.0)", "-0.0, 0.0", "0x8000000000000000"),
+                ("atan2pi(0.0, -0.0)", "0.0, -0.0", "0x3ff0000000000000"),
+                ("atan2pi(1.0, 1.0)", "1.0, 1.0", "0x3fd0000000000000"),
+                ("atan2pi(-1.0, 1.0)", "-1.0, 1.0", "0xbfd0000000000000"),
+                ("atan2pi(1.0, 0.0)", "1.0, 0.0", "0x3fe0000000000000"),
+                ("atan2pi(+Infinity, +Infinity)",
+                 "Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY",
+                 "0x3fd0000000000000"),
+                ("atan2pi(NaN, 1.0)",
+                 "Double.longBitsToDouble(0x7ff8000000000000L), 1.0", "nan"),
+            ],
+        },
+    },
+    "compound": {
+        32: {
+            "arity": 2,
+            "worst": True,
+            "special": [
+                ("compoundf(0.0f, 1.0f)", "0.0f, 1.0f", "0x3f800000"),
+                ("compoundf(0.0f, 10.0f)", "0.0f, 10.0f", "0x3f800000"),
+                ("compoundf(1.0f, 0.0f)", "1.0f, 0.0f", "0x3f800000"),
+                ("compoundf(1.0f, 1.0f)", "1.0f, 1.0f", "0x40000000"),
+                ("compoundf(1.0f, 2.0f)", "1.0f, 2.0f", "0x40800000"),
+                ("compoundf(-0.5f, 2.0f)", "-0.5f, 2.0f", "0x3e800000"),
+                ("compoundf(-0.0f, 1.0f)", "-0.0f, 1.0f", "0x3f800000"),
+                ("compoundf(1.0f, +Infinity)",
+                 "1.0f, Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("compoundf(+Infinity, 1.0f)",
+                 "Float.POSITIVE_INFINITY, 1.0f", "0x7f800000"),
+                ("compoundf(-2.0f, 0.5f)", "-2.0f, 0.5f", "nan"),
+                ("compoundf(NaN, 1.0f)",
+                 "Float.intBitsToFloat(0x7fc00000), 1.0f", "nan"),
+            ],
+        },
+    },
 }
 
 # the class name of the translation where it does not follow from the
@@ -937,6 +1131,8 @@ def main(argv):
 
 
 def emit(name, width):
+    if width not in SPEC[name]:
+        return
     spec = SPEC[name][width]
     package = "binary32" if width == 32 else "binary64"
     suffix = "" if width == 64 else "f"
@@ -952,7 +1148,8 @@ def emit(name, width):
     body = [HEADER.format(
         package=package, name=name, java_type=java_type, entry="cr_" + name + suffix,
         klass=klass, hex_method=hex_method(name, width, arity, suffix),
-        wc_method=wc_method(spec["worst"]), special="\n".join(special(name, width)),
+        wc_method=wc_method(spec["worst"]),
+        special="\n".join(special(name, width, arity)),
         wc=wc_javadoc(spec["worst"], name),
     )]
     body.append(checks(name, width, arity, params, arg))
@@ -980,7 +1177,7 @@ def call(method, width, arity):
     return "CrMath.%s(%s, %s)" % (method, conv % "y", conv % "x")
 
 
-def special(name, width):
+def special(name, width, arity):
     spec = SPEC[name][width]
     box = "Float" if width == 32 else "Double"
     lines = []
@@ -999,11 +1196,18 @@ def special(name, width):
     names = ["quiet NaN", "signalling NaN, smallest payload",
              "negative NaN with a payload", "NaN with every payload bit set"]
     for payload, label in zip(payloads, names):
-        lines.append('    assertTrue(%s.isNaN(CrMath.%s(%s(%s))),'
-                     % (box, name, conv, payload))
-        lines.append('        "%s(%s, %s)");'
-                     % (name + ("f" if width == 32 else ""),
-                        payload.replace("L", ""), label))
+        flat = payload.replace("L", "")
+        if arity == 1:
+            call = "CrMath.%s(%s(%s))" % (name, conv, payload)
+            msg = '"%s(%s, %s)"' % (name + ("f" if width == 32 else ""),
+                                     flat, label)
+        else:
+            call = "CrMath.%s(%s(%s), %s)" % (
+                name, conv, payload, "1.0f" if width == 32 else "1.0")
+            msg = '"%s(%s, 1.0): %s"' % (name + ("f" if width == 32 else ""),
+                                          flat, label)
+        lines.append('    assertTrue(%s.isNaN(%s),' % (box, call))
+        lines.append('        %s);' % msg)
     return lines
 
 

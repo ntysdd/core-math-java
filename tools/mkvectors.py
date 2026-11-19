@@ -292,6 +292,31 @@ THRESHOLDS = {
         64: "compute(): |x| against 0x1.6a09e667f3bccp-27 and the exponent "
             "bounds of the reduction, and the multiples of pi/2",
     },
+    "atan2": {
+        32: "the quadrants and the axes of the two arguments, and the "
+            "special values in either position",
+        64: "the quadrants and the axes of the two arguments, and the "
+            "special values in either position",
+    },
+    "hypot": {
+        32: "the exact triples, the special values in either position and "
+            "0x47efffffe0000000",
+        64: "the exact triples, the subnormal pairs, the special values in "
+            "either position and the 2^-52 ratio bounds",
+    },
+    "pow": {
+        32: "the IEEE 754 special cases of pow with odd and even exponents",
+        64: "the IEEE 754 special cases of pow with odd and even exponents",
+    },
+    "atan2pi": {
+        32: "the quadrants and the axes of the two arguments, and the "
+            "special values in either position",
+        64: "the quadrants and the axes of the two arguments, and the "
+            "special values in either position",
+    },
+    "compound": {
+        32: "compound(x, 0), compound(0, y) and the integer exponents",
+    },
 }
 
 COLUMNS = {
@@ -1371,6 +1396,77 @@ def sincos_cases(width):
     return rows
 
 
+def specials2(width):
+    """The special values in both argument positions: each of them with 1 as
+    the other argument, and the full cross product, which carries every pair an
+    IEEE 754 special case of a two-argument function is stated for."""
+    one = (f64 if width == 64 else f32)(1.0)
+    rows = []
+    for (v,) in specials(width):
+        rows.append((v, one))
+        rows.append((one, v))
+    for (y,) in specials(width):
+        for (x,) in specials(width):
+            rows.append((y, x))
+    return rows
+
+
+def atan2_cases(width):
+    rows = specials2(width)
+    # the quadrants and the axes, where atan2 is exact or a pole
+    for y in (0, 1.0, 2.0, -1.0, -2.0, 0.5):
+        for x in (0, 1.0, 2.0, -1.0, -2.0, 0.5):
+            rows.append((signed(y, width)[0][0], signed(x, width)[0][0]))
+            rows.append((signed(-y, width)[0][0], signed(-x, width)[0][0]))
+    for v in (1.0, 2.0, 4.0, 8.0, 0.25):
+        rows.append((signed(v, width)[0][0], signed(1.0, width)[0][0]))
+        rows.append((signed(1.0, width)[0][0], signed(v, width)[0][0]))
+    rows.append((f64(1.0) if width == 64 else f32(1.0),) * 1 +
+                (signed(float.fromhex("0x1.fffffffffffffp+1023"), width)[0][0]
+                 if width == 64 else f32(3.4028234663852886e38),))
+    return rows
+
+
+def hypot_cases(width):
+    rows = specials2(width)
+    # the exact triples, the subnormal pairs and the magnitude ratios
+    for y, x in ((3.0, 4.0), (4.0, 3.0), (5.0, 12.0), (1.0, 1.0), (1.0, 2.0)):
+        rows.append((signed(y, width)[0][0], signed(x, width)[0][0]))
+    tiny = float.fromhex("0x1p-1070") if width == 64 else float.fromhex("0x1p-140")
+    rows.append((signed(tiny, width)[0][0], signed(tiny, width)[0][0]))
+    if width == 64:
+        for bits in (0x39b0000000000000, 0x3c9fffffffffff80,
+                     0x10000000000000):
+            rows.append((bits, signed(1.0, 64)[0][0]))
+            rows.append((signed(1.0, 64)[0][0], bits))
+    return rows
+
+
+def atan2pi_cases(width):
+    rows = atan2_cases(width)
+    return rows
+
+
+def pow_cases(width):
+    rows = specials2(width)
+    # the IEEE 754 special cases of pow, with both odd and even exponents
+    for y in (0, 1.0, 2.0, 3.0, 10.0, -1.0, -2.0, -3.0, 0.5, -0.5):
+        for x in (0, 1.0, -1.0, 2.0, -2.0, 10.0, 0.5):
+            rows.append((signed(x, width)[0][0], signed(y, width)[0][0]))
+            rows.append((signed(x, width)[1][0], signed(y, width)[0][0]))
+    return rows
+
+
+def compound_cases(width):
+    rows = specials2(width)
+    # compound(x, 0) is 1, compound(0, y) is 1, and the integer exponents
+    for y in (0, 1.0, 2.0, -1.0, 0.5, 10.0):
+        for x in (0, 1.0, -1.0, 0.5, -0.5, 2.0, -2.0):
+            rows.append((signed(x, width)[0][0], signed(y, width)[0][0]))
+            rows.append((signed(x, width)[1][0], signed(y, width)[0][0]))
+    return rows
+
+
 BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "exp": exp_cases, "log": log_cases, "log2": log2_cases,
             "log10": log10_cases, "atan": atan_cases, "asin": asin_cases,
@@ -1385,7 +1481,9 @@ BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "exp10": exp10_cases, "exp2m1": exp2m1_cases,
             "exp10m1": exp10m1_cases, "log10p1": log10p1_cases,
             "log2p1": log2p1_cases, "tgamma": tgamma_cases,
-            "lgamma": lgamma_cases, "sincos": sincos_cases}
+            "lgamma": lgamma_cases, "sincos": sincos_cases,
+            "atan2": atan2_cases, "hypot": hypot_cases, "pow": pow_cases,
+            "atan2pi": atan2pi_cases, "compound": compound_cases}
 
 
 def directed(name, width):
@@ -1538,6 +1636,12 @@ def header(name, width, kind, wc_name, wc_total, front):
                       "%d inputs of the binary32 domain where (float) cr_%s(x) "
                       "and cr_%sf(x) disagree, from tools/cmref --frontier; "
                       "they are among the directed cases" % (front, name, name))
+    elif KIND[name] != "unary":
+        lines += wrap("# double rounding: ",
+                      "no scan.  --frontier walks the whole binary32 domain "
+                      "of a one-argument function, and a two-argument function "
+                      "has 2^64 argument pairs, so the directed grid and the "
+                      "random sweep stand in for it")
     if wc_name is None:
         lines.append("# worst cases: no upstream .wc file for this format")
     else:
