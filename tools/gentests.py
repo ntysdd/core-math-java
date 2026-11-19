@@ -377,6 +377,89 @@ SPEC = {
             ],
         },
     },
+    "asinh": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("asinhf(+0.0)", "0.0f", "0x00000000"),
+                ("asinhf(-0.0)", "-0.0f", "0x80000000"),
+                ("asinhf(1.0)", "1.0f", "0x3f61a1b3"),
+                ("asinhf(-1.0)", "-1.0f", "0xbf61a1b3"),
+                ("asinhf(+Infinity)", "Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("asinhf(-Infinity)", "Float.NEGATIVE_INFINITY", "0xff800000"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("asinh(+0.0)", "0.0", "0x0000000000000000"),
+                ("asinh(-0.0)", "-0.0", "0x8000000000000000"),
+                ("asinh(1.0)", "1.0", "0x3fec34366179d427"),
+                ("asinh(-1.0)", "-1.0", "0xbfec34366179d427"),
+                ("asinh(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("asinh(-Infinity)", "Double.NEGATIVE_INFINITY",
+                 "0xfff0000000000000"),
+            ],
+        },
+    },
+    "acosh": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("acoshf(1.0)", "1.0f", "0x00000000"),
+                ("acoshf(0.5)", "0.5f", "nan"),
+                ("acoshf(0.0)", "0.0f", "nan"),
+                ("acoshf(-1.0)", "-1.0f", "nan"),
+                ("acoshf(+Infinity)", "Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("acoshf(-Infinity)", "Float.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("acosh(1.0)", "1.0", "0x0000000000000000"),
+                ("acosh(0.5)", "0.5", "nan"),
+                ("acosh(0.0)", "0.0", "nan"),
+                ("acosh(-1.0)", "-1.0", "nan"),
+                ("acosh(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("acosh(-Infinity)", "Double.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+    },
+    "atanh": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("atanhf(+0.0)", "0.0f", "0x00000000"),
+                ("atanhf(-0.0)", "-0.0f", "0x80000000"),
+                ("atanhf(1.0)", "1.0f", "0x7f800000"),
+                ("atanhf(-1.0)", "-1.0f", "0xff800000"),
+                ("atanhf(2.0)", "2.0f", "nan"),
+                ("atanhf(+Infinity)", "Float.POSITIVE_INFINITY", "nan"),
+                ("atanhf(-Infinity)", "Float.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("atanh(+0.0)", "0.0", "0x0000000000000000"),
+                ("atanh(-0.0)", "-0.0", "0x8000000000000000"),
+                ("atanh(1.0)", "1.0", "0x7ff0000000000000"),
+                ("atanh(-1.0)", "-1.0", "0xfff0000000000000"),
+                ("atanh(2.0)", "2.0", "nan"),
+                ("atanh(+Infinity)", "Double.POSITIVE_INFINITY", "nan"),
+                ("atanh(-Infinity)", "Double.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+    },
 }
 
 # the class name of the translation where it does not follow from the

@@ -69,9 +69,9 @@ rules that keep it that way.
 | `sinpi` | translated, tested | translated, tested | `src/binary{32,64}/sinpi` |
 | `cospi` | translated, tested | translated, tested | `src/binary{32,64}/cospi` |
 | `hypot` | translated, tests pending | translated, tests pending | `src/binary{32,64}/hypot` |
-| `asinh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/asinh` |
-| `acosh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/acosh` |
-| `atanh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atanh` |
+| `asinh` | translated, tested | translated, tested | `src/binary{32,64}/asinh` |
+| `acosh` | translated, tested | translated, tested | `src/binary{32,64}/acosh` |
+| `atanh` | translated, tested | translated, tested | `src/binary{32,64}/atanh` |
 | `erf` | translated, tests pending | translated, tests pending | `src/binary{32,64}/erf` |
 | `erfc` | translated, tests pending | translated, tests pending | `src/binary{32,64}/erfc` |
 | `tanpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tanpi` |

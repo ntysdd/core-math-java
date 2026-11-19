@@ -183,6 +183,22 @@ THRESHOLDS = {
         64: "compute(): e == 0x7ff, |x| >= 2^41, |x| >= 2^53, |x| <= 2^-12, "
             "0x1.2ccf6429be6621p-26, and the integer and half-integer tests",
     },
+    "asinh": {
+        32: "compute(): |x| against 0x1.02accep-2, 0x1.bb67aep-12 and the "
+            "inf/NaN bound",
+        64: "compute(): |x| against 0x1.bp-4, 0x1.7137449123ef7p-26, "
+            "0x1.3p-6, 2^-12, 0x1.ap-26, 2^26, 1 and 2^52",
+    },
+    "acosh": {
+        32: "compute(): x against 1, 0x1.99db23p-1 and the inf/NaN bound",
+        64: "compute(): x against 1, 0x1.1e83e425aee63p+0, 111.75, 738, "
+            "32896, 0x1.ap+31, 2^26 and 2^52",
+    },
+    "atanh": {
+        32: "compute(): ax = u<<1 against 0x7a300000, 0x73713744 and "
+            "0x7f000000, and |x| = 1, 1 < |x| and NaN through asSpecial()",
+        64: "compute(): |x| against 1, 0.25 and 0x1.d12ed0af1a27fp-27",
+    },
 }
 
 COLUMNS = {
@@ -812,13 +828,82 @@ def cospi_cases(width):
     return rows
 
 
+def asinh_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_asinhf: |x| against 0x1.02accep-2, 0x1.bb67aep-12 and the
+        # inf/NaN bound
+        for bits in (0x3e815667, 0x39ddb3d7, 0x7f800000):
+            rows += straddle_bits(bits, 32)
+        rows += signed(1.0, 32)
+        rows += near(1.0, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_asinh: |x| against 0x1.bp-4, 0x1.7137449123ef7p-26, 0x1.3p-6,
+        # 2^-12, 0x1.ap-26, 2^26, 1 and 2^52
+        for bits in (0x3fbb000000000000, 0x3e57137449123ef7,
+                     0x3f93000000000000, 0x3f30000000000000,
+                     0x3e5a000000000000, 0x4190000000000000,
+                     0x3ff0000000000000, 0x4330000000000000,
+                     0x7ff0000000000000):
+            rows += straddle_magnitude(bits, 64)
+        rows += signed(1.0, 64)
+        rows += near(1.0, 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def acosh_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_acoshf: x against 1, 0x1.99db23p-1 and the inf/NaN bound
+        for bits in (0x3f800000, 0x3f99db23, 0x7f800000):
+            rows += straddle_bits(bits, 32)
+        rows += signed(1.0, 32)
+        rows += near(1.0, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_acosh: x against 1, 0x1.1e83e425aee63p+0, 111.75, 738, 32896,
+        # 0x1.ap+31, 2^26 and 2^52
+        for bits in (0x3ff0000000000000, 0x3ff1e83e425aee63,
+                     0x405bf00000000000, 0x4087100000000000,
+                     0x40e0100000000000, 0x41ea000000000000,
+                     0x4190000000000000, 0x4330000000000000,
+                     0x7ff0000000000000):
+            rows += straddle_bits(bits, 64)
+        rows += near(1.0, 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def atanh_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_atanhf: ax = u<<1 against 0x7a300000, 0x73713744 and 0x7f000000
+        for ax in (0x7a300000, 0x73713744, 0x7f000000):
+            rows += straddle_ax(ax, 32)
+        rows += signed(2.0, 32)
+        rows += near(1.0, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_atanh: |x| against 1, 0.25 and 0x1.d12ed0af1a27fp-27
+        for bits in (0x3ff0000000000000, 0x3fd0000000000000,
+                     0x3e4d12ed0af1a27f, 0x7ff0000000000000):
+            rows += straddle_magnitude(bits, 64)
+        rows += near(1.0, 64)
+        rows += signed(2.0, 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
 BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "exp": exp_cases, "log": log_cases, "log2": log2_cases,
             "log10": log10_cases, "atan": atan_cases, "asin": asin_cases,
             "acos": acos_cases, "sinh": sinh_cases, "cosh": cosh_cases,
             "tanh": tanh_cases, "cbrt": cbrt_cases, "exp2": exp2_cases,
             "log1p": log1p_cases, "expm1": expm1_cases,
-            "sinpi": sinpi_cases, "cospi": cospi_cases}
+            "sinpi": sinpi_cases, "cospi": cospi_cases,
+            "asinh": asinh_cases, "acosh": acosh_cases, "atanh": atanh_cases}
 
 
 def directed(name, width):
