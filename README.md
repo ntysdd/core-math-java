@@ -17,8 +17,8 @@ All 42 functions that CORE-MATH provides for binary32 and all 41 that it
 provides for binary64 are translated, 83 entry points in all, and every one of
 them has been checked bit for bit against a local build of the C sources. The
 JUnit suite and its vector files are being filled in a few functions at a time:
-`sin`, `cos`, `tan`, `exp`, `log`, `log2` and `log10` have them, and the scope
-table below marks what is still pending.
+`sin`, `cos`, `tan`, `exp`, `log`, `log2`, `log10`, `atan`, `asin` and `acos`
+have them, and the scope table below marks what is still pending.
 
 ## What this is
 
@@ -54,12 +54,12 @@ rules that keep it that way.
 | `exp` | translated, tested | translated, tested | `src/binary{32,64}/exp` |
 | `log` | translated, tested | translated, tested | `src/binary{32,64}/log` |
 | `pow` | translated, tests pending | translated, tests pending | `src/binary{32,64}/pow` |
-| `atan` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atan` |
+| `atan` | translated, tested | translated, tested | `src/binary{32,64}/atan` |
 | `atan2` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atan2` |
 | `log2` | translated, tested | translated, tested | `src/binary{32,64}/log2` |
 | `log10` | translated, tested | translated, tested | `src/binary{32,64}/log10` |
-| `asin` | translated, tests pending | translated, tests pending | `src/binary{32,64}/asin` |
-| `acos` | translated, tests pending | translated, tests pending | `src/binary{32,64}/acos` |
+| `asin` | translated, tested | translated, tested | `src/binary{32,64}/asin` |
+| `acos` | translated, tested | translated, tested | `src/binary{32,64}/acos` |
 | `sinh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sinh` |
 | `cosh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cosh` |
 | `tanh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tanh` |

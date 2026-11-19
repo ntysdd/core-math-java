@@ -103,6 +103,28 @@ THRESHOLDS = {
         64: "compute(): e = (v>>52)-0x3ff against 0x400 and -0x3ff, and "
             "v == pow10[n] (the powers of ten); the rounding test",
     },
+    "atan": {
+        32: "compute(): ta = u&0x7fffffff against 0x4c700518 and "
+            "0x7f800000, e against 127-13 and 127-25, and the |x| >= 1 "
+            "switch of the reduction",
+        64: "compute(): |x| against 0x1.b21c475e6362ap-8, 2^-27, "
+            "0x1.2ded8e34a9035p+7, 0x1.d02967c31cdb5p+53 and 0x7ff<<52; "
+            "asAtanRefine2(): i == 0 and i == 128 of the reduction",
+    },
+    "asin": {
+        32: "compute(): ax = u<<1 against 0x7f<<24, 0x7ec29000, 115<<24 and "
+            "0x7e<<24, and the entries 0x7e55688a and 0x7e107434 "
+            "(0x1.75b8a2p-1 and 0x1.1f4b64p-1) of the accurate path",
+        64: "compute(): ax = ix<<1 against 0x7fc0<<48, 0x7fe0<<48, "
+            "0xffe0<<48 and 0x1.7137449123ef6p-26",
+    },
+    "acos": {
+        32: "compute(): ax = u<<1 against 0x7f<<24, 0x7ec2a1dc, 0x40000000 "
+            "and 0x7e<<24, and the entries 0x328885a3 and 0x39826222 of the "
+            "accurate path",
+        64: "compute(): ax = ix<<1 against 0x7fc0<<48, 0x7fe0<<48, "
+            "0xffe0<<48, 2^-15 and x0 = 0x1.cb3b3869747f4p-55",
+    },
 }
 
 COLUMNS = {
@@ -410,9 +432,81 @@ def log10_cases(width):
     return rows
 
 
+def atan_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_atanf: ta = u&0x7fffffff against 0x4c700518 and 0x7f800000,
+        # then e = (u>>23)&0xff against 127-13 and 127-25
+        rows += straddle_bits(0x4c700518, 32)
+        rows += straddle_magnitude(0x7f800000, 32)
+        for e in (0x7f - 13, 0x7f - 25):
+            rows += straddle_exponent(e, 32)
+        rows += signed(1.0, 32)
+        rows += near(1.0, 32)
+    else:
+        # cr_atan: |x| against 0x1.b21c475e6362ap-8, 2^-27,
+        # 0x1.2ded8e34a9035p+7, 0x1.d02967c31cdb5p+53 and the NaN bound
+        for bits in (0x3f7b21c475e6362a, 0x3e40000000000000,
+                     0x4062ded8e34a9035, 0x434d02967c31cdb5,
+                     0x7ff0000000000000):
+            rows += straddle_magnitude(bits, 64)
+        rows += signed(1.0, 64)
+        rows += near(1.0, 64)
+    return rows
+
+
+def asin_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_asinf: ax = u<<1 against 0x7f<<24, 0x7ec29000, 115<<24 and
+        # 0x7e<<24, and the two exceptional entries of the accurate path
+        for ax in (0x7f << 24, 0x7ec29000, 115 << 24, 0x7e << 24):
+            rows += straddle_ax(ax, 32)
+        for ax in (0x7e55688a, 0x7e107434):
+            rows += straddle_ax(ax, 32)
+        rows += signed(1.0, 32)
+        rows += near(1.0, 32)
+        rows += near(-1.0, 32)
+    else:
+        # cr_asin: ax = ix<<1 against 0x7fc0<<48 (|x| > 0.5), 0x7fe0<<48
+        # (|x| >= 1), 0xffe0<<48 (NaN) and 0x1.7137449123ef6p-26
+        for ax in (0x7fc0000000000000, 0x7fe0000000000000, 0xffe0000000000000,
+                   0x7cae26e892247dec):
+            rows += straddle_ax(ax, 64)
+        rows += signed(1.0, 64)
+        rows += near(1.0, 64)
+        rows += near(-1.0, 64)
+    return rows
+
+
+def acos_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_acosf: ax = u<<1 against 0x7f<<24, 0x7ec2a1dc, 0x40000000 and
+        # 0x7e<<24, and the two exceptional entries compared on the raw bits
+        for ax in (0x7f << 24, 0x7ec2a1dc, 0x40000000, 0x7e << 24):
+            rows += straddle_ax(ax, 32)
+        for bits in (0x328885a3, 0x39826222):
+            rows += straddle_bits(bits, 32)
+        rows += signed(1.0, 32)
+        rows += near(1.0, 32)
+        rows += near(-1.0, 32)
+    else:
+        # cr_acos: ax against 0x7fc0<<48, 0x7fe0<<48, 0xffe0<<48, 2^-15 and
+        # x0 = 0x1.cb3b3869747f4p-55
+        for ax in (0x7fc0000000000000, 0x7fe0000000000000, 0xffe0000000000000,
+                   0x7e00000000000000, 0x791967670d2e8fe8):
+            rows += straddle_ax(ax, 64)
+        rows += signed(1.0, 64)
+        rows += near(1.0, 64)
+        rows += near(-1.0, 64)
+    return rows
+
+
 BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "exp": exp_cases, "log": log_cases, "log2": log2_cases,
-            "log10": log10_cases}
+            "log10": log10_cases, "atan": atan_cases, "asin": asin_cases,
+            "acos": acos_cases}
 
 
 def directed(name, width):
