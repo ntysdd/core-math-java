@@ -746,6 +746,98 @@ SPEC = {
             ],
         },
     },
+    "exp10m1": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("exp10m1f(+0.0)", "0.0f", "0x00000000"),
+                ("exp10m1f(-0.0)", "-0.0f", "0x80000000"),
+                ("exp10m1f(1.0)", "1.0f", "0x41100000"),
+                ("exp10m1f(-1.0)", "-1.0f", "0xbf666666"),
+                ("exp10m1f(+Infinity)", "Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("exp10m1f(-Infinity)", "Float.NEGATIVE_INFINITY", "0xbf800000"),
+                ("exp10m1f(Float.MAX_VALUE)", "Float.MAX_VALUE", "0x7f800000"),
+                ("exp10m1f(-Float.MAX_VALUE)", "-Float.MAX_VALUE", "0xbf800000"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("exp10m1(+0.0)", "0.0", "0x0000000000000000"),
+                ("exp10m1(-0.0)", "-0.0", "0x8000000000000000"),
+                ("exp10m1(1.0)", "1.0", "0x4022000000000000"),
+                ("exp10m1(-1.0)", "-1.0", "0xbfeccccccccccccd"),
+                ("exp10m1(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("exp10m1(-Infinity)", "Double.NEGATIVE_INFINITY",
+                 "0xbff0000000000000"),
+                ("exp10m1(Double.MAX_VALUE)", "Double.MAX_VALUE",
+                 "0x7ff0000000000000"),
+                ("exp10m1(-Double.MAX_VALUE)", "-Double.MAX_VALUE",
+                 "0xbff0000000000000"),
+            ],
+        },
+    },
+    "log10p1": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("log10p1f(+0.0)", "0.0f", "0x00000000"),
+                ("log10p1f(-0.0)", "-0.0f", "0x80000000"),
+                ("log10p1f(1.0)", "1.0f", "0x3e9a209b"),
+                ("log10p1f(-1.0)", "-1.0f", "0xff800000"),
+                ("log10p1f(-2.0)", "-2.0f", "nan"),
+                ("log10p1f(+Infinity)", "Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("log10p1f(-Infinity)", "Float.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("log10p1(+0.0)", "0.0", "0x0000000000000000"),
+                ("log10p1(-0.0)", "-0.0", "0x8000000000000000"),
+                ("log10p1(1.0)", "1.0", "0x3fd34413509f79ff"),
+                ("log10p1(-1.0)", "-1.0", "0xfff0000000000000"),
+                ("log10p1(-2.0)", "-2.0", "nan"),
+                ("log10p1(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("log10p1(-Infinity)", "Double.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+    },
+    "log2p1": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("log2p1f(+0.0)", "0.0f", "0x00000000"),
+                ("log2p1f(-0.0)", "-0.0f", "0x80000000"),
+                ("log2p1f(1.0)", "1.0f", "0x3f800000"),
+                ("log2p1f(-1.0)", "-1.0f", "0xff800000"),
+                ("log2p1f(-2.0)", "-2.0f", "nan"),
+                ("log2p1f(+Infinity)", "Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("log2p1f(-Infinity)", "Float.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("log2p1(+0.0)", "0.0", "0x0000000000000000"),
+                ("log2p1(-0.0)", "-0.0", "0x8000000000000000"),
+                ("log2p1(1.0)", "1.0", "0x3ff0000000000000"),
+                ("log2p1(-1.0)", "-1.0", "0xfff0000000000000"),
+                ("log2p1(-2.0)", "-2.0", "nan"),
+                ("log2p1(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("log2p1(-Infinity)", "Double.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+    },
 }
 
 # the class name of the translation where it does not follow from the

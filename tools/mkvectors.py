@@ -256,6 +256,24 @@ THRESHOLDS = {
         64: "compute(): the raw bits against -54, 1024, -Inf/NaN, 2^-51, "
             "2^-54 and 0.125",
     },
+    "exp10m1": {
+        32: "compute(): the raw bits against -7.52575, the magnitude against "
+            "the overflow bound, and the nine-step ladder of small arguments",
+        64: "compute(): the raw bits against -0x1.041704c068efp+4, the "
+            "overflow bound, 2^-54, 0.0625, 2^-46 and -Inf/NaN",
+    },
+    "log10p1": {
+        32: "compute(): the raw bits against -1, +Inf and NaN, the magnitude "
+            "against 2^-25 and 2^-11, and the powers of ten of st[]",
+        64: "compute(): x <= -1, x = -1, x = 0, the NaN/Inf branch and the "
+            "0x16a09e667f3bcd bound of the reduction",
+    },
+    "log2p1": {
+        32: "compute(): the raw bits against -1, +Inf and NaN, the magnitude "
+            "against 0.0234375 and 0x1p-126*ln(2)",
+        64: "compute(): x <= -1, x = -1, x = 0, the NaN/Inf branch and the "
+            "0x16a09e667f3bcd bound of the reduction",
+    },
 }
 
 COLUMNS = {
@@ -1181,6 +1199,87 @@ def exp2m1_cases(width):
     return rows
 
 
+def exp10m1_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_exp10m1f: the raw bits against -7.52575, the magnitude against
+        # the overflow bound and the nine-step ladder of small arguments
+        rows += straddle_bits(0xc0f0d2f1, 32)
+        for ax in (0x421a209a, 0x3d89c604, 0x3d1622fb, 0x3c8b76a3,
+                   0x3bcced04, 0x3acf33eb, 0x395a966b, 0x36fe4a4b,
+                   0x32407f39, 0x245e5bd9):
+            rows += straddle_magnitude(ax, 32)
+        for bits in (0x2c994b7b, 0xb6fa215b, 0xff800000):
+            rows += straddle_bits(bits, 32)
+        rows += signed(1.0, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_exp10m1: the raw bits against -0x1.041704c068efp+4, the overflow
+        # bound, 2^-54, 0.0625, 2^-46 and -Inf/NaN
+        for bits in (0xc03041704c068ef0, 0x40734413509f79fe,
+                     0x3c90000000000000, 0x3fb0000000000000,
+                     0x3970000000000000, 0xfff0000000000000):
+            rows += straddle_bits(bits, 64)
+        rows += signed(1.0, 64)
+        rows += signed(float.fromhex("0x1p-1022"), 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def log10p1_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_log10p1f: the raw bits against -1, +Inf and NaN, the magnitude
+        # against 2^-25 and 2^-11, and the powers of ten of st[]
+        for bits in (0xbf800000, 0x7f800000, 0xff000000):
+            rows += straddle_bits(bits, 32)
+        for ax in (0x33000000, 0x3d100000):
+            rows += straddle_magnitude(ax, 32)
+        rows += near(-1.0, 32)
+        rows += signed(-0.5, 32)
+        rows += signed(0.5, 32)
+        for n in range(-30, 31, 6):
+            rows += signed(float("1e%d" % n), 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        rows += near(-1.0, 64)
+        rows += straddle_bits(0x16a09e667f3bcd, 64)
+        rows += signed(-0.5, 64)
+        rows += signed(0.5, 64)
+        rows += signed(1.0, 64)
+        for n in range(-300, 301, 60):
+            rows += signed(float("1e%d" % n), 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def log2p1_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_log2p1f: the raw bits against -1, +Inf and NaN, the magnitude
+        # against 0.0234375 and 0x1p-126*ln(2), and the powers of two
+        for bits in (0xbf800000, 0x7f800000, 0xff000000):
+            rows += straddle_bits(bits, 32)
+        for ax in (0x3cc00000, 0x58b90b):
+            rows += straddle_magnitude(ax, 32)
+        rows += near(-1.0, 32)
+        rows += signed(-0.5, 32)
+        rows += signed(0.5, 32)
+        for k in range(-30, 31, 6):
+            rows += signed(math.ldexp(1.0, k), 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        rows += near(-1.0, 64)
+        rows += straddle_bits(0x16a09e667f3bcd, 64)
+        rows += signed(-0.5, 64)
+        rows += signed(0.5, 64)
+        rows += signed(1.0, 64)
+        for k in range(-300, 301, 60):
+            rows += signed(math.ldexp(1.0, k), 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
 BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "exp": exp_cases, "log": log_cases, "log2": log2_cases,
             "log10": log10_cases, "atan": atan_cases, "asin": asin_cases,
@@ -1192,7 +1291,9 @@ BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "erf": erf_cases, "erfc": erfc_cases, "tanpi": tanpi_cases,
             "atanpi": atanpi_cases, "asinpi": asinpi_cases,
             "acospi": acospi_cases, "rsqrt": rsqrt_cases,
-            "exp10": exp10_cases, "exp2m1": exp2m1_cases}
+            "exp10": exp10_cases, "exp2m1": exp2m1_cases,
+            "exp10m1": exp10m1_cases, "log10p1": log10p1_cases,
+            "log2p1": log2p1_cases}
 
 
 def directed(name, width):
