@@ -52,34 +52,50 @@ class Atan2Test {
     assertBits(0x4002d97c7f3321d2L, CrMath.atan2(1.0, -1.0), "atan2(1.0, -1.0)");
     assertBits(0x3ff921fb54442d18L, CrMath.atan2(1.0, 0.0), "atan2(1.0, 0.0)");
     assertBits(0xbff921fb54442d18L, CrMath.atan2(-1.0, 0.0), "atan2(-1.0, 0.0)");
-    assertBits(0x3fe921fb54442d18L, CrMath.atan2(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY), "atan2(+Infinity, +Infinity)");
-    assertBits(0x0000000000000000L, CrMath.atan2(1.0, Double.POSITIVE_INFINITY), "atan2(1.0, +Infinity)");
-    assertTrue(Double.isNaN(CrMath.atan2(Double.longBitsToDouble(0x7ff8000000000000L), 1.0)), "atan2(NaN, 1.0)");
-    assertTrue(Double.isNaN(CrMath.atan2(Double.longBitsToDouble(0x7ff8000000000000L), 1.0)),
+    assertBits(0x3fe921fb54442d18L,
+        CrMath.atan2(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
+        "atan2(+Infinity, +Infinity)");
+    assertBits(0x0000000000000000L,
+        CrMath.atan2(1.0, Double.POSITIVE_INFINITY),
+        "atan2(1.0, +Infinity)");
+    assertTrue(Double.isNaN(
+        CrMath.atan2(Double.longBitsToDouble(0x7ff8000000000000L), 1.0)),
+        "atan2(NaN, 1.0)");
+    assertTrue(Double.isNaN(
+        CrMath.atan2(Double.longBitsToDouble(0x7ff8000000000000L), 1.0)),
         "atan2(0x7ff8000000000000, 1.0): quiet NaN");
-    assertTrue(Double.isNaN(CrMath.atan2(Double.longBitsToDouble(0x7ff0000000000001L), 1.0)),
+    assertTrue(Double.isNaN(
+        CrMath.atan2(Double.longBitsToDouble(0x7ff0000000000001L), 1.0)),
         "atan2(0x7ff0000000000001, 1.0): signalling NaN, smallest payload");
-    assertTrue(Double.isNaN(CrMath.atan2(Double.longBitsToDouble(0xfff8000000000001L), 1.0)),
+    assertTrue(Double.isNaN(
+        CrMath.atan2(Double.longBitsToDouble(0xfff8000000000001L), 1.0)),
         "atan2(0xfff8000000000001, 1.0): negative NaN with a payload");
-    assertTrue(Double.isNaN(CrMath.atan2(Double.longBitsToDouble(0x7fffffffffffffffL), 1.0)),
+    assertTrue(Double.isNaN(
+        CrMath.atan2(Double.longBitsToDouble(0x7fffffffffffffffL), 1.0)),
         "atan2(0x7fffffffffffffff, 1.0): NaN with every payload bit set");
   }
 
   @ParameterizedTest
   @MethodSource("directed")
   void directedCases(long y, long x, long expected) {
-    assertBits(expected, CrMath.atan2(Double.longBitsToDouble(y), Double.longBitsToDouble(x)), hex(y, x));
+    assertBits(expected,
+        CrMath.atan2(Double.longBitsToDouble(y), Double.longBitsToDouble(x)),
+        hex(y, x));
   }
 
   @ParameterizedTest
   @MethodSource("worstCases")
   void upstreamWorstCases(long y, long x, long expected) {
-    assertBits(expected, CrMath.atan2(Double.longBitsToDouble(y), Double.longBitsToDouble(x)), hex(y, x));
+    assertBits(expected,
+        CrMath.atan2(Double.longBitsToDouble(y), Double.longBitsToDouble(x)),
+        hex(y, x));
   }
 
   @ParameterizedTest
   @MethodSource("random")
   void randomSweep(long y, long x, long expected) {
-    assertBits(expected, CrMath.atan2(Double.longBitsToDouble(y), Double.longBitsToDouble(x)), hex(y, x));
+    assertBits(expected,
+        CrMath.atan2(Double.longBitsToDouble(y), Double.longBitsToDouble(x)),
+        hex(y, x));
   }
 }

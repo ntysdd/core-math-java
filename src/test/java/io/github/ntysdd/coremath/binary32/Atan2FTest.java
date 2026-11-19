@@ -52,34 +52,50 @@ class Atan2FTest {
     assertBits(0x4016cbe4L, CrMath.atan2(1.0f, -1.0f), "atan2f(1.0f, -1.0f)");
     assertBits(0x3fc90fdbL, CrMath.atan2(1.0f, 0.0f), "atan2f(1.0f, 0.0f)");
     assertBits(0xbfc90fdbL, CrMath.atan2(-1.0f, 0.0f), "atan2f(-1.0f, 0.0f)");
-    assertBits(0x3f490fdbL, CrMath.atan2(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY), "atan2f(+Infinity, +Infinity)");
-    assertBits(0x00000000L, CrMath.atan2(1.0f, Float.POSITIVE_INFINITY), "atan2f(1.0f, +Infinity)");
-    assertTrue(Float.isNaN(CrMath.atan2(Float.intBitsToFloat(0x7fc00000), 1.0f)), "atan2f(NaN, 1.0f)");
-    assertTrue(Float.isNaN(CrMath.atan2(Float.intBitsToFloat(0x7fc00000), 1.0f)),
+    assertBits(0x3f490fdbL,
+        CrMath.atan2(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY),
+        "atan2f(+Infinity, +Infinity)");
+    assertBits(0x00000000L,
+        CrMath.atan2(1.0f, Float.POSITIVE_INFINITY),
+        "atan2f(1.0f, +Infinity)");
+    assertTrue(Float.isNaN(
+        CrMath.atan2(Float.intBitsToFloat(0x7fc00000), 1.0f)),
+        "atan2f(NaN, 1.0f)");
+    assertTrue(Float.isNaN(
+        CrMath.atan2(Float.intBitsToFloat(0x7fc00000), 1.0f)),
         "atan2f(0x7fc00000, 1.0): quiet NaN");
-    assertTrue(Float.isNaN(CrMath.atan2(Float.intBitsToFloat(0x7f800001), 1.0f)),
+    assertTrue(Float.isNaN(
+        CrMath.atan2(Float.intBitsToFloat(0x7f800001), 1.0f)),
         "atan2f(0x7f800001, 1.0): signalling NaN, smallest payload");
-    assertTrue(Float.isNaN(CrMath.atan2(Float.intBitsToFloat(0xffc00001), 1.0f)),
+    assertTrue(Float.isNaN(
+        CrMath.atan2(Float.intBitsToFloat(0xffc00001), 1.0f)),
         "atan2f(0xffc00001, 1.0): negative NaN with a payload");
-    assertTrue(Float.isNaN(CrMath.atan2(Float.intBitsToFloat(0x7fffffff), 1.0f)),
+    assertTrue(Float.isNaN(
+        CrMath.atan2(Float.intBitsToFloat(0x7fffffff), 1.0f)),
         "atan2f(0x7fffffff, 1.0): NaN with every payload bit set");
   }
 
   @ParameterizedTest
   @MethodSource("directed")
   void directedCases(long y, long x, long expected) {
-    assertBits(expected, CrMath.atan2(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)), hex(y, x));
+    assertBits(expected,
+        CrMath.atan2(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)),
+        hex(y, x));
   }
 
   @ParameterizedTest
   @MethodSource("worstCases")
   void upstreamWorstCases(long y, long x, long expected) {
-    assertBits(expected, CrMath.atan2(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)), hex(y, x));
+    assertBits(expected,
+        CrMath.atan2(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)),
+        hex(y, x));
   }
 
   @ParameterizedTest
   @MethodSource("random")
   void randomSweep(long y, long x, long expected) {
-    assertBits(expected, CrMath.atan2(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)), hex(y, x));
+    assertBits(expected,
+        CrMath.atan2(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)),
+        hex(y, x));
   }
 }

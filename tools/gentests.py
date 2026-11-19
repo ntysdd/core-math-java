@@ -1183,11 +1183,13 @@ def special(name, width, arity):
     lines = []
     for label, expr, expected in spec["special"]:
         if expected == "nan":
-            lines.append('    assertTrue(%s.isNaN(CrMath.%s(%s)), "%s");'
-                         % (box, name, expr, label))
+            lines += assert_line("assertTrue(%s.isNaN(" % box,
+                                 "CrMath.%s(%s)" % (name, expr), ")",
+                                 '"%s");' % label)
         else:
-            lines.append('    assertBits(%sL, CrMath.%s(%s), "%s");'
-                         % (expected, name, expr, label))
+            lines += assert_line("assertBits(%sL, " % expected,
+                                 "CrMath.%s(%s)" % (name, expr), "",
+                                 '"%s");' % label)
     conv = ("Float.intBitsToFloat" if width == 32 else "Double.longBitsToDouble")
     payloads = (["0x7fc00000", "0x7f800001", "0xffc00001", "0x7fffffff"]
                 if width == 32 else
@@ -1206,27 +1208,42 @@ def special(name, width, arity):
                 name, conv, payload, "1.0f" if width == 32 else "1.0")
             msg = '"%s(%s, 1.0): %s"' % (name + ("f" if width == 32 else ""),
                                           flat, label)
-        lines.append('    assertTrue(%s.isNaN(%s),' % (box, call))
-        lines.append('        %s);' % msg)
+        lines += assert_line("assertTrue(%s.isNaN(" % box, call, ")",
+                             "%s);" % msg)
     return lines
+
+
+def assert_line(pre, call, closer, tail):
+    """An assertion on one line, or on three when it does not fit.
+
+    The two-argument functions have calls that push a one-line assertion past
+    100 columns.  `pre` is the text before the call and keeps its trailing
+    separator, `closer` is what closes the parenthesis the call sits in, if
+    any, and `tail` is the rest.
+    """
+    line = "    %s%s%s, %s" % (pre, call, closer, tail)
+    if len(line) <= 96:
+        return [line]
+    return ["    %s" % pre.rstrip(),
+            "        %s%s," % (call, closer),
+            "        %s" % tail]
 
 
 def checks(name, width, arity, params, arg):
     call_expr = call(name, width, arity)
+    body = "\n".join(assert_line("assertBits(expected, ", call_expr, "",
+                                 "hex(%s));" % arg))
     directed = ("  @ParameterizedTest\n  @MethodSource(\"directed\")\n"
-                "  void directedCases(%s) {\n"
-                "    assertBits(expected, %s, hex(%s));\n  }\n\n"
-                % (params, call_expr, arg))
+                "  void directedCases(%s) {\n%s\n  }\n\n"
+                % (params, body))
     worst = ""
     if SPEC[name][width]["worst"]:
         worst = ("  @ParameterizedTest\n  @MethodSource(\"worstCases\")\n"
-                 "  void upstreamWorstCases(%s) {\n"
-                 "    assertBits(expected, %s, hex(%s));\n  }\n\n"
-                 % (params, call_expr, arg))
+                 "  void upstreamWorstCases(%s) {\n%s\n  }\n\n"
+                 % (params, body))
     random = ("  @ParameterizedTest\n  @MethodSource(\"random\")\n"
-              "  void randomSweep(%s) {\n"
-              "    assertBits(expected, %s, hex(%s));\n  }\n}\n"
-              % (params, call_expr, arg))
+              "  void randomSweep(%s) {\n%s\n  }\n}\n"
+              % (params, body))
     return directed + worst + random
 
 

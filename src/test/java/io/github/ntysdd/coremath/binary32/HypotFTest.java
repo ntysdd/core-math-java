@@ -48,35 +48,53 @@ class HypotFTest {
     assertBits(0x00000000L, CrMath.hypot(-0.0f, -0.0f), "hypotf(-0.0f, -0.0f)");
     assertBits(0x40a00000L, CrMath.hypot(3.0f, 4.0f), "hypotf(3.0f, 4.0f)");
     assertBits(0x3fb504f3L, CrMath.hypot(1.0f, 1.0f), "hypotf(1.0f, 1.0f)");
-    assertBits(0x7f800000L, CrMath.hypot(Float.POSITIVE_INFINITY, Float.intBitsToFloat(0x7fc00000)), "hypotf(+Infinity, NaN)");
-    assertBits(0x7f800000L, CrMath.hypot(Float.intBitsToFloat(0x7fc00000), Float.POSITIVE_INFINITY), "hypotf(NaN, +Infinity)");
-    assertTrue(Float.isNaN(CrMath.hypot(1.0f, Float.intBitsToFloat(0x7fc00000))), "hypotf(1.0f, NaN)");
-    assertBits(0x7f800000L, CrMath.hypot(Float.MAX_VALUE, Float.MAX_VALUE), "hypotf(Float.MAX_VALUE, Float.MAX_VALUE)");
-    assertTrue(Float.isNaN(CrMath.hypot(Float.intBitsToFloat(0x7fc00000), 1.0f)),
+    assertBits(0x7f800000L,
+        CrMath.hypot(Float.POSITIVE_INFINITY, Float.intBitsToFloat(0x7fc00000)),
+        "hypotf(+Infinity, NaN)");
+    assertBits(0x7f800000L,
+        CrMath.hypot(Float.intBitsToFloat(0x7fc00000), Float.POSITIVE_INFINITY),
+        "hypotf(NaN, +Infinity)");
+    assertTrue(Float.isNaN(
+        CrMath.hypot(1.0f, Float.intBitsToFloat(0x7fc00000))),
+        "hypotf(1.0f, NaN)");
+    assertBits(0x7f800000L,
+        CrMath.hypot(Float.MAX_VALUE, Float.MAX_VALUE),
+        "hypotf(Float.MAX_VALUE, Float.MAX_VALUE)");
+    assertTrue(Float.isNaN(
+        CrMath.hypot(Float.intBitsToFloat(0x7fc00000), 1.0f)),
         "hypotf(0x7fc00000, 1.0): quiet NaN");
-    assertTrue(Float.isNaN(CrMath.hypot(Float.intBitsToFloat(0x7f800001), 1.0f)),
+    assertTrue(Float.isNaN(
+        CrMath.hypot(Float.intBitsToFloat(0x7f800001), 1.0f)),
         "hypotf(0x7f800001, 1.0): signalling NaN, smallest payload");
-    assertTrue(Float.isNaN(CrMath.hypot(Float.intBitsToFloat(0xffc00001), 1.0f)),
+    assertTrue(Float.isNaN(
+        CrMath.hypot(Float.intBitsToFloat(0xffc00001), 1.0f)),
         "hypotf(0xffc00001, 1.0): negative NaN with a payload");
-    assertTrue(Float.isNaN(CrMath.hypot(Float.intBitsToFloat(0x7fffffff), 1.0f)),
+    assertTrue(Float.isNaN(
+        CrMath.hypot(Float.intBitsToFloat(0x7fffffff), 1.0f)),
         "hypotf(0x7fffffff, 1.0): NaN with every payload bit set");
   }
 
   @ParameterizedTest
   @MethodSource("directed")
   void directedCases(long y, long x, long expected) {
-    assertBits(expected, CrMath.hypot(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)), hex(y, x));
+    assertBits(expected,
+        CrMath.hypot(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)),
+        hex(y, x));
   }
 
   @ParameterizedTest
   @MethodSource("worstCases")
   void upstreamWorstCases(long y, long x, long expected) {
-    assertBits(expected, CrMath.hypot(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)), hex(y, x));
+    assertBits(expected,
+        CrMath.hypot(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)),
+        hex(y, x));
   }
 
   @ParameterizedTest
   @MethodSource("random")
   void randomSweep(long y, long x, long expected) {
-    assertBits(expected, CrMath.hypot(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)), hex(y, x));
+    assertBits(expected,
+        CrMath.hypot(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)),
+        hex(y, x));
   }
 }

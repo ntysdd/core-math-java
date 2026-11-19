@@ -48,39 +48,55 @@ class PowFTest {
     assertBits(0x7f800000L, CrMath.pow(0.0f, -1.0f), "powf(0.0f, -1.0f)");
     assertBits(0xff800000L, CrMath.pow(-0.0f, -1.0f), "powf(-0.0f, -1.0f)");
     assertBits(0x7f800000L, CrMath.pow(-0.0f, -2.0f), "powf(-0.0f, -2.0f)");
-    assertBits(0x3f800000L, CrMath.pow(1.0f, Float.intBitsToFloat(0x7fc00000)), "powf(1.0f, NaN)");
-    assertBits(0x3f800000L, CrMath.pow(Float.intBitsToFloat(0x7fc00000), 0.0f), "powf(NaN, 0.0f)");
-    assertBits(0x3f800000L, CrMath.pow(-1.0f, Float.POSITIVE_INFINITY), "powf(-1.0f, +Infinity)");
+    assertBits(0x3f800000L,
+        CrMath.pow(1.0f, Float.intBitsToFloat(0x7fc00000)),
+        "powf(1.0f, NaN)");
+    assertBits(0x3f800000L,
+        CrMath.pow(Float.intBitsToFloat(0x7fc00000), 0.0f),
+        "powf(NaN, 0.0f)");
+    assertBits(0x3f800000L,
+        CrMath.pow(-1.0f, Float.POSITIVE_INFINITY),
+        "powf(-1.0f, +Infinity)");
     assertBits(0x3f800000L, CrMath.pow(Float.POSITIVE_INFINITY, 0.0f), "powf(+Infinity, 0.0f)");
     assertBits(0x44800000L, CrMath.pow(2.0f, 10.0f), "powf(2.0f, 10.0f)");
     assertBits(0x3f000000L, CrMath.pow(2.0f, -1.0f), "powf(2.0f, -1.0f)");
     assertBits(0xc1000000L, CrMath.pow(-2.0f, 3.0f), "powf(-2.0f, 3.0f)");
     assertTrue(Float.isNaN(CrMath.pow(-2.0f, 0.5f)), "powf(-2.0f, 0.5f)");
-    assertTrue(Float.isNaN(CrMath.pow(Float.intBitsToFloat(0x7fc00000), 1.0f)),
+    assertTrue(Float.isNaN(
+        CrMath.pow(Float.intBitsToFloat(0x7fc00000), 1.0f)),
         "powf(0x7fc00000, 1.0): quiet NaN");
-    assertTrue(Float.isNaN(CrMath.pow(Float.intBitsToFloat(0x7f800001), 1.0f)),
+    assertTrue(Float.isNaN(
+        CrMath.pow(Float.intBitsToFloat(0x7f800001), 1.0f)),
         "powf(0x7f800001, 1.0): signalling NaN, smallest payload");
-    assertTrue(Float.isNaN(CrMath.pow(Float.intBitsToFloat(0xffc00001), 1.0f)),
+    assertTrue(Float.isNaN(
+        CrMath.pow(Float.intBitsToFloat(0xffc00001), 1.0f)),
         "powf(0xffc00001, 1.0): negative NaN with a payload");
-    assertTrue(Float.isNaN(CrMath.pow(Float.intBitsToFloat(0x7fffffff), 1.0f)),
+    assertTrue(Float.isNaN(
+        CrMath.pow(Float.intBitsToFloat(0x7fffffff), 1.0f)),
         "powf(0x7fffffff, 1.0): NaN with every payload bit set");
   }
 
   @ParameterizedTest
   @MethodSource("directed")
   void directedCases(long y, long x, long expected) {
-    assertBits(expected, CrMath.pow(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)), hex(y, x));
+    assertBits(expected,
+        CrMath.pow(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)),
+        hex(y, x));
   }
 
   @ParameterizedTest
   @MethodSource("worstCases")
   void upstreamWorstCases(long y, long x, long expected) {
-    assertBits(expected, CrMath.pow(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)), hex(y, x));
+    assertBits(expected,
+        CrMath.pow(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)),
+        hex(y, x));
   }
 
   @ParameterizedTest
   @MethodSource("random")
   void randomSweep(long y, long x, long expected) {
-    assertBits(expected, CrMath.pow(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)), hex(y, x));
+    assertBits(expected,
+        CrMath.pow(Float.intBitsToFloat((int) y), Float.intBitsToFloat((int) x)),
+        hex(y, x));
   }
 }
