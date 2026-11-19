@@ -111,8 +111,8 @@ translation. Nothing beyond the table is planned on this side.
 
 ## Usage
 
-The API. See the scope table for which functions exist so far in which binary
-format:
+The API. The scope table below lists the functions and says in which binary
+format each of them exists:
 
 ```java
 import io.github.ntysdd.coremath.CrMath;
@@ -133,7 +133,9 @@ code returns the bits the C code returns.
 
 Every function is checked against a local build of upstream, and the JUnit
 suite repeats that check on the vectors committed under
-`src/test/resources/vectors`. Three sets make up a function's vectors:
+`src/test/resources/vectors`. Three sets make up a function's vectors, and for
+the one-argument binary32 functions a fourth pass adds the double-rounding
+frontier to the directed section:
 
 1. The directed cases: the special values of `AGENTS.md` section 5.1, both
    sides of every comparison threshold of the translation, and the exceptional
@@ -144,15 +146,15 @@ suite repeats that check on the vectors committed under
    `0x9e3779b97f4a7c15`, the seed the generator and the test share. The test
    recomputes the inputs and fails if a row does not match them, so a
    hand-edited sweep cannot pass unnoticed.
-4. For binary32, the double-rounding frontier: the inputs of the whole binary32
-   domain where the float result and the binary64 result rounded to float
-   disagree, found by `tools/cmref --frontier`. Those are the inputs where the
-   correctly rounded float result is decided by the last bit, the closest
-   thing binary32 has to an upstream `.wc` file, and they go into the directed
-   section. The scan walks the domain of a one-argument function; the
-   two-argument ones (`atan2`, `atan2pi`, `hypot`, `pow`, `compound`) have 2^64
-   argument pairs and their headers say `double rounding: no scan` rather than
-   quoting a count.
+4. For the one-argument functions, the binary32 double-rounding frontier: the
+   inputs of the whole binary32 domain where the float result and the binary64
+   result rounded to float disagree, found by `tools/cmref --frontier`. Those
+   are the inputs where the correctly rounded float result is decided by the
+   last bit, the closest thing binary32 has to an upstream `.wc` file, and they
+   go into the directed section. The scan walks the domain of a one-argument
+   function; the two-argument ones (`atan2`, `atan2pi`, `hypot`, `pow`,
+   `compound`) have 2^64 argument pairs and their headers say
+   `double rounding: no scan` rather than quoting a count.
 
 A vector file has one section per set, introduced by a `#---` marker, with one
 case per line: the input arguments and the expected results as hexadecimal bit
@@ -173,10 +175,12 @@ python3 tools/mkvectors.py --all
 `tools/cmref/cmref.c` is one small driver over the upstream entry points, built
 with the reference flags (`-O2 -ffp-contract=off -mfma`). Neither the driver
 nor its built binary is part of the Maven build, and the binary is not
-committed. `tools/gentests.py` writes the JUnit classes from a small table of
-function names and special values, so that the classes that differ in nothing
-but those stay consistent; it is a development aid as well and never runs under
-Maven.
+committed. `tools/gentests.py` writes the JUnit classes from a small table of function
+names and special values, so that the classes that differ in nothing but those
+stay consistent; it is a development aid as well and never runs under Maven.
+Both generators are idempotent: their `--all` form reproduces what is committed,
+byte for byte, so a diff after regenerating one function is the change that
+function actually needs.
 
 Large runs, such as the exhaustive sweep of all 2^32 binary32 inputs or a long
 random sweep for binary64, stay offline in chunks: the same driver prints the
