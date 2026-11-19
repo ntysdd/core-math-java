@@ -1,5 +1,7 @@
 # core-math-java
 
+[![verify](https://github.com/ntysdd/core-math-java/actions/workflows/verify.yml/badge.svg)](https://github.com/ntysdd/core-math-java/actions/workflows/verify.yml)
+
 Java port of [CORE-MATH](https://core-math.gitlabpages.inria.fr/): correctly
 rounded (0.5 ulp) mathematical functions, translated from the C sources so
 that the results are bit-for-bit identical to upstream, with one exception: the
