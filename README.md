@@ -65,9 +65,9 @@ rules that keep it that way.
 | `cbrt` | translated, tested | translated, tested | `src/binary{32,64}/cbrt` |
 | `exp2` | translated, tested | translated, tested | `src/binary{32,64}/exp2` |
 | `log1p` | translated, tested | translated, tested | `src/binary{32,64}/log1p` |
-| `expm1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/expm1` |
-| `sinpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sinpi` |
-| `cospi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/cospi` |
+| `expm1` | translated, tested | translated, tested | `src/binary{32,64}/expm1` |
+| `sinpi` | translated, tested | translated, tested | `src/binary{32,64}/sinpi` |
+| `cospi` | translated, tested | translated, tested | `src/binary{32,64}/cospi` |
 | `hypot` | translated, tests pending | translated, tests pending | `src/binary{32,64}/hypot` |
 | `asinh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/asinh` |
 | `acosh` | translated, tests pending | translated, tests pending | `src/binary{32,64}/acosh` |

@@ -283,6 +283,108 @@ SPEC = {
             ],
         },
     },
+    "expm1": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("expm1f(+0.0)", "0.0f", "0x00000000"),
+                ("expm1f(-0.0)", "-0.0f", "0x80000000"),
+                ("expm1f(+Infinity)", "Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("expm1f(-Infinity)", "Float.NEGATIVE_INFINITY", "0xbf800000"),
+                ("expm1f(Float.MAX_VALUE)", "Float.MAX_VALUE", "0x7f800000"),
+                ("expm1f(-Float.MAX_VALUE)", "-Float.MAX_VALUE", "0xbf800000"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("expm1(+0.0)", "0.0", "0x0000000000000000"),
+                ("expm1(-0.0)", "-0.0", "0x8000000000000000"),
+                ("expm1(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("expm1(-Infinity)", "Double.NEGATIVE_INFINITY",
+                 "0xbff0000000000000"),
+                ("expm1(Double.MAX_VALUE)", "Double.MAX_VALUE",
+                 "0x7ff0000000000000"),
+                ("expm1(-Double.MAX_VALUE)", "-Double.MAX_VALUE",
+                 "0xbff0000000000000"),
+            ],
+        },
+    },
+    "sinpi": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("sinpif(+0.0)", "0.0f", "0x00000000"),
+                ("sinpif(-0.0)", "-0.0f", "0x80000000"),
+                ("sinpif(0.5)", "0.5f", "0x3f800000"),
+                ("sinpif(-0.5)", "-0.5f", "0xbf800000"),
+                ("sinpif(1.0)", "1.0f", "0x00000000"),
+                ("sinpif(-1.0)", "-1.0f", "0x80000000"),
+                ("sinpif(2.0)", "2.0f", "0x00000000"),
+                ("sinpif(+Infinity)", "Float.POSITIVE_INFINITY", "nan"),
+                ("sinpif(-Infinity)", "Float.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("sinpi(+0.0)", "0.0", "0x0000000000000000"),
+                ("sinpi(-0.0)", "-0.0", "0x8000000000000000"),
+                ("sinpi(0.5)", "0.5", "0x3ff0000000000000"),
+                ("sinpi(-0.5)", "-0.5", "0xbff0000000000000"),
+                ("sinpi(1.0)", "1.0", "0x0000000000000000"),
+                ("sinpi(-1.0)", "-1.0", "0x8000000000000000"),
+                ("sinpi(2.0)", "2.0", "0x0000000000000000"),
+                ("sinpi(+Infinity)", "Double.POSITIVE_INFINITY", "nan"),
+                ("sinpi(-Infinity)", "Double.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+    },
+    "cospi": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("cospif(+0.0)", "0.0f", "0x3f800000"),
+                ("cospif(-0.0)", "-0.0f", "0x3f800000"),
+                ("cospif(0.5)", "0.5f", "0x00000000"),
+                ("cospif(-0.5)", "-0.5f", "0x00000000"),
+                ("cospif(1.0)", "1.0f", "0xbf800000"),
+                ("cospif(-1.0)", "-1.0f", "0xbf800000"),
+                ("cospif(2.0)", "2.0f", "0x3f800000"),
+                ("cospif(+Infinity)", "Float.POSITIVE_INFINITY", "nan"),
+                ("cospif(-Infinity)", "Float.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("cospi(+0.0)", "0.0", "0x3ff0000000000000"),
+                ("cospi(-0.0)", "-0.0", "0x3ff0000000000000"),
+                ("cospi(0.5)", "0.5", "0x0000000000000000"),
+                ("cospi(-0.5)", "-0.5", "0x0000000000000000"),
+                ("cospi(1.0)", "1.0", "0xbff0000000000000"),
+                ("cospi(-1.0)", "-1.0", "0xbff0000000000000"),
+                ("cospi(2.0)", "2.0", "0x3ff0000000000000"),
+                ("cospi(+Infinity)", "Double.POSITIVE_INFINITY", "nan"),
+                ("cospi(-Infinity)", "Double.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+    },
+}
+
+# the class name of the translation where it does not follow from the
+# function name by capitalising it
+JAVA_NAME = {
+    "sinpi": "SinPi", "cospi": "CosPi", "atan2": "Atan2",
+    "atan2pi": "Atan2Pi", "exp2m1": "Exp2M1", "exp10m1": "Exp10M1",
+    "log10p1": "Log10P1", "log2p1": "Log2P1",
 }
 
 HEADER = '''package io.github.ntysdd.coremath.{package};
@@ -340,7 +442,8 @@ def emit(name, width):
     spec = SPEC[name][width]
     package = "binary32" if width == 32 else "binary64"
     suffix = "" if width == 64 else "f"
-    klass = name.capitalize() + ("FTest" if width == 32 else "Test")
+    klass = JAVA_NAME.get(name, name.capitalize()) + ("FTest" if width == 32
+                                                       else "Test")
     java_type = "float" if width == 32 else "double"
     box = "Float" if width == 32 else "Double"
     arity = spec["arity"]

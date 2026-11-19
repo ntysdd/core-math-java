@@ -165,6 +165,24 @@ THRESHOLDS = {
         64: "compute(): |x| against 0.0625, 2^-53, 2^-12 and 0x1.19bp-21, and "
             "the raw bits against 2^53, -1, 2^106 and 2^1024",
     },
+    "expm1": {
+        32: "compute(): ax = u<<1 against 0x7c400000, 0x676a09e8, "
+            "0x8562e430 and 0xff<<24",
+        64: "compute(): |x| against 0.25, 2^-53 and 0x1.62e42fefa39fp+9",
+    },
+    "sinpi": {
+        32: "compute(): e == 0xff, |x| >= 2^17, |x| >= 2^23, |x| < 2^-14, "
+            "and the integer test (m<<si) == 0",
+        64: "compute(): e == 0x7ff, |x| >= 2^41, |x| >= 2^52, |x| <= "
+            "0x1.2p-5 and |x| < 2^-960",
+    },
+    "cospi": {
+        32: "compute(): e == 0xff, p = e-112 against 0, 32 and 64 "
+            "(|x| < 2^-15, |x| >= 2^17, |x| >= 2^31), and the integer and "
+            "half-integer tests",
+        64: "compute(): e == 0x7ff, |x| >= 2^41, |x| >= 2^53, |x| <= 2^-12, "
+            "0x1.2ccf6429be6621p-26, and the integer and half-integer tests",
+    },
 }
 
 COLUMNS = {
@@ -715,12 +733,92 @@ def log1p_cases(width):
     return rows
 
 
+def expm1_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_expm1f: ax = u<<1 against 0x7c400000, 0x676a09e8, 0x8562e430
+        # and 0xff<<24
+        for ax in (0x7c400000, 0x676a09e8, 0x8562e430, 0xff << 24):
+            rows += straddle_ax(ax, 32)
+        rows += signed(0.15625, 32)
+        rows += near(0.15625, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_expm1: |x| against 0.25, 2^-53 and 0x1.62e42fefa39fp+9
+        for bits in (0x3fd0000000000000, 0x3ca0000000000000,
+                     0x40862e42fefa39f0, 0x7ff0000000000000):
+            rows += straddle_magnitude(bits, 64)
+        rows += signed(0.25, 64)
+        rows += near(0.25, 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def sinpi_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_sinpif: e == 0xff, |x| >= 2^17, |x| >= 2^23, |x| < 2^-14 and the
+        # integer test m<<si == 0
+        for e in (0x7f + 16, 0x7f + 17, 0x7f + 22, 0x7f + 23, 0xff,
+                  0x7f - 15, 0x7f - 14):
+            rows += straddle_exponent(e, 32)
+        for i in list(range(-8, 9)) + [2 ** 17, 2 ** 23, 2 ** 30]:
+            rows += signed(float(i), 32)
+        for h in (0.5, 1.5, 2.5, float.fromhex("0x1p-15"),
+                  float.fromhex("0x1p-14")):
+            rows += signed(h, 32)
+        rows += near(float(2 ** 17), 32)
+    else:
+        # cr_sinpi: e == 0x7ff, |x| >= 2^41, |x| >= 52, |x| <= 0x1.2p-5 and
+        # the small-x bound 2^-960
+        for e in (0x3ff + 40, 0x3ff + 41, 0x3ff + 52, 0x3ff + 53, 0x7ff,
+                  0x3ff - 961, 0x3ff - 960):
+            rows += straddle_exponent(e, 64)
+        for i in list(range(-8, 9)) + [2 ** 41, 2 ** 52, 2 ** 53]:
+            rows += signed(float(i), 64)
+        for h in (0.5, 1.5, 2.5, float.fromhex("0x1p-6"),
+                  float.fromhex("0x1p-5")):
+            rows += signed(h, 64)
+        rows += near(float.fromhex("0x1.2p-5"), 64)
+    return rows
+
+
+def cospi_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_cospif: e == 0xff, p = e-112 (|x| < 2^-15, |x| >= 2^17, >= 2^31)
+        # and the 0x1.9f03p-129 bound under which -x*x would underflow
+        for e in (0x7f - 16, 0x7f - 15, 0x7f + 17, 0x7f + 18, 0x7f + 31,
+                  0x7f + 32, 0xff):
+            rows += straddle_exponent(e, 32)
+        for i in list(range(-8, 9)) + [2 ** 17, 2 ** 23, 2 ** 30]:
+            rows += signed(float(i), 32)
+        for h in (0.5, 1.5, 2.5, 3.5):
+            rows += signed(h, 32)
+        rows += signed(float.fromhex("0x1.9f03p-129"), 32)
+        rows += near(float.fromhex("0x1.9f03p-129"), 32)
+    else:
+        # cr_cospi: e == 0x7ff, |x| >= 2^41, |x| >= 2^53, |x| <= 2^-12 and
+        # the 0x1.2ccf6429be6621p-26 bound
+        for e in (0x3ff + 40, 0x3ff + 41, 0x3ff + 52, 0x3ff + 53, 0x7ff):
+            rows += straddle_exponent(e, 64)
+        for i in list(range(-8, 9)) + [2 ** 41, 2 ** 52, 2 ** 53]:
+            rows += signed(float(i), 64)
+        for h in (0.5, 1.5, 2.5, 3.5):
+            rows += signed(h, 64)
+        rows += straddle_ax(0x3f30000000000000, 64)
+        rows += straddle_ax(0x7c599ed2857cc442, 64)
+        rows += signed(float.fromhex("0x1p-12"), 64)
+    return rows
+
+
 BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "exp": exp_cases, "log": log_cases, "log2": log2_cases,
             "log10": log10_cases, "atan": atan_cases, "asin": asin_cases,
             "acos": acos_cases, "sinh": sinh_cases, "cosh": cosh_cases,
             "tanh": tanh_cases, "cbrt": cbrt_cases, "exp2": exp2_cases,
-            "log1p": log1p_cases}
+            "log1p": log1p_cases, "expm1": expm1_cases,
+            "sinpi": sinpi_cases, "cospi": cospi_cases}
 
 
 def directed(name, width):
