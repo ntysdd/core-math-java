@@ -84,9 +84,9 @@ rules that keep it that way.
 | `exp10m1` | translated, tested | translated, tested | `src/binary{32,64}/exp10m1` |
 | `log10p1` | translated, tested | translated, tested | `src/binary{32,64}/log10p1` |
 | `log2p1` | translated, tested | translated, tested | `src/binary{32,64}/log2p1` |
-| `tgamma` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tgamma` |
-| `lgamma` | translated, tests pending | translated, tests pending | `src/binary{32,64}/lgamma` |
-| `sincos` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sincos` |
+| `tgamma` | translated, tested | translated, tested | `src/binary{32,64}/tgamma` |
+| `lgamma` | translated, tested | translated, tested | `src/binary{32,64}/lgamma` |
+| `sincos` | translated, tested | translated, tested | `src/binary{32,64}/sincos` |
 | `atan2pi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atan2pi` |
 | `compound` | translated, tests pending | not in CORE-MATH | `src/binary32/compound` |
 

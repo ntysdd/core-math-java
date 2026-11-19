@@ -274,6 +274,24 @@ THRESHOLDS = {
         64: "compute(): x <= -1, x = -1, x = 0, the NaN/Inf branch and the "
             "0x16a09e667f3bcd bound of the reduction",
     },
+    "tgamma": {
+        32: "compute(): ax = u<<1 against 2^-18, and the integers and "
+            "half-integers where gamma is exact or a pole",
+        64: "compute(): |x| against 2^-112 and 2^-1024, the integers and "
+            "half-integers, and the rows of as_tgamma_database()",
+    },
+    "lgamma": {
+        32: "compute(): the integer cases and the 0x401ceccb, 0x401d95ca, "
+            "0x402f95c2, 0x40301b93, 0x40492009 and 0x404940ef borders",
+        64: "compute(): the integer cases, the exponent bounds of the "
+            "reduction, and the rows of as_lgamma_database()",
+    },
+    "sincos": {
+        32: "compute(): ax = u<<1 against 0x822d97c8, 0x99000000, "
+            "0x73000000 and 0x66000000, and the multiples of pi/2",
+        64: "compute(): |x| against 0x1.6a09e667f3bccp-27 and the exponent "
+            "bounds of the reduction, and the multiples of pi/2",
+    },
 }
 
 COLUMNS = {
@@ -281,7 +299,8 @@ COLUMNS = {
     "binary": "y x result",
     "binary32": "y x result",
     "sincos": "input sin cos",
-    "lgamma": "input result signgam",
+    "lgamma": "input result signgam, the 32-bit pattern of the int, "
+              "so 00000001 is 1 and ffffffff is -1",
 }
 
 DRAWS = {
@@ -666,8 +685,10 @@ def c_table(name, width, marker="db[][3]"):
     start = text.index(marker)
     end = text.index("};", start)
     rows = []
-    for arg in re.findall(r"\{\s*(0x[0-9a-fA-F.]+p[-+]?[0-9]+)", text[start:end]):
-        rows += signed(float.fromhex(arg), width)
+    for arg in re.findall(r"\{\s*([-+]?0x[0-9a-fA-F.]+p[-+]?[0-9]+)", text[start:end]):
+        value = float.fromhex(arg)
+        rows.append(((f64 if width == 64 else f32)(value),))
+        rows.append(((f64 if width == 64 else f32)(-value),))
     if not rows:
         sys.exit("mkvectors: no rows in the table %s of %s" % (marker, path))
     return rows
@@ -1280,6 +1301,76 @@ def log2p1_cases(width):
     return rows
 
 
+def tgamma_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_tgammaf: ax = u<<1 against 0x6d000000 (|x| < 2^-18), and the
+        # integers and half-integers where gamma is exact or a pole
+        rows += straddle_ax(0x6d000000, 32)
+        for i in range(-8, 9):
+            rows += signed(float(i), 32)
+            rows += signed(i + 0.5, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_tgamma: |x| against 2^-112 and 2^-1024, and the integers and
+        # half-integers; the rows of as_tgamma_database()
+        rows += straddle_magnitude(0x71e0000000000000, 64)
+        for i in range(-8, 9):
+            rows += signed(float(i), 64)
+            rows += signed(i + 0.5, 64)
+        rows += c_table("tgamma", 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def lgamma_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_lgammaf: the integer cases and the four range borders
+        for i in range(-8, 9):
+            rows += signed(float(i), 32)
+            rows += signed(i + 0.5, 32)
+        for bits in (0x401ceccb, 0x401d95ca, 0x402f95c2, 0x40301b93,
+                     0x40492009, 0x404940ef):
+            rows += straddle_bits(bits, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_lgamma: the integer cases, the range borders of the ubrd[] table
+        # and the rows of as_lgamma_database()
+        for i in range(-8, 9):
+            rows += signed(float(i), 64)
+            rows += signed(i + 0.5, 64)
+        for e in (0x3ff - 1, 0x3ff, 0x3ff + 1, 0x7fe):
+            rows += straddle_exponent(e, 64)
+        rows += c_table("lgamma", 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def sincos_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_sincosf: ax = u<<1 against 0x822d97c8, 0x99000000, 0x73000000
+        # and 0x66000000, and the multiples of pi/2
+        for ax in (0x822d97c8, 0x99000000, 0x73000000, 0x66000000):
+            rows += straddle_ax(ax, 32)
+        for k in range(-8, 9):
+            rows += signed(k * 1.5707963267948966, 32)
+            rows += signed(k * 3.141592653589793, 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_sincos: |x| against 0x1.6a09e667f3bccp-27 and the exponent bounds
+        # of the reduction, and the multiples of pi/2
+        rows += straddle_magnitude(0x3e46a09e667f3bcc, 64)
+        for e in (0x3ff - 27, 0x3ff - 26, 0x3ff + 30, 0x3ff + 31, 0x7fe):
+            rows += straddle_exponent(e, 64)
+        for k in range(-8, 9):
+            rows += signed(k * 1.5707963267948966, 64)
+            rows += signed(k * 3.141592653589793, 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
 BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "exp": exp_cases, "log": log_cases, "log2": log2_cases,
             "log10": log10_cases, "atan": atan_cases, "asin": asin_cases,
@@ -1293,7 +1384,8 @@ BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "acospi": acospi_cases, "rsqrt": rsqrt_cases,
             "exp10": exp10_cases, "exp2m1": exp2m1_cases,
             "exp10m1": exp10m1_cases, "log10p1": log10p1_cases,
-            "log2p1": log2p1_cases}
+            "log2p1": log2p1_cases, "tgamma": tgamma_cases,
+            "lgamma": lgamma_cases, "sincos": sincos_cases}
 
 
 def directed(name, width):
@@ -1460,6 +1552,18 @@ def header(name, width, kind, wc_name, wc_total, front):
     return lines
 
 
+def format_row(kind, width, row):
+    """The hexadecimal text of one result row.
+
+    The signgam column of lgamma is an int, so it goes out as the 32-bit
+    pattern of that int and ffffffff stands for -1.
+    """
+    fields = [hx(v, width) for v in row]
+    if kind == "lgamma":
+        fields[-1] = hx(row[-1] & 0xffffffff, 32)
+    return " ".join(fields)
+
+
 def build(name):
     kind = KIND[name]
     widths = [32] if kind == "binary32" else [32, 64]
@@ -1489,7 +1593,7 @@ def build(name):
             else:
                 out.append("#--- " + title)
             for _ in rows:
-                out.append(" ".join(hx(v, width) for v in results[at]))
+                out.append(format_row(kind, width, results[at]))
                 at += 1
         path = (VECTORS / ("binary64" if width == 64 else "binary32")
                 / (name + ".txt"))

@@ -838,6 +838,42 @@ SPEC = {
             ],
         },
     },
+    "tgamma": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("tgammaf(+0.0)", "0.0f", "0x7f800000"),
+                ("tgammaf(-0.0)", "-0.0f", "0xff800000"),
+                ("tgammaf(1.0)", "1.0f", "0x3f800000"),
+                ("tgammaf(2.0)", "2.0f", "0x3f800000"),
+                ("tgammaf(5.0)", "5.0f", "0x41c00000"),
+                ("tgammaf(-1.0)", "-1.0f", "nan"),
+                ("tgammaf(+Infinity)", "Float.POSITIVE_INFINITY", "0x7f800000"),
+                ("tgammaf(-Infinity)", "Float.NEGATIVE_INFINITY", "nan"),
+                ("tgammaf(Float.MAX_VALUE)", "Float.MAX_VALUE", "0x7f800000"),
+                ("tgammaf(-Float.MAX_VALUE)", "-Float.MAX_VALUE", "nan"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("tgamma(+0.0)", "0.0", "0x7ff0000000000000"),
+                ("tgamma(-0.0)", "-0.0", "0xfff0000000000000"),
+                ("tgamma(1.0)", "1.0", "0x3ff0000000000000"),
+                ("tgamma(2.0)", "2.0", "0x3ff0000000000000"),
+                ("tgamma(5.0)", "5.0", "0x4038000000000000"),
+                ("tgamma(-1.0)", "-1.0", "nan"),
+                ("tgamma(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x7ff0000000000000"),
+                ("tgamma(-Infinity)", "Double.NEGATIVE_INFINITY", "nan"),
+                ("tgamma(Double.MAX_VALUE)", "Double.MAX_VALUE",
+                 "0x7ff0000000000000"),
+                ("tgamma(-Double.MAX_VALUE)", "-Double.MAX_VALUE", "nan"),
+            ],
+        },
+    },
 }
 
 # the class name of the translation where it does not follow from the

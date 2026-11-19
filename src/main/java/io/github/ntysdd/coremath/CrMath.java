@@ -1867,9 +1867,9 @@ public final class CrMath {
    * <p>The special cases are the ones of the {@code float} overload, with the
    * binary64 constants: {@code lgamma(±0.0)} is {@code +Infinity},
    * {@code lgamma(1.0)} and {@code lgamma(2.0)} are {@code +0.0}, the negative
-   * integers and {@code -Infinity} give {@code +Infinity}, and the sign
-   * written for a NaN and for a negative integer is {@code 1}, as the C source
-   * sets it arbitrarily there.
+   * integers and {@code -Infinity} give {@code +Infinity}, the sign written for
+   * a NaN is {@code 1}, and for a negative integer it is {@code -1}, which is
+   * the sign of the argument, as the C source computes it.
    *
    * @param x the argument
    * @param signgamp a one-element array that receives the sign of
