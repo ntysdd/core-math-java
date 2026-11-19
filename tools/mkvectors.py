@@ -85,6 +85,24 @@ THRESHOLDS = {
             "|x| >= 0x1.74910d52d3052p+9 and x < -0x1.6232bdd7abcd2p+9; "
             "the rounding test ub != lb",
     },
+    "log": {
+        32: "compute(): ux < 1<<23, ux >= 0x7f800000 and ux == 127<<23; "
+            "the rounding test ub != lb and |x-1| < 0x1p-10 of the slow path",
+        64: "compute(): e = (v>>52)-0x3ff against 0x400 and -0x3ff, and x = 1; "
+            "the rounding test left == right",
+    },
+    "log2": {
+        32: "compute(): ux >= 0x7f800000, ux < 1<<23 and m == 0 (powers of "
+            "two); the rounding test lb == ub",
+        64: "compute(): ex == 0, ex >= 0x7ff and m == 0 (powers of two); the "
+            "rounding test lb == ub",
+    },
+    "log10": {
+        32: "compute(): ux >= 0x7f800000, ux < 0x00800000, ux == 0 and "
+            "ux == st[(ux>>24)&0xf] (the powers of ten); the rounding test",
+        64: "compute(): e = (v>>52)-0x3ff against 0x400 and -0x3ff, and "
+            "v == pow10[n] (the powers of ten); the rounding test",
+    },
 }
 
 COLUMNS = {
@@ -321,8 +339,80 @@ def exp_cases(width):
     return rows
 
 
+def log_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_logf: ux < 1<<23 (subnormal) or ux >= 0x7f800000 (inf, NaN and
+        # every negative), and ux == 127<<23 (x = 1)
+        for bits in (0x00800000, 0x7f800000):
+            rows += straddle_bits(bits, 32)
+        rows += straddle_bits(0x3f800000, 32)
+        for arg in ("0x1p-10", "0x1.fffffep-1", "0x1.000002p+0"):
+            rows += signed(float.fromhex(arg), 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        # cr_log: e = (v>>52) - 0x3ff against 0x400 and -0x3ff (subnormal)
+        for e in (0, 1, 0x3fe, 0x3ff, 0x7fe, 0x7ff):
+            rows += straddle_exponent(e, 64)
+        rows += straddle_bits(0x3ff0000000000000, 64)
+        for arg in ("0x1.fffffffffffffp-1", "0x1.0000000000001p+0",
+                    "0x1.fffffffffffffp+1023"):
+            rows += signed(float.fromhex(arg), 64)
+    return rows
+
+
+def log2_cases(width):
+    rows = specials(width)
+    if width == 32:
+        for bits in (0x00800000, 0x7f800000):
+            rows += straddle_bits(bits, 32)
+        # m == 0: the exact powers of two, where the result is the exponent
+        for e in (-126, -1, 0, 1, 127):
+            rows += signed(math.ldexp(1.0, e), 32)
+        rows += straddle_bits(0x3f800000, 32)
+        for arg in ("0x1.fffffep-1", "0x1.000002p+0"):
+            rows += signed(float.fromhex(arg), 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        for e in (0, 1, 0x3fe, 0x3ff, 0x7fe, 0x7ff):
+            rows += straddle_exponent(e, 64)
+        for e in (-1022, -1, 0, 1, 1023):
+            rows += signed(math.ldexp(1.0, e), 64)
+        rows += straddle_bits(0x3ff0000000000000, 64)
+        for arg in ("0x1.fffffffffffffp-1", "0x1.0000000000001p+0",
+                    "0x1.fffffffffffffp+1023"):
+            rows += signed(float.fromhex(arg), 64)
+    return rows
+
+
+def log10_cases(width):
+    rows = specials(width)
+    if width == 32:
+        for bits in (0x00800000, 0x7f800000):
+            rows += straddle_bits(bits, 32)
+        # the exact powers of ten of the st[] table, 10^0 to 10^10
+        for n in range(11):
+            rows += signed(float("1e%d" % n), 32)
+        rows += straddle_bits(0x3f800000, 32)
+        for arg in ("0x1.fffffep-1", "0x1.000002p+0"):
+            rows += signed(float.fromhex(arg), 32)
+        rows += signed(3.4028234663852886e38, 32)
+    else:
+        for e in (0, 1, 0x3fe, 0x3ff, 0x7fe, 0x7ff):
+            rows += straddle_exponent(e, 64)
+        # the exact powers of ten of the pow10[] table, 10^0 to 10^22
+        for n in range(23):
+            rows += signed(float("1e%d" % n), 64)
+        rows += straddle_bits(0x3ff0000000000000, 64)
+        for arg in ("0x1.fffffffffffffp-1", "0x1.0000000000001p+0",
+                    "0x1.fffffffffffffp+1023"):
+            rows += signed(float.fromhex(arg), 64)
+    return rows
+
+
 BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
-            "exp": exp_cases}
+            "exp": exp_cases, "log": log_cases, "log2": log2_cases,
+            "log10": log10_cases}
 
 
 def directed(name, width):
