@@ -75,8 +75,9 @@ rules that keep it that way.
 | `erf` | translated, tested | translated, tested | `src/binary{32,64}/erf` |
 | `erfc` | translated, tested | translated, tested | `src/binary{32,64}/erfc` |
 | `tanpi` | translated, tested | translated, tested | `src/binary{32,64}/tanpi` |
-| `atanpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atanpi` |
-| `asinpi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/asinpi` |
+| `atanpi` | translated, tested | translated, tested | `src/binary{32,64}/atanpi` |
+| `asinpi` | translated, tested | translated, tested | `src/binary{32,64}/asinpi` |
+| `acospi` | translated, tested | translated, tested | `src/binary{32,64}/acospi` |
 | `rsqrt` | translated, tests pending | translated, tests pending | `src/binary{32,64}/rsqrt` |
 | `exp10` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp10` |
 | `exp2m1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp2m1` |
@@ -86,6 +87,7 @@ rules that keep it that way.
 | `tgamma` | translated, tests pending | translated, tests pending | `src/binary{32,64}/tgamma` |
 | `lgamma` | translated, tests pending | translated, tests pending | `src/binary{32,64}/lgamma` |
 | `sincos` | translated, tests pending | translated, tests pending | `src/binary{32,64}/sincos` |
+| `atan2pi` | translated, tests pending | translated, tests pending | `src/binary{32,64}/atan2pi` |
 | `compound` | translated, tests pending | not in CORE-MATH | `src/binary32/compound` |
 
 Every function has been checked bit for bit against a local build of the C

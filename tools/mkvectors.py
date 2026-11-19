@@ -219,6 +219,24 @@ THRESHOLDS = {
         64: "compute(): |x| against 2^-12, 2^46 and 2^53, and the exact "
             "multiples of 1/4",
     },
+    "atanpi": {
+        32: "compute(): e against 127+24 and 0xff, e against 127-13 and "
+            "127-25, and 0x1.45f306p+124",
+        64: "compute(): |x| against 0x1.b21c475e6362ap-8, 2^-54 and the NaN "
+            "bound",
+    },
+    "asinpi": {
+        32: "compute(): e >= 127 (|x| >= 1), e == 0xff, and 2^-12 where the "
+            "polynomial index changes",
+        64: "compute(): |x| against 2^-6, 2^-26, 2^-53, and the |x| = 1 and "
+            "NaN branches",
+    },
+    "acospi": {
+        32: "compute(): e >= 127 (|x| >= 1), e == 0xff, and 2^-12 where the "
+            "polynomial index changes",
+        64: "compute(): |x| against 0.75, 0x1.921fb54442d18p-54, and the "
+            "|x| = 1 and NaN branches",
+    },
 }
 
 COLUMNS = {
@@ -992,6 +1010,85 @@ def tanpi_cases(width):
     return rows
 
 
+def atanpi_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_atanpif: e against 127+24 and 0xff, e against 127-13 and 127-25,
+        # and the 0x1.45f306p+124 bound under which 1/x would underflow
+        rows += straddle_ax((0x7f + 25) << 24, 32)
+        rows += straddle_ax(0xff << 24, 32)
+        for e in (0x7f - 14, 0x7f - 13, 0x7f - 26, 0x7f - 25):
+            rows += straddle_exponent(e, 32)
+        rows += signed(float.fromhex("0x1.45f306p+124"), 32)
+        rows += signed(1.0, 32)
+        rows += near(1.0, 32)
+    else:
+        # cr_atanpi: |x| against 0x1.b21c475e6362ap-8, 2^-54 and the NaN bound
+        for bits in (0x3f7b21c475e6362a, 0x3c90000000000000,
+                     0x7ff0000000000000):
+            rows += straddle_magnitude(bits, 64)
+        rows += signed(1.0, 64)
+        rows += near(1.0, 64)
+        rows += signed(float.fromhex("0x1.fffffffffffffp+1023"), 64)
+    return rows
+
+
+def asinpi_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_asinpif: e >= 127 (|x| >= 1), e == 0xff, the index i of the
+        # polynomial from s = 146-e, and the 2^-12 edge of that index
+        for e in (0x7f - 1, 0x7f, 0x7f + 1, 0xff):
+            rows += straddle_exponent(e, 32)
+        rows += signed(1.0, 32)
+        rows += near(1.0, 32)
+        rows += near(-1.0, 32)
+        for v in (2.0, 0.5, 0.25):
+            rows += signed(v, 32)
+        rows += signed(float.fromhex("0x1p-12"), 32)
+        rows += near(float.fromhex("0x1p-12"), 32)
+    else:
+        # cr_asinpi: |x| against 2^-6, 2^-26, 2^-53 and the |x| = 1 and NaN
+        # branches
+        for e in (0x3ff - 7, 0x3ff - 6, 0x3ff - 27, 0x3ff - 26,
+                  0x3ff - 54, 0x3ff - 53, 0x3ff - 1, 0x3ff, 0x7ff):
+            rows += straddle_exponent(e, 64)
+        rows += signed(1.0, 64)
+        rows += near(1.0, 64)
+        rows += near(-1.0, 64)
+        rows += signed(0.5, 64)
+    return rows
+
+
+def acospi_cases(width):
+    rows = specials(width)
+    if width == 32:
+        # cr_acospif: e >= 127 (|x| >= 1), e == 0xff, the polynomial index,
+        # and the 2^-12 edge of that index
+        for e in (0x7f - 1, 0x7f, 0x7f + 1, 0xff):
+            rows += straddle_exponent(e, 32)
+        rows += signed(1.0, 32)
+        rows += near(1.0, 32)
+        rows += near(-1.0, 32)
+        rows += signed(0.75, 32)
+        rows += near(0.75, 32)
+        rows += signed(float.fromhex("0x1p-12"), 32)
+        rows += near(float.fromhex("0x1p-12"), 32)
+    else:
+        # cr_acospi: |x| against 0.75, 0x1.921fb54442d18p-54 and the |x| = 1
+        # and NaN branches
+        for e in (0x3ff - 1, 0x3ff, 0x7ff):
+            rows += straddle_exponent(e, 64)
+        rows += signed(1.0, 64)
+        rows += near(1.0, 64)
+        rows += near(-1.0, 64)
+        rows += signed(0.75, 64)
+        rows += near(0.75, 64)
+        rows += signed(float.fromhex("0x1.921fb54442d18p-54"), 64)
+        rows += near(float.fromhex("0x1.921fb54442d18p-54"), 64)
+    return rows
+
+
 BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "exp": exp_cases, "log": log_cases, "log2": log2_cases,
             "log10": log10_cases, "atan": atan_cases, "asin": asin_cases,
@@ -1000,7 +1097,9 @@ BUILDERS = {"sin": sin_cases, "cos": cos_cases, "tan": tan_cases,
             "log1p": log1p_cases, "expm1": expm1_cases,
             "sinpi": sinpi_cases, "cospi": cospi_cases,
             "asinh": asinh_cases, "acosh": acosh_cases, "atanh": atanh_cases,
-            "erf": erf_cases, "erfc": erfc_cases, "tanpi": tanpi_cases}
+            "erf": erf_cases, "erfc": erfc_cases, "tanpi": tanpi_cases,
+            "atanpi": atanpi_cases, "asinpi": asinpi_cases,
+            "acospi": acospi_cases}
 
 
 def directed(name, width):

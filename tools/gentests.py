@@ -560,12 +560,101 @@ SPEC = {
             ],
         },
     },
+    "atanpi": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("atanpif(+0.0)", "0.0f", "0x00000000"),
+                ("atanpif(-0.0)", "-0.0f", "0x80000000"),
+                ("atanpif(1.0)", "1.0f", "0x3e800000"),
+                ("atanpif(-1.0)", "-1.0f", "0xbe800000"),
+                ("atanpif(+Infinity)", "Float.POSITIVE_INFINITY", "0x3f000000"),
+                ("atanpif(-Infinity)", "Float.NEGATIVE_INFINITY", "0xbf000000"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("atanpi(+0.0)", "0.0", "0x0000000000000000"),
+                ("atanpi(-0.0)", "-0.0", "0x8000000000000000"),
+                ("atanpi(1.0)", "1.0", "0x3fd0000000000000"),
+                ("atanpi(-1.0)", "-1.0", "0xbfd0000000000000"),
+                ("atanpi(+Infinity)", "Double.POSITIVE_INFINITY",
+                 "0x3fe0000000000000"),
+                ("atanpi(-Infinity)", "Double.NEGATIVE_INFINITY",
+                 "0xbfe0000000000000"),
+            ],
+        },
+    },
+    "asinpi": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("asinpif(+0.0)", "0.0f", "0x00000000"),
+                ("asinpif(-0.0)", "-0.0f", "0x80000000"),
+                ("asinpif(0.5)", "0.5f", "0x3e2aaaab"),
+                ("asinpif(1.0)", "1.0f", "0x3f000000"),
+                ("asinpif(-1.0)", "-1.0f", "0xbf000000"),
+                ("asinpif(2.0)", "2.0f", "nan"),
+                ("asinpif(+Infinity)", "Float.POSITIVE_INFINITY", "nan"),
+                ("asinpif(-Infinity)", "Float.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("asinpi(+0.0)", "0.0", "0x0000000000000000"),
+                ("asinpi(-0.0)", "-0.0", "0x8000000000000000"),
+                ("asinpi(0.5)", "0.5", "0x3fc5555555555555"),
+                ("asinpi(1.0)", "1.0", "0x3fe0000000000000"),
+                ("asinpi(-1.0)", "-1.0", "0xbfe0000000000000"),
+                ("asinpi(2.0)", "2.0", "nan"),
+                ("asinpi(+Infinity)", "Double.POSITIVE_INFINITY", "nan"),
+                ("asinpi(-Infinity)", "Double.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+    },
+    "acospi": {
+        32: {
+            "arity": 1,
+            "worst": False,
+            "special": [
+                ("acospif(+0.0)", "0.0f", "0x3f000000"),
+                ("acospif(-0.0)", "-0.0f", "0x3f000000"),
+                ("acospif(0.5)", "0.5f", "0x3eaaaaab"),
+                ("acospif(1.0)", "1.0f", "0x00000000"),
+                ("acospif(-1.0)", "-1.0f", "0x3f800000"),
+                ("acospif(2.0)", "2.0f", "nan"),
+                ("acospif(+Infinity)", "Float.POSITIVE_INFINITY", "nan"),
+                ("acospif(-Infinity)", "Float.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+        64: {
+            "arity": 1,
+            "worst": True,
+            "special": [
+                ("acospi(+0.0)", "0.0", "0x3fe0000000000000"),
+                ("acospi(-0.0)", "-0.0", "0x3fe0000000000000"),
+                ("acospi(0.5)", "0.5", "0x3fd5555555555555"),
+                ("acospi(1.0)", "1.0", "0x0000000000000000"),
+                ("acospi(-1.0)", "-1.0", "0x3ff0000000000000"),
+                ("acospi(2.0)", "2.0", "nan"),
+                ("acospi(+Infinity)", "Double.POSITIVE_INFINITY", "nan"),
+                ("acospi(-Infinity)", "Double.NEGATIVE_INFINITY", "nan"),
+            ],
+        },
+    },
 }
 
 # the class name of the translation where it does not follow from the
 # function name by capitalising it
 JAVA_NAME = {
     "sinpi": "SinPi", "cospi": "CosPi", "tanpi": "TanPi",
+    "atanpi": "AtanPi", "asinpi": "AsinPi", "acospi": "AcosPi",
     "atan2": "Atan2", "atan2pi": "Atan2Pi", "exp2m1": "Exp2M1",
     "exp10m1": "Exp10M1", "log10p1": "Log10P1", "log2p1": "Log2P1",
 }
