@@ -78,9 +78,9 @@ rules that keep it that way.
 | `atanpi` | translated, tested | translated, tested | `src/binary{32,64}/atanpi` |
 | `asinpi` | translated, tested | translated, tested | `src/binary{32,64}/asinpi` |
 | `acospi` | translated, tested | translated, tested | `src/binary{32,64}/acospi` |
-| `rsqrt` | translated, tests pending | translated, tests pending | `src/binary{32,64}/rsqrt` |
-| `exp10` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp10` |
-| `exp2m1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp2m1` |
+| `rsqrt` | translated, tested | translated, tested | `src/binary{32,64}/rsqrt` |
+| `exp10` | translated, tested | translated, tested | `src/binary{32,64}/exp10` |
+| `exp2m1` | translated, tested | translated, tested | `src/binary{32,64}/exp2m1` |
 | `exp10m1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/exp10m1` |
 | `log10p1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log10p1` |
 | `log2p1` | translated, tests pending | translated, tests pending | `src/binary{32,64}/log2p1` |
