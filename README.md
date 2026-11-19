@@ -187,6 +187,25 @@ random sweep for binary64, stay offline in chunks: the same driver prints the
 expected block, and a scratch runner compares it against the port. None of that
 is part of the default build.
 
+## Performance
+
+This is a rough guide to the order of magnitude, not a benchmark. The port is
+plain Java, so it runs at Java speed and not at the speed of a CPU instruction.
+On one x86-64 machine with JDK 27, over five runs, the binary64 entry points
+land in the same range as `StrictMath`: faster for `exp`, `log` and `pow`,
+slower for `sin`, `tanh` and `cbrt`, and faster still for `log10`, whose
+`StrictMath` counterpart is unsteady. Against `Math`, whose functions the JIT
+turns into CPU instructions, the port costs 1.2 to 2.5 times as much, apart
+from `log` and `log10`, which it wins. The binary32 entry points are the
+clearer win: they beat what a caller has to write today,
+`(float) Math.f((double) x)`, by a factor of one and a half to three, and
+without the double rounding. In absolute terms a call costs a few nanoseconds
+for the elementary functions and about 25 ns for `tgamma`.
+
+None of this is a promise, and the repository carries no benchmark code: the
+figures came from a throwaway harness on one machine, and another JVM or
+another CPU will move them.
+
 ## Building and testing
 
 The commands are:
