@@ -91,7 +91,7 @@ import io.github.ntysdd.coremath.binary64.TanPi;
 import io.github.ntysdd.coremath.binary64.Tgamma;
 
 /**
- * Correctly rounded elementary functions.
+ * Correctly rounded mathematical functions.
  *
  * <p>Every method returns the correctly rounded (0.5 ulp) result of the
  * corresponding CORE-MATH function, with the same bits as the C code, including

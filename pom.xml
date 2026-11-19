@@ -10,7 +10,7 @@
   <packaging>jar</packaging>
 
   <name>core-math-java</name>
-  <description>Java port of CORE-MATH: correctly rounded elementary math functions</description>
+  <description>Java port of CORE-MATH: correctly rounded binary32 and binary64 math functions</description>
   <url>https://github.com/ntysdd/core-math-java</url>
 
   <licenses>
