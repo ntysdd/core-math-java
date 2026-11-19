@@ -12,7 +12,8 @@
 # comparison threshold of the translation, and the exceptional
 # entries the entry point can reach.
 # thresholds: the exact triples, the subnormal pairs, the special values in either
-#   position and the 2^-52 ratio bounds
+#   position, the 2^-52 ratio bounds, and the 16 rows of the near-midpoint family X^2 +
+#   Y^2 = Z^2 + 1 of the core-math-quality hypot candidate in both argument orders
 # double rounding: no scan.  --frontier walks the whole binary32 domain of a
 #   one-argument function, and a two-argument function has 2^64 argument pairs, so the
 #   directed grid and the random sweep stand in for it
@@ -67,6 +68,22 @@
 3ff0000000000000 bff0000000000000 3ff6a09e667f3bcd
 3ff0000000000000 fff0000000000000 7ff0000000000000
 3ff0000000000000 fff8000000000001 7ff8000000000001
+3ff7ffffffffffd5 3fffffffffffffc5 4003ffffffffffdc
+3ff7ffffffffffdb 3fffffffffffffcd 4003ffffffffffe1
+3ff7ffffffffffe1 3fffffffffffffd5 4003ffffffffffe6
+3ff7ffffffffffe7 3fffffffffffffdd 4003ffffffffffeb
+3ff7ffffffffffed 3fffffffffffffe5 4003fffffffffff0
+3ff7fffffffffff3 3fffffffffffffed 4003fffffffffff5
+3ff7fffffffffff9 3ffffffffffffff5 4003fffffffffffa
+3ff7ffffffffffff 3ffffffffffffffd 4003ffffffffffff
+3fffffffffffffc5 3ff7ffffffffffd5 4003ffffffffffdc
+3fffffffffffffcd 3ff7ffffffffffdb 4003ffffffffffe1
+3fffffffffffffd5 3ff7ffffffffffe1 4003ffffffffffe6
+3fffffffffffffdd 3ff7ffffffffffe7 4003ffffffffffeb
+3fffffffffffffe5 3ff7ffffffffffed 4003fffffffffff0
+3fffffffffffffed 3ff7fffffffffff3 4003fffffffffff5
+3ffffffffffffff5 3ff7fffffffffff9 4003fffffffffffa
+3ffffffffffffffd 3ff7ffffffffffff 4003ffffffffffff
 4008000000000000 4010000000000000 4014000000000000
 4010000000000000 4008000000000000 4014000000000000
 4014000000000000 4028000000000000 402a000000000000

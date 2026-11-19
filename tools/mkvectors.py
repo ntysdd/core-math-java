@@ -229,7 +229,8 @@ THRESHOLDS = {
         32: "compute(): e >= 127 (|x| >= 1), e == 0xff, and 2^-12 where the "
             "polynomial index changes",
         64: "compute(): |x| against 2^-6, 2^-26, 2^-53, and the |x| = 1 and "
-            "NaN branches",
+            "NaN branches; the out-of-domain 1.5 and -1.5 rows of the "
+            "core-math-quality asinpi candidate",
     },
     "acospi": {
         32: "compute(): e >= 127 (|x| >= 1), e == 0xff, and 2^-12 where the "
@@ -302,7 +303,9 @@ THRESHOLDS = {
         32: "the exact triples, the special values in either position and "
             "0x47efffffe0000000",
         64: "the exact triples, the subnormal pairs, the special values in "
-            "either position and the 2^-52 ratio bounds",
+            "either position, the 2^-52 ratio bounds, and the 16 rows of the "
+            "near-midpoint family X^2 + Y^2 = Z^2 + 1 of the core-math-quality "
+            "hypot candidate in both argument orders",
     },
     "pow": {
         32: "the IEEE 754 special cases of pow with odd and even exponents",
@@ -1140,6 +1143,9 @@ def asinpi_cases(width):
         rows += near(1.0, 64)
         rows += near(-1.0, 64)
         rows += signed(0.5, 64)
+        # the out-of-domain rows of the core-math-quality asinpi candidate:
+        # the checker tests 1.5 and -1.5 through the |x| >= 1 branch
+        rows += signed(1.5, 64)
     return rows
 
 
@@ -1439,6 +1445,16 @@ def hypot_cases(width):
                      0x10000000000000):
             rows.append((bits, signed(1.0, 64)[0][0]))
             rows.append((signed(1.0, 64)[0][0], bits))
+        # the near-midpoint family of the core-math-quality hypot candidate:
+        # X^2 + Y^2 = Z^2 + 1 for X = 3m+2, Y = 4m+1, Z = 5m+2 and
+        # m = 2^51-1-2j, so with odd Z the exact result sits just above the
+        # midpoint Z*2^-52 and round-to-nearest has to return (Z+1)*2^-52
+        for j in range(8):
+            m = (1 << 51) - 1 - 2 * j
+            x = (3 * m + 2) * float.fromhex("0x1p-52")
+            y = (4 * m + 1) * float.fromhex("0x1p-52")
+            rows.append((f64(y), f64(x)))
+            rows.append((f64(x), f64(y)))
     return rows
 
 
