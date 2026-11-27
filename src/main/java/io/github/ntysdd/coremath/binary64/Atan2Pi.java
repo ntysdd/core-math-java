@@ -67,8 +67,9 @@ import io.github.ntysdd.coremath.internal.U128;
  *   <li>{@code #include "tint.h"} is carried in this class, as upstream does:
  *       the 192-bit helpers and the {@code Tint64} constants are the same ones
  *       {@code Atan2.java} already translated, with the same camelCase names,
- *       and {@code print_tint}, {@code is_normalized} and the {@code exit (1)}
- *       of an unexpected worst case are dropped exactly as they are there.
+ *       and {@code print_tint} and {@code is_normalized} are dropped as they
+ *       are there, while the {@code exit (1)} of an unexpected worst case
+ *       becomes a throw, as in {@code Atan2}.
  *       {@code ONE}, {@code ONE_HALF} and {@code ONE_OVER_PI} are the three
  *       {@code tint_t} constants this file reads. Two helpers are <em>not</em>
  *       the text of {@code Atan2.java}, because {@code atan2pi/tint.h} and
@@ -444,7 +445,7 @@ public final strictfp class Atan2Pi {
           || (~mm == 0 && (low == 0x3ff || low == 0x7ff)
               && Long.compareUnsigned(~ll, err) < 0))
       {
-        throw new IllegalStateException("Unexpected worst-case found: atan2("
+        throw new IllegalStateException("Unexpected worst-case found: atan2pi("
             + Double.toHexString(y) + ", " + Double.toHexString(x) + ")");
       }
     if (ex <= -1022) // subnormal case
